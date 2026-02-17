@@ -4,18 +4,13 @@ import { NavLink ,Link } from "react-router";
 
 const links = (
   <>
-    <li>
-      <NavLink to="/">Home</NavLink>
+    <li className=" btn btn-primary btn-outline">
+      <Link to="/register">Register</Link>
     </li>
-    <li>
-      <NavLink to="/">About</NavLink>
+    <li className=" btn btn-primary">
+      <Link to="/login">Login</Link>
     </li>
-    <li>
-      <NavLink to="/">Contact</NavLink>
-    </li>
-    <li>
-      <NavLink to="/id-card-maker">Id Card Maker</NavLink>
-    </li>
+  
   </>
 );
 
@@ -47,7 +42,7 @@ const Navbar = () => {
 
         {/* desktop nav */}
         <nav className=" hidden xl:block">
-          <ul className="flex gap-5">{links}</ul>
+          <ul className="flex gap-5 ">{links}</ul>
         </nav>
       </div>
     </header>

@@ -12,7 +12,9 @@ const Home = () => {
       <Hero />
       <AcademicPrograms />
       <NoticeBoard />
+      {/* create by polok */}
       <SecureCloudSystem></SecureCloudSystem>
+      {/* create by polok */}
       <Testimonials></Testimonials>
     </>
   );
