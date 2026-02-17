@@ -30,7 +30,7 @@ const Navbar = () => {
         </div>
 
         {/* desktop nav */}
-        <nav>
+        <nav >
           <ul className="flex gap-5">{links}</ul>
         </nav>
       </div>
