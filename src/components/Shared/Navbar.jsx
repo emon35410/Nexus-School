@@ -58,8 +58,8 @@ const Navbar = () => {
             )}
           </div>
           {/* logo */}
-          <Link>
-            Lo<span className="text-primary">Go</span>
+          <Link to='/' className="font-bold">
+            LoNexus-<span className="text-primary">School</span>
           </Link>
         </div>
 
