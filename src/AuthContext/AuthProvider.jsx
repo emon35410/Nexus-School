@@ -1,59 +1,76 @@
 import React, { useEffect, useState } from 'react';
 import { AuthContext } from './AuthContext';
-import { createUserWithEmailAndPassword, onAuthStateChanged, sendEmailVerification, sendPasswordResetEmail, signInWithEmailAndPassword, signOut, updateProfile } from 'firebase/auth';
+import {
+  createUserWithEmailAndPassword,
+  GoogleAuthProvider,
+  onAuthStateChanged,
+  sendEmailVerification,
+  sendPasswordResetEmail,
+  signInWithEmailAndPassword,
+  signInWithPopup,
+  signOut,
+  updateProfile,
+} from 'firebase/auth';
 import { auth } from '../auth/authInit';
+
+const googleProvider =new GoogleAuthProvider()
 
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [isLoading,setIsLoading]=useState(true)
+  const [isLoading, setIsLoading] = useState(true);
 
-  const register = (email,password) => {
-    return createUserWithEmailAndPassword(auth,email,password)
-  }
-  const loginUser = (email,password) => {
-    return signInWithEmailAndPassword(auth,email,password)
+  const socialGoogleLogin = () => {
+    return signInWithPopup(auth,googleProvider)
   }
 
-  const updateUserProfile = (userInfo) => {
-    return updateProfile(auth,userInfo)
-  }
+  const userRegister = (email, password) => {
+    return createUserWithEmailAndPassword(auth, email, password);
+  };
+  const loginUser = (email, password) => {
+    return signInWithEmailAndPassword(auth, email, password);
+  };
+
+  const updateUserProfile = userInfo => {
+    return updateProfile(auth.currentUser, userInfo);
+  };
 
   const userEmailVerify = () => {
-    return sendEmailVerification(auth)
-  }
+    return sendEmailVerification(auth.currentUser);
+  };
 
-  const userPassRest = (email) => {
-    return sendPasswordResetEmail(auth,email)
-  }
+  const userPassRest = email => {
+    return sendPasswordResetEmail(auth, email);
+  };
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, currentUser => {
       setUser(currentUser);
       setIsLoading(false);
-    })
+    });
     return () => unsubscribe();
   }, []);
 
-  const LogOut = () => {
+  const logOut = () => {
     return signOut(auth);
-  }
-
+  };
 
   const createUserAuthInfo = {
     isLoading,
     user,
     setUser,
-    register,
+    socialGoogleLogin,
+    userRegister,
     loginUser,
-    LogOut,
+    logOut,
     updateUserProfile,
     userEmailVerify,
     userPassRest,
-    
-  }
+  };
 
   return (
-    <AuthContext value={createUserAuthInfo}>{ children}</AuthContext>
+    <AuthContext value={createUserAuthInfo}>
+      {children}
+    </AuthContext>
   );
 };
 
