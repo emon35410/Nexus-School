@@ -1,2 +1,7 @@
 @import "tailwindcss";
 @plugin "daisyui";
+
+
+.section-res{
+  @apply md:max-w-7xl mx-auto px-4 w-full
+}

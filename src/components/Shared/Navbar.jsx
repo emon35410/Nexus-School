@@ -1,29 +1,47 @@
-import React, { useState } from "react";
+import React, { use, useState } from "react";
 import { FaBarsStaggered } from "react-icons/fa6";
-import { NavLink ,Link } from "react-router";
+import { NavLink ,Link, useNavigate } from "react-router";
+import { AuthContext } from "../../AuthContext/AuthContext";
+import { toast } from "react-toastify";
 
-const links = (
-  <>
-    <li>
-      <NavLink to="/">Home</NavLink>
-    </li>
-    <li>
-      <NavLink to="/">About</NavLink>
-    </li>
-    <li>
-      <NavLink to="/">Contact</NavLink>
-    </li>
-    <li>
-      <NavLink to="/id-card-maker">Id Card Maker</NavLink>
-    </li>
-  </>
-);
 
 const Navbar = () => {
+
+  const { logOut, user } = use(AuthContext);
+  const navigate=useNavigate()
+  // responsive nav 
   const [activeRes, setActiveRes] = useState(false);
   const handleActiveRes = () => {
     setActiveRes(!activeRes)
   }
+
+  // logout function
+  const handleLogOut = () => {
+    logOut().then(res => {
+      toast.info('success')
+      navigate('/')
+    }).catch(err => {
+      console.log(err)
+    })
+  }
+  // all nav bar link
+  const links = (
+    <>
+      <li className=" btn btn-primary btn-outline">
+        <Link to="/register">Register</Link>
+      </li>
+      {user ? (
+        <button onClick={handleLogOut} className=" btn btn-primary">
+         LogOut
+        </button>
+      ) : (
+        <li className=" btn btn-primary">
+          <Link to="/login">Login</Link>
+        </li>
+      )}
+    </>
+  );
+
   return (
     <header className="top-0 border-b/10 shadow py-4 sticky bg-white z-50 ">
       <div className="flex items-center justify-between max-w-7xl px-4 md:px-6 mx-auto">
@@ -40,14 +58,14 @@ const Navbar = () => {
             )}
           </div>
           {/* logo */}
-          <Link>
-            Lo<span className="text-primary">Go</span>
+          <Link to='/' className="font-bold">
+            LoNexus-<span className="text-primary">School</span>
           </Link>
         </div>
 
         {/* desktop nav */}
         <nav className=" hidden xl:block">
-          <ul className="flex gap-5">{links}</ul>
+          <ul className="flex gap-5 ">{links}</ul>
         </nav>
       </div>
     </header>
