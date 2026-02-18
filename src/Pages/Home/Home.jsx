@@ -3,7 +3,14 @@ import Hero from "./Hero/Hero";
 import AcademicPrograms from "../../components/Home/AcademicPrograms";
 import NoticeBoard from "../../components/Home/NoticeBoard";
 import SecureCloudSystem from "../../components/Home/SecureCloudSystem";
+<<<<<<< HEAD
 import LogoMarquee from "../../components/Home/LogoMarquee";
+=======
+import Testimonials from "../../components/Home/Testimonials";
+import Container from "../../Layouts/Container";
+import HowItWorks from "../../components/Home/HowItWorks";
+import FAQ from "../../components/Home/FAQ";
+>>>>>>> 58737753490fb02d7491476b5b9ab1c4f1760cb5
 
 const Home = () => {
   return (
@@ -20,7 +27,14 @@ const Home = () => {
         <LogoMarquee></LogoMarquee>
       </div>
       {/* Koushik - Codes - End */}
+      {/* create by polok */}
       <SecureCloudSystem></SecureCloudSystem>
+      {/* create by polok */}
+      <Testimonials></Testimonials>
+      {/* created by Peyas */}
+      <HowItWorks />
+      {/* created by peyas */}
+      <FAQ />
     </>
   );
 };
