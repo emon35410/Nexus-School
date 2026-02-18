@@ -5,6 +5,7 @@ import Contact from './Contact/Contact';
 const Home = () => {
     return (
         <>
+            {/* Created By Mahialam rahat */}
             <Hero />
             <Contact />
         </>
