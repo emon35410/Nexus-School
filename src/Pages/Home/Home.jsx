@@ -5,6 +5,7 @@ import NoticeBoard from '../../components/Home/NoticeBoard';
 import SecureCloudSystem from '../../components/Home/SecureCloudSystem';
 import Testimonials from '../../components/Home/Testimonials';
 import Container from '../../Layouts/Container';
+import HowItWorks from '../../components/Home/HowItWorks';
 
 const Home = () => {
   return (
@@ -16,6 +17,8 @@ const Home = () => {
       <SecureCloudSystem></SecureCloudSystem>
       {/* create by polok */}
       <Testimonials></Testimonials>
+      {/* created by Peyas */}
+      <HowItWorks />
     </>
   );
 };
