@@ -1,13 +1,27 @@
-import React from "react";
+import React, { useState } from "react";
 import Container from "../../../Layouts/Container";
 import { Mail, Phone, MapPin, Clock } from "lucide-react"; // 'lucide-react' icons use kora hoyeche
 import toast from "react-hot-toast";
 
 const Contact = () => {
-  const handleSubmit = (e) => {
+
+  const [loading, setLoading] = useState(false);
+
+
+  const handleSubmit = async(e) => {
     e.preventDefault();
-    console.log('submited')
+    setLoading(true)
+   
+    try {
+      await new Promise(resolve => setTimeout(resolve, 2000));
     toast.success("Message sent successfully!");
+    e.target.reset();
+    } catch (error) {
+      console.log(error)
+    } finally {
+      setLoading(false)
+    }
+    
   }
   return (
     <section className="py-12 md:py-20 lg:py-28 bg-gray-50">
@@ -100,8 +114,8 @@ const Contact = () => {
                   className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
                 ></textarea>
               </div>
-              <button className="md:col-span-2 w-full py-4 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-700 transform hover:-translate-y-1 transition duration-300 shadow-md">
-                Send Message
+              <button disabled={loading} className={`md:col-span-2 w-full py-4 cursor-pointer text-white font-bold rounded-lg  transform hover:-translate-y-1 transition duration-300 shadow-md ${loading ? 'bg-black/80' : 'bg-blue-600 hover:bg-blue-700'} `}>
+                {loading ? <span>Loading... </span> : <span>Send Message</span> }
               </button>
             </form>
           </div>
