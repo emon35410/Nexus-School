@@ -9,6 +9,7 @@ import Collaboration from '../../components/Home/Collaboration';
 import SocialProof from '../../components/Home/SocialProof';
 import HowItWorks from "../../components/Home/HowItWorks";
 import FAQ from "../../components/Home/FAQ";
+import Contact from '../../components/Home/Contact';
 
 const Home = () => {
   return (
@@ -28,6 +29,8 @@ const Home = () => {
       <HowItWorks />
       {/* created by peyas */}
       <FAQ />
+      {/* created by mahialam */}
+      <Contact />
     </>
   );
 };
