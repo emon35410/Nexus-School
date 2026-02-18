@@ -72,7 +72,7 @@ const Contact = () => {
           </div>
 
           {/* Contact Form */}
-          <div className="lg:col-span-2 bg-white p-8 rounded-2xl shadow-lg border border-gray-100">
+          <div className="lg:col-span-2 bg-white px-4 py-8 md:p-8 rounded-2xl shadow-lg border border-gray-100">
             <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
                 <label className="text-sm font-semibold text-gray-700">
