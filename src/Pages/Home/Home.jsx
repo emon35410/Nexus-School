@@ -7,6 +7,8 @@ import Testimonials from '../../components/Home/Testimonials';
 import Container from '../../Layouts/Container';
 import Collaboration from '../../components/Home/Collaboration';
 import SocialProof from '../../components/Home/SocialProof';
+import HowItWorks from "../../components/Home/HowItWorks";
+import FAQ from "../../components/Home/FAQ";
 
 const Home = () => {
   return (
@@ -22,6 +24,10 @@ const Home = () => {
       <Collaboration></Collaboration>
       {/* Create By Emon */}
       <SocialProof></SocialProof>
+      {/* created by Peyas */}
+      <HowItWorks />
+      {/* created by peyas */}
+      <FAQ />
     </>
   );
 };

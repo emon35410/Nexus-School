@@ -26,7 +26,7 @@ const SocialProof = () => {
                 ))}
             </div>
 
-            {/* 2. Simplified Marquee */}
+            {/* Marquee */}
             <div className="relative flex overflow-hidden ">
                 <div className="flex gap-8 animate-[marquee_25s_linear_infinite] whitespace-nowrap">
                     {[...sponsors, ...sponsors].map((item, idx) => (
