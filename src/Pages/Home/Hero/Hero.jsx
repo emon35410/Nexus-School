@@ -1,6 +1,8 @@
 import React from "react";
 import Container from "../../../Layouts/Container";
 import { Swiper, SwiperSlide } from "swiper/react";
+import { motion } from "framer-motion";
+
 // Import Swiper styles
 import "swiper/css";
 import "swiper/css/effect-fade";
@@ -97,7 +99,10 @@ const Hero = () => {
               >
                 {heroImgs.map((heroImg) => (
                   <SwiperSlide key={heroImg.id} className="w-full">
-                    <img className="w-full h-full object-cover" src={heroImg.img} />
+                    <img
+                      className="w-full h-full object-cover"
+                      src={heroImg.img}
+                    />
                   </SwiperSlide>
                 ))}
               </Swiper>
@@ -108,7 +113,26 @@ const Hero = () => {
             <div className="absolute -top-10 -right-10 w-48 h-48 bg-blue-500 rounded-full opacity-10 blur-[80px]"></div>
 
             {/* Small Floating Card */}
-            <div className="absolute top-10 -left-6 z-20 bg-white p-4 rounded-xl shadow-xl border border-blue-50 hidden md:block animate-float">
+            <motion.div
+              // 1. Smooth Entrance
+              initial={{ opacity: 0, scale: 0.95, x: -20 }}
+              animate={{
+                  opacity: 1,
+                   x: 0,
+                scale: [1, 1.03, 1], // Subtle Heartbeat/Pulse effect
+              }}
+              transition={{
+                opacity: { duration: 0.4 },
+                scale: {
+                  duration: 2,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                },
+              }}
+              // GPU Acceleration ensure korar jonno style prop use kora holo
+              style={{ willChange: "transform" }}
+              className="absolute top-10 -left-6 z-20 bg-white p-4 rounded-xl shadow-xl border border-blue-50 hidden md:block"
+            >
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center text-green-600 font-bold">
                   ✓
@@ -120,7 +144,7 @@ const Hero = () => {
                   </p>
                 </div>
               </div>
-            </div>
+            </motion.div>
           </div>
         </div>
       </Container>
