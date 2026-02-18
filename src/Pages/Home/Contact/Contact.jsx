@@ -1,8 +1,14 @@
 import React from "react";
 import Container from "../../../Layouts/Container";
 import { Mail, Phone, MapPin, Clock } from "lucide-react"; // 'lucide-react' icons use kora hoyeche
+import toast from "react-hot-toast";
 
 const Contact = () => {
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log('submited')
+    toast.success("Message sent successfully!");
+  }
   return (
     <section className="py-12 md:py-20 lg:py-28 bg-gray-50">
       <Container>
@@ -53,7 +59,7 @@ const Contact = () => {
 
           {/* Contact Form */}
           <div className="lg:col-span-2 bg-white p-8 rounded-2xl shadow-lg border border-gray-100">
-            <form className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
                 <label className="text-sm font-semibold text-gray-700">
                   Full Name
