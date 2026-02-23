@@ -2,7 +2,7 @@ import React, { use } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router";
 import { AuthContext } from "../../AuthContext/AuthContext";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import SocialLogin from "../../components/Shared/SocialLogin";
 
 const Login = () => {
@@ -10,16 +10,18 @@ const Login = () => {
   const { loginUser } = use(AuthContext);
   const navigate = useNavigate();
 
-  // const handleLogin = (userInfo) => {
-  //   loginUser(userInfo.email, userInfo.password)
-  //     .then((res) => {
-  //       toast.success("success");
-  //       navigate("/");
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  // };
+  const handleLogin = (userInfo) => {
+    loginUser(userInfo.email, userInfo.password)
+      .then((res) => {
+        toast.success("Login successful!");
+        navigate("/");
+      })
+      .catch((err) => {
+        toast.error(err.message);
+      });
+  };
+
+
   return (
     <div className="min-h-[90vh] flex items-center justify-center p-4">
       <div className="card bg-base-100 w-full max-w-md shadow-2xl border border-base-200 overflow-hidden">
@@ -34,8 +36,8 @@ const Login = () => {
         </div>
 
         <div className="card-body p-8 pt-6">
-          <form className="space-y-4">
-            {/* onSubmit={handleSubmit(handleLogin)} */}
+          <form  onSubmit={handleSubmit(handleLogin)} className="space-y-4">
+           
             {/* Email Field */}
             <div className="form-control">
               <label className="label">
