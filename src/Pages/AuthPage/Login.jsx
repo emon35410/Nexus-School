@@ -6,7 +6,7 @@ import { toast } from "react-hot-toast";
 import SocialLogin from "../../components/Shared/SocialLogin";
 
 const Login = () => {
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit, formState: {errors} } = useForm();
   const { loginUser } = use(AuthContext);
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
@@ -53,11 +53,11 @@ const Login = () => {
                 className={`input input-bordered focus:input-primary w-full `} //${errors.email ? "input-error" : ""}
                 placeholder="name@example.com"
               />
-              {/* {errors.email && (
+              {errors.email && (
                 <span className="text-error text-xs mt-1">
                   {errors.email.message}
                 </span>
-              )} */}
+              )}
             </div>
 
             {/* Password Field */}
@@ -74,11 +74,11 @@ const Login = () => {
                 className={`input input-bordered focus:input-primary w-full`}
                 placeholder="••••••••"
               />
-              {/* {errors.password && (
+              {errors.password && (
                 <span className="text-error text-xs mt-1">
                   {errors.password.message}
                 </span>
-              )} */}
+              )}
             </div>
             <div>
               <a className="link link-hover underline">Forgot password?</a>

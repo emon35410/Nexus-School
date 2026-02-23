@@ -6,6 +6,7 @@ import { AuthContext } from "../../AuthContext/AuthContext";
 import SocialLogin from "../../components/Shared/SocialLogin";
 import toast from "react-hot-toast";
 import axios from "axios";
+import useAxiosSecure from "../../Hooks/useAxiosSecure";
 
 const Register = () => {
   const {
@@ -16,6 +17,9 @@ const Register = () => {
   const { userRegister, updateUserProfile, user } = use(AuthContext);
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const axiosSecure = useAxiosSecure();
+
+
 
   const handleRegister = async (userInfo) => {
     setLoading(true);
@@ -43,6 +47,15 @@ const Register = () => {
 
       await updateUserProfile(updateProfileInfo);
 
+      // send user info in database
+      const userInfoDb = {
+        name: res.displayName,
+        email: res.email
+      }
+
+    //  axiosSecure.post('/users', userInfoDb)
+
+
       toast.success("success");
       navigate("/");
     } catch (err) {
@@ -52,7 +65,6 @@ const Register = () => {
     }
   };
 
-  console.log(user);
 
   return (
     <div className="min-h-[90vh] flex items-center justify-center p-4">
