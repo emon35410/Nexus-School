@@ -1,30 +1,75 @@
-import React, { use } from "react";
+import React, { use, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router";
 import { AuthContext } from "../../AuthContext/AuthContext";
 // import { toast } from "react-toastify";
 import SocialLogin from "../../components/Shared/SocialLogin";
 import toast from "react-hot-toast";
+import axios from "axios";
 
 const Register = () => {
-  const { register, handleSubmit, formState:{errors} } = useForm();
-  const { userRegister } = use(AuthContext);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+  const { userRegister, updateUserProfile, user } = use(AuthContext);
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false)
 
-  const handleRegister = (userInfo) => {
-    userRegister(userInfo.email, userInfo.password)
-      .then(res => {
-        toast.success('success')
-       navigate('/')
+  const handleRegister = async(userInfo) => {
+   setLoading(true);
+    try {
+       
+      userRegister(userInfo.email, userInfo.password)
+      .then((res) => {
+        // form image for profile
+        const profilePhoto = userInfo.photo[0];
+
+        const formData = new FormData();
+        formData.append("image", profilePhoto);
+
+        // imagebb hosting
+        axios
+          .post(
+            `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_IMAGE_HOSTING_KEY}`,
+            formData,
+          )
+          .then((res) => {
+            // console.log(res.data.data.url);
+
+            const updateProfileInfo = {
+              displayName: userInfo.name,
+              photoURL: res.data.data.url,
+            };
+
+            updateUserProfile(updateProfileInfo)
+              .then((res) => {
+                // console.log(res);
+                toast.success("success");
+                navigate("/");
+              })
+              .catch((err) => {
+                console.log(err);
+              });
+          })
+          .catch((err) => {
+            console.log(err);
+          });
       })
-      .catch(err => {
-        toast.error(err.message)
+      .catch((err) => {
+        toast.error(err.message);
       });
-    
-    
+    } catch (err) {
+      console.log(err)
+    } finally {
+      setLoading(false)
+    }
 
-    console.log(userInfo)
+  
   };
+
+  
   return (
     <div className="min-h-[90vh] flex items-center justify-center p-4">
       <div className="card bg-base-100 w-full max-w-md shadow-2xl border border-base-200 overflow-hidden">
@@ -109,7 +154,7 @@ const Register = () => {
               </p>
             )}
 
-            <button className="btn btn-neutral mt-4">Register</button>
+            <button className="btn btn-neutral mt-4">{loading ? <span>Wait for verify</span> : <span>Register</span>}</button>
           </fieldset>
           <p className="font-semibold text-xs">
             Already have an account?{" "}
