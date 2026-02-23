@@ -9,7 +9,7 @@ import Collaboration from "../../components/Home/Collaboration";
 import SocialProof from "../../components/Home/SocialProof";
 import HowItWorks from "../../components/Home/HowItWorks";
 import FAQ from "../../components/Home/FAQ";
-import LogoMarquee from "../../components/Home/LogoMarquee";
+import Contact from "../../components/Home/Contact";
 
 const Home = () => {
   return (
@@ -19,12 +19,12 @@ const Home = () => {
       <NoticeBoard />
       {/* Koushik - Codes - Start */}
       {/* Marquee section */}
-      <div className="mt-0 mb-0 border-0">
+      {/* <div className="mt-0 mb-0 border-0">
         {/* <h2 className="text-center pt-8 text-3xl font-bold bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent">
           Paid Sponsors
         </h2> */}
-        <LogoMarquee></LogoMarquee>
-      </div>
+      {/* <LogoMarquee></LogoMarquee> */}
+      {/* </div> */}
       {/* Koushik - Codes - End */}
       {/* create by polok */}
       <SecureCloudSystem></SecureCloudSystem>
@@ -38,6 +38,8 @@ const Home = () => {
       <HowItWorks />
       {/* created by peyas */}
       <FAQ />
+      {/* created by mahialam */}
+      <Contact />
     </>
   );
 };

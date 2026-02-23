@@ -7,6 +7,7 @@ import router from './Router/RootRouter.jsx'
 import MainLayout from './Layouts/MainLayout.jsx'
 import AuthProvider from './AuthContext/AuthProvider.jsx'
 import { ToastContainer } from 'react-toastify'
+import { Toaster } from 'react-hot-toast'
 
 
 createRoot(document.getElementById('root')).render(
@@ -16,6 +17,7 @@ createRoot(document.getElementById('root')).render(
         <MainLayout></MainLayout>
       </RouterProvider>
       <ToastContainer />
+      <Toaster />
     </AuthProvider>
   </StrictMode>,
 );
