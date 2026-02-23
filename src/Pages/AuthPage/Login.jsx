@@ -1,4 +1,4 @@
-import React, { use } from "react";
+import React, { use, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router";
 import { AuthContext } from "../../AuthContext/AuthContext";
@@ -9,13 +9,17 @@ const Login = () => {
   const { register, handleSubmit } = useForm();
   const { loginUser } = use(AuthContext);
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   const handleLogin = (userInfo) => {
+    setLoading(true)
     loginUser(userInfo.email, userInfo.password)
       .then((res) => {
         toast.success("Login successful!");
         navigate("/");
+         setLoading(false)
       })
+   
       .catch((err) => {
         toast.error(err.message);
       });
@@ -80,8 +84,8 @@ const Login = () => {
               <a className="link link-hover underline">Forgot password?</a>
             </div>
             {/* Login Button */}
-            <button className="btn btn-primary btn-block text-white font-bold mt-2">
-              Sign In
+            <button className={`${loading ? 'opacity-80' : ''} btn btn-primary btn-block text-white font-bold mt-2 `}>
+              {loading ? "Logging in..." : " Sign In"}
             </button>
           </form>
         </div>

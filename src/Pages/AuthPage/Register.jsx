@@ -15,61 +15,45 @@ const Register = () => {
   } = useForm();
   const { userRegister, updateUserProfile, user } = use(AuthContext);
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
 
-  const handleRegister = async(userInfo) => {
-   setLoading(true);
+  const handleRegister = async (userInfo) => {
+    setLoading(true);
     try {
-       
-      userRegister(userInfo.email, userInfo.password)
-      .then((res) => {
-        // form image for profile
-        const profilePhoto = userInfo.photo[0];
+      const res = await userRegister(userInfo.email, userInfo.password);
 
-        const formData = new FormData();
-        formData.append("image", profilePhoto);
+      // form image for profile
+      const profilePhoto = userInfo.photo[0];
 
-        // imagebb hosting
-        axios
-          .post(
-            `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_IMAGE_HOSTING_KEY}`,
-            formData,
-          )
-          .then((res) => {
-            // console.log(res.data.data.url);
+      const formData = new FormData();
+      formData.append("image", profilePhoto);
 
-            const updateProfileInfo = {
-              displayName: userInfo.name,
-              photoURL: res.data.data.url,
-            };
+      // imagebb hosting
+      const imageRes = await axios.post(
+        `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_IMAGE_HOSTING_KEY}`,
+        formData,
+      );
 
-            updateUserProfile(updateProfileInfo)
-              .then((res) => {
-                // console.log(res);
-                toast.success("success");
-                navigate("/");
-              })
-              .catch((err) => {
-                console.log(err);
-              });
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      })
-      .catch((err) => {
-        toast.error(err.message);
-      });
+      const imageurl = imageRes.data.data.url;
+
+      const updateProfileInfo = {
+        displayName: userInfo.name,
+        photoURL: imageurl,
+      };
+
+      await updateUserProfile(updateProfileInfo);
+
+      toast.success("success");
+      navigate("/");
     } catch (err) {
-      console.log(err)
+      console.log(err);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-
-  
   };
 
-  
+  console.log(user);
+
   return (
     <div className="min-h-[90vh] flex items-center justify-center p-4">
       <div className="card bg-base-100 w-full max-w-md shadow-2xl border border-base-200 overflow-hidden">
@@ -154,7 +138,9 @@ const Register = () => {
               </p>
             )}
 
-            <button className="btn btn-neutral mt-4">{loading ? <span>Wait for verify</span> : <span>Register</span>}</button>
+            <button className="btn btn-neutral mt-4">
+              {loading ? <span>Wait for verify</span> : <span>Register</span>}
+            </button>
           </fieldset>
           <p className="font-semibold text-xs">
             Already have an account?{" "}
