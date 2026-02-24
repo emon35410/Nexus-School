@@ -1,44 +1,122 @@
-import React, { use } from 'react';
-import { useForm } from 'react-hook-form';
-import { Link, useNavigate } from 'react-router';
-import { AuthContext } from '../../AuthContext/AuthContext';
-import { toast } from 'react-toastify';
+import React, { use, useState } from "react";
+import { useForm } from "react-hook-form";
+import { Link, useNavigate } from "react-router";
+import { AuthContext } from "../../AuthContext/AuthContext";
+import { toast } from "react-hot-toast";
+import SocialLogin from "../../components/Shared/SocialLogin";
 
 const Login = () => {
-  const { register, handleSubmit } = useForm();
-  const { loginUser } = use(AuthContext);
-  const navigate=useNavigate()
- 
+  const { register, handleSubmit,getValues, formState: {errors} } = useForm();
+  const { loginUser,userPassRest } = use(AuthContext);
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+  
+
   const handleLogin = (userInfo) => {
+    setLoading(true)
     loginUser(userInfo.email, userInfo.password)
-      .then(res => {
-        toast.success('success');
-        navigate('/')
-      }).catch(err => {
-      console.log(err)
-    })
-  }
+      .then((res) => {
+        toast.success("Login successful!");
+        navigate("/");
+         setLoading(false)
+      })
+   
+      .catch((err) => {
+        toast.error(err.message);
+      });
+  };
+
+   const handleForgetPassword = () => {
+     const email = getValues("email");
+      userPassRest(email)
+        .then((res) => {
+          console.log(res);
+          setLoading(false);
+          toast.success("Check your email to reset password");
+        })
+        .catch((e) => {
+          toast.error(e.message);
+        });
+    };
+
+
   return (
-    <div className="hero bg-base-200 min-h-screen ">
-      <div className="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl">
-        <div className="text-center  mt-4 ">
-          <h1 className="text-3xl font-bold">Login now!</h1>
+    <div className="min-h-[90vh] flex items-center justify-center p-4">
+      <div className="card bg-base-100 w-full max-w-md shadow-2xl border border-base-200 overflow-hidden">
+        {/* Header Section */}
+        <div className="bg-gradient-to-r from-blue-600 to-cyan-500 p-8 text-center text-white">
+          <h3 className="text-3xl font-black tracking-tight mb-2">
+            Nexus-School
+          </h3>
+          <p className="text-blue-50 opacity-90 font-medium">
+            Login to your School
+          </p>
         </div>
-        <div className="card-body">
-          <form onSubmit={handleSubmit(handleLogin)} className="fieldset">
-            {/* email */}
-            <label className="label">Email</label>
-            <input type="email" {...register('email', {required:true})} className="input" placeholder="Email" />
-            {/* password */}
-            <label className="label">Password</label>
-            <input type="password" {...register('password',{required:true , minLength:6})} className="input" placeholder="Password" />
-            <div>
-              <a className="link link-hover">Forgot password?</a>
+
+        <div className="card-body p-8 pt-6">
+          <form  onSubmit={handleSubmit(handleLogin)} className="space-y-4">
+           
+            {/* Email Field */}
+            <div className="form-control">
+              <label className="label">
+                <span className="label-text font-bold">Email Address</span>
+              </label>
+              <input
+                type="email"
+                {...register("email", { required: "Email is required" })}
+                className={`input input-bordered focus:input-primary w-full `} //${errors.email ? "input-error" : ""}
+                placeholder="name@example.com"
+              />
+              {errors.email && (
+                <span className="text-error text-xs mt-1">
+                  {errors.email.message}
+                </span>
+              )}
             </div>
-            <button className="btn btn-primary mt-4">Login</button>
+
+            {/* Password Field */}
+            <div className="form-control">
+              <label className="label flex justify-between">
+                <span className="label-text font-bold">Password</span>
+              </label>
+              <input
+                type="password"
+                {...register("password", {
+                  required: "Password is required",
+                  minLength: { value: 6, message: "At least 6 characters" },
+                })}
+                className={`input input-bordered focus:input-primary w-full`}
+                placeholder="••••••••"
+              />
+              {errors.password && (
+                <span className="text-error text-xs mt-1">
+                  {errors.password.message}
+                </span>
+              )}
+            </div>
+            {/* create by saleh-ahmad */}
+            <div>
+              <button onClick={handleForgetPassword} type='button' className="link link-hover">Forget password?</button>
+            </div>
+            {/* Login Button */}
+            <button className={`${loading ? 'opacity-80' : ''} btn btn-primary btn-block text-white font-bold mt-2 `}>
+              {loading ? "Logging in..." : " Sign In"}
+            </button>
           </form>
-          <p>don't have an account <Link to='/register' className='link link-hover text-blue-500'>Register</Link></p>
         </div>
+        {/* Social Login */}
+        <SocialLogin></SocialLogin>
+
+        <p className="text-center text-sm mt-4 pb-3">
+          New to <span className="font-semibold">Nexus-School? </span>
+          <Link
+            state={location.state}
+            className="text-primary font-bold hover:underline"
+            to="/register"
+          >
+            Create an Account
+          </Link>
+        </p>
       </div>
     </div>
   );
