@@ -2,8 +2,10 @@ import React, { use, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router";
 import { AuthContext } from "../../AuthContext/AuthContext";
-import { toast } from "react-hot-toast";
+import { toast } from 'react-toastify';
 import SocialLogin from "../../components/Shared/SocialLogin";
+import { doc, getDoc, updateDoc } from 'firebase/firestore';
+import { db } from '../../auth/authInit';
 
 const Login = () => {
   const { register, handleSubmit,getValues, formState: {errors} } = useForm();
@@ -12,18 +14,66 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   
 
-  const handleLogin = (userInfo) => {
-    setLoading(true)
-    loginUser(userInfo.email, userInfo.password)
-      .then((res) => {
-        toast.success("Login successful!");
-        navigate("/");
-         setLoading(false)
-      })
-   
-      .catch((err) => {
-        toast.error(err.message);
+  const handleLogin = async userInfo => {
+    if (!userInfo?.email) {
+      toast.error('Please enter a valid email');
+      return;
+    }
+
+    const docRef = doc(db, 'users', userInfo.email);
+    const docSnap = await getDoc(docRef);
+
+    if (!docSnap.exists()) {
+      toast.info('User not found');
+      return;
+    }
+
+    const userData = docSnap.data();
+
+    if (userData.lockUntil && Date.now() < userData.lockUntil) {
+      toast.info('Account is locked. Try again later ❌');
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      // ✅ login try
+      const res = await loginUser(userInfo.email, userInfo.password);
+
+      // ✅ success  then reset
+      await updateDoc(docRef, {
+        wrongAttempts: 0,
+        lockUntil: null,
       });
+
+      toast.success('Login successful!');
+      navigate('/');
+    } catch (err) {
+      toast.error(err.message);
+
+      const freshSnap = await getDoc(docRef);
+      const freshData = freshSnap.data();
+
+      const attempts = (freshData.wrongAttempts || 0) + 1;
+
+      if (attempts >= 3) {
+        await updateDoc(docRef, {
+          wrongAttempts: 0,
+          lockUntil: Date.now() + 30 * 1000, // 30 sec
+        });
+
+        toast.info('Account locked for 30 seconds 🔒');
+      } else {
+        await updateDoc(docRef, {
+          wrongAttempts: attempts,
+        });
+
+        toast.info(`Wrong attempts: ${attempts}`);
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
    const handleForgetPassword = () => {
