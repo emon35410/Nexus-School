@@ -1,25 +1,71 @@
-import React, { use } from "react";
+import React, { use, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router";
 import { AuthContext } from "../../AuthContext/AuthContext";
-import { toast } from "react-toastify";
+// import { toast } from "react-toastify";
 import SocialLogin from "../../components/Shared/SocialLogin";
+import toast from "react-hot-toast";
+import axios from "axios";
+import useAxiosSecure from "../../Hooks/useAxiosSecure";
 
 const Register = () => {
-  // const { register, handleSubmit } = useForm();
-  // const { userRegister } = use(AuthContext);
-  // const navigate=useNavigate()
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+  const { userRegister, updateUserProfile, user } = use(AuthContext);
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+  const axiosSecure = useAxiosSecure();
 
-  // const handleRegister = userInfo => {
-  //   userRegister(userInfo.email, userInfo.password)
-  //     .then(res => {
-  //       toast.success('success')
-  //      navigate('/')
-  //     })
-  //     .catch(err => {
-  //       console.log(err);
-  //     });
-  // };
+
+
+  const handleRegister = async (userInfo) => {
+    setLoading(true);
+    try {
+      const res = await userRegister(userInfo.email, userInfo.password);
+
+      // form image for profile
+      const profilePhoto = userInfo.photo[0];
+
+      const formData = new FormData();
+      formData.append("image", profilePhoto);
+
+      // imagebb hosting
+      const imageRes = await axios.post(
+        `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_IMAGE_HOSTING_KEY}`,
+        formData,
+      );
+
+      const imageurl = imageRes.data.data.url;
+
+      const updateProfileInfo = {
+        displayName: userInfo.name,
+        photoURL: imageurl,
+      };
+
+      await updateUserProfile(updateProfileInfo);
+
+      // send user info in database
+      const userInfoDb = {
+        name: res.displayName,
+        email: res.email
+      }
+
+    //  axiosSecure.post('/users', userInfoDb)
+
+
+      toast.success("success");
+      navigate("/");
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+
   return (
     <div className="min-h-[90vh] flex items-center justify-center p-4">
       <div className="card bg-base-100 w-full max-w-md shadow-2xl border border-base-200 overflow-hidden">
@@ -33,60 +79,60 @@ const Register = () => {
         </div>
         <form
           className="card-body my-0 py-0"
-          // onSubmit={handleSubmit(handleRegistration)}
+          onSubmit={handleSubmit(handleRegister)}
         >
           <fieldset className="fieldset">
             {/* name field */}
             <label className="label">Name</label>
             <input
               type="text"
-              // {...register("name", { required: true })}
+              {...register("name", { required: true })}
               className="input w-full"
               placeholder="Your Name"
             />
-            {/* {errors.name?.type === "required" && (
+            {errors.name?.type === "required" && (
               <p className="text-red-500">Name is required.</p>
-            )} */}
+            )}
 
             {/* photo image field */}
             <label className="label">Photo</label>
 
             <input
               type="file"
-              // {...register("photo", { required: true })}
+              {...register("photo", { required: true })}
               className="file-input w-full"
               placeholder="Your Photo"
             />
 
-            {/* {errors.name?.type === "required" && (
+            {errors.name?.type === "required" && (
               <p className="text-red-500">Photo is required.</p>
-            )} */}
+            )}
 
             {/* email field */}
             <label className="label">Email</label>
             <input
               type="email"
-              // {...register("email", { required: true })}
+              {...register("email", { required: true })}
               className="input w-full"
               placeholder="Email"
             />
-            {/* {errors.email?.type === "required" && (
+            {errors.email?.type === "required" && (
               <p className="text-red-500">Email is required.</p>
-            )} */}
+            )}
 
             {/* password */}
             <label className="label">Password</label>
             <input
               type="password"
-              // {...register("password", {
-              //   required: true,
-              //   minLength: 6,
-              //   pattern: /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[^A-Za-z0-9]).+$/,
-              // })}
+              {...register("password", {
+                required: true,
+                minLength: 6,
+                pattern: /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[^A-Za-z0-9]).+$/,
+              })}
               className="input w-full"
               placeholder="Password"
             />
-            {/* {errors.password?.type === "required" && (
+            {errors.password?.type === "required" && (
               <p className="text-red-500 font-semibold italic">
                 Password is required.
               </p>
@@ -102,9 +148,11 @@ const Register = () => {
                 lowercase, at least one number, and at least one special
                 characters
               </p>
-            )} */}
+            )}
 
-            <button className="btn btn-neutral mt-4">Register</button>
+            <button className="btn btn-neutral mt-4">
+              {loading ? <span>Wait for verify</span> : <span>Register</span>}
+            </button>
           </fieldset>
           <p className="font-semibold text-xs">
             Already have an account?{" "}

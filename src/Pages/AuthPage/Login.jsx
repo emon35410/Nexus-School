@@ -1,25 +1,31 @@
-import React, { use } from "react";
+import React, { use, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router";
 import { AuthContext } from "../../AuthContext/AuthContext";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import SocialLogin from "../../components/Shared/SocialLogin";
 
 const Login = () => {
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit, formState: {errors} } = useForm();
   const { loginUser } = use(AuthContext);
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
-  // const handleLogin = (userInfo) => {
-  //   loginUser(userInfo.email, userInfo.password)
-  //     .then((res) => {
-  //       toast.success("success");
-  //       navigate("/");
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  // };
+  const handleLogin = (userInfo) => {
+    setLoading(true)
+    loginUser(userInfo.email, userInfo.password)
+      .then((res) => {
+        toast.success("Login successful!");
+        navigate("/");
+         setLoading(false)
+      })
+   
+      .catch((err) => {
+        toast.error(err.message);
+      });
+  };
+
+
   return (
     <div className="min-h-[90vh] flex items-center justify-center p-4">
       <div className="card bg-base-100 w-full max-w-md shadow-2xl border border-base-200 overflow-hidden">
@@ -34,8 +40,8 @@ const Login = () => {
         </div>
 
         <div className="card-body p-8 pt-6">
-          <form className="space-y-4">
-            {/* onSubmit={handleSubmit(handleLogin)} */}
+          <form  onSubmit={handleSubmit(handleLogin)} className="space-y-4">
+           
             {/* Email Field */}
             <div className="form-control">
               <label className="label">
@@ -47,11 +53,11 @@ const Login = () => {
                 className={`input input-bordered focus:input-primary w-full `} //${errors.email ? "input-error" : ""}
                 placeholder="name@example.com"
               />
-              {/* {errors.email && (
+              {errors.email && (
                 <span className="text-error text-xs mt-1">
                   {errors.email.message}
                 </span>
-              )} */}
+              )}
             </div>
 
             {/* Password Field */}
@@ -68,18 +74,18 @@ const Login = () => {
                 className={`input input-bordered focus:input-primary w-full`}
                 placeholder="••••••••"
               />
-              {/* {errors.password && (
+              {errors.password && (
                 <span className="text-error text-xs mt-1">
                   {errors.password.message}
                 </span>
-              )} */}
+              )}
             </div>
             <div>
               <a className="link link-hover underline">Forgot password?</a>
             </div>
             {/* Login Button */}
-            <button className="btn btn-primary btn-block text-white font-bold mt-2">
-              Sign In
+            <button className={`${loading ? 'opacity-80' : ''} btn btn-primary btn-block text-white font-bold mt-2 `}>
+              {loading ? "Logging in..." : " Sign In"}
             </button>
           </form>
         </div>
