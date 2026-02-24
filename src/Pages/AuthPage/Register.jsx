@@ -30,15 +30,19 @@ const Register = () => {
       const profilePhoto = userInfo.photo[0];
 
       const formData = new FormData();
-      formData.append("image", profilePhoto);
+      formData.append("file", profilePhoto);
+      formData.append("upload_preset", import.meta.env.VITE_IMAGE_HOSTING_PRESET);
 
       // imagebb hosting
       const imageRes = await axios.post(
-        `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_IMAGE_HOSTING_KEY}`,
+       
+        `https://api.cloudinary.com/v1_1/${import.meta.env.VITE_IMAGE_HOSTING_KEY}/image/upload`,
+
         formData,
       );
 
-      const imageurl = imageRes.data.data.url;
+      const imageurl = imageRes.data.secure_url;
+      console.log(imageRes)
 
       const updateProfileInfo = {
         displayName: userInfo.name,
@@ -64,6 +68,9 @@ const Register = () => {
       setLoading(false);
     }
   };
+
+
+  console.log(user)
 
 
   return (
@@ -150,8 +157,8 @@ const Register = () => {
               </p>
             )}
 
-            <button className="btn btn-neutral mt-4">
-              {loading ? <span>Wait for verify</span> : <span>Register</span>}
+            <button className={`btn btn-neutral mt-4 ${loading ? 'bg-neutral/60' : ''}`}>
+              {loading ? <span>Wait for verify...</span> : <span>Register</span>}
             </button>
           </fieldset>
           <p className="font-semibold text-xs">
