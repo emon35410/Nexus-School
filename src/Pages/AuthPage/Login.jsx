@@ -6,10 +6,11 @@ import { toast } from "react-hot-toast";
 import SocialLogin from "../../components/Shared/SocialLogin";
 
 const Login = () => {
-  const { register, handleSubmit, formState: {errors} } = useForm();
-  const { loginUser } = use(AuthContext);
+  const { register, handleSubmit,getValues, formState: {errors} } = useForm();
+  const { loginUser,userPassRest } = use(AuthContext);
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  
 
   const handleLogin = (userInfo) => {
     setLoading(true)
@@ -24,6 +25,19 @@ const Login = () => {
         toast.error(err.message);
       });
   };
+
+   const handleForgetPassword = () => {
+     const email = getValues("email");
+      userPassRest(email)
+        .then((res) => {
+          console.log(res);
+          setLoading(false);
+          toast.success("Check your email to reset password");
+        })
+        .catch((e) => {
+          toast.error(e.message);
+        });
+    };
 
 
   return (
@@ -81,7 +95,7 @@ const Login = () => {
               )}
             </div>
             <div>
-              <a className="link link-hover underline">Forgot password?</a>
+              <button onClick={handleForgetPassword} type='button' className="link link-hover">Forget password?</button>
             </div>
             {/* Login Button */}
             <button className={`${loading ? 'opacity-80' : ''} btn btn-primary btn-block text-white font-bold mt-2 `}>

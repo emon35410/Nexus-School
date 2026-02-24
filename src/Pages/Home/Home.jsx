@@ -15,7 +15,9 @@ const Home = () => {
   return (
     <>
       <Hero />
+      {/* Create by Saleh ahmad */}
       <AcademicPrograms />
+      {/* Create by Saleh ahmad */}
       <NoticeBoard />
       {/* Koushik - Codes - Start */}
       {/* Marquee section */}
