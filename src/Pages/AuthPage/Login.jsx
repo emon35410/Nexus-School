@@ -94,6 +94,7 @@ const Login = () => {
                 </span>
               )}
             </div>
+            {/* create by saleh-ahmad */}
             <div>
               <button onClick={handleForgetPassword} type='button' className="link link-hover">Forget password?</button>
             </div>
