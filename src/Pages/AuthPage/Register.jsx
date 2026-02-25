@@ -7,6 +7,8 @@ import SocialLogin from "../../components/Shared/SocialLogin";
 import toast from "react-hot-toast";
 import axios from "axios";
 import useAxiosSecure from "../../Hooks/useAxiosSecure";
+import { db } from '../../auth/authInit';
+import { doc, setDoc } from 'firebase/firestore';
 
 const Register = () => {
   const {
@@ -21,28 +23,37 @@ const Register = () => {
 
 
 
+
   const handleRegister = async (userInfo) => {
     setLoading(true);
     try {
       const res = await userRegister(userInfo.email, userInfo.password);
+      // save user action on fireStore
+      const docRef = await setDoc(doc(db, 'users', userInfo.email), {
+        email: userInfo.email,
+        wrongAttempts: 0,
+        lockUntil: null,
+      });
 
       // form image for profile
       const profilePhoto = userInfo.photo[0];
 
       const formData = new FormData();
-      formData.append("file", profilePhoto);
-      formData.append("upload_preset", import.meta.env.VITE_IMAGE_HOSTING_PRESET);
+      formData.append('file', profilePhoto);
+      formData.append(
+        'upload_preset',
+        import.meta.env.VITE_IMAGE_HOSTING_PRESET,
+      );
 
       // imagebb hosting
       const imageRes = await axios.post(
-       
         `https://api.cloudinary.com/v1_1/${import.meta.env.VITE_IMAGE_HOSTING_KEY}/image/upload`,
 
         formData,
       );
 
       const imageurl = imageRes.data.secure_url;
-      console.log(imageRes)
+      console.log(imageRes);
 
       const updateProfileInfo = {
         displayName: userInfo.name,
@@ -54,14 +65,13 @@ const Register = () => {
       // send user info in database
       const userInfoDb = {
         name: res.displayName,
-        email: res.email
-      }
+        email: res.email,
+      };
 
-    //  axiosSecure.post('/users', userInfoDb)
+      //  axiosSecure.post('/users', userInfoDb)
 
-
-      toast.success("success");
-      navigate("/");
+      toast.success('success');
+      navigate('/');
     } catch (err) {
       console.log(err);
     } finally {
@@ -76,7 +86,7 @@ const Register = () => {
   return (
     <div className="min-h-[90vh] flex items-center justify-center p-4">
       <div className="card bg-base-100 w-full max-w-md shadow-2xl border border-base-200 overflow-hidden">
-        <div className="bg-gradient-to-r from-blue-600 to-cyan-500 p-8 text-center text-white">
+        <div className="bg-linear-to-r from-blue-600 to-cyan-500 p-8 text-center text-white">
           <h3 className="text-3xl font-black tracking-tight mb-2">
             Nexus-School
           </h3>
