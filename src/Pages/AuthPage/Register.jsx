@@ -27,6 +27,11 @@ const Register = () => {
     setLoading(true);
     try {
       const res = await userRegister(userInfo.email, userInfo.password);
+
+      // imidated redirect
+       toast.success('Success');
+        navigate('/');
+
       // save user action on fireStore
       const docRef = await setDoc(doc(db, 'users', userInfo.email), {
         email: userInfo.email,
@@ -61,6 +66,8 @@ const Register = () => {
 
       await updateUserProfile(updateProfileInfo);
 
+     
+
       // send user info in database
       const userInfoDb = {
         name: res.user.displayName,
@@ -71,10 +78,9 @@ const Register = () => {
       console.log(dbRes)
         
 
-      toast.success('success');
-      navigate('/');
+      
     } catch (err) {
-      console.log(err);
+      toast.error(err.message);
     } finally {
       setLoading(false);
     }
