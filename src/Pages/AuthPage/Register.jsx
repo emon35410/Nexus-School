@@ -63,11 +63,13 @@ const Register = () => {
 
       // send user info in database
       const userInfoDb = {
-        name: res.displayName,
-        email: res.email,
+        name: res.user.displayName,
+        email: res.user.email,
       };
 
-      //  axiosSecure.post('/users', userInfoDb)
+      const dbRes = await axiosSecure.post('/api/users', userInfoDb);
+      console.log(dbRes)
+        
 
       toast.success('success');
       navigate('/');
