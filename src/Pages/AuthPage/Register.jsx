@@ -23,6 +23,7 @@ const Register = () => {
 
 
 
+
   const handleRegister = async (userInfo) => {
     setLoading(true);
     try {
@@ -85,7 +86,7 @@ const Register = () => {
   return (
     <div className="min-h-[90vh] flex items-center justify-center p-4">
       <div className="card bg-base-100 w-full max-w-md shadow-2xl border border-base-200 overflow-hidden">
-        <div className="bg-gradient-to-r from-blue-600 to-cyan-500 p-8 text-center text-white">
+        <div className="bg-linear-to-r from-blue-600 to-cyan-500 p-8 text-center text-white">
           <h3 className="text-3xl font-black tracking-tight mb-2">
             Nexus-School
           </h3>
