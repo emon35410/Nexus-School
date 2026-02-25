@@ -58,14 +58,19 @@ const Navbar = () => {
         <button onClick={handleLogOut} className=" btn btn-primary">
           LogOut
         </button>
-      ) : (
-        <li className=" btn btn-ghost btn-outline border-gray-300">
-          <Link to="/login">Login</Link>
-        </li>
-      )}
-      <li className=" btn btn-info ">
-        <Link to="/register">Register</Link>
-      </li>
+      ) :
+        (
+          <>
+            <li className=" btn btn-ghost btn-outline border-gray-300">
+              <Link to="/login">Login</Link>
+
+            </li>
+            <li className=" btn btn-info ">
+              <Link to="/register">Register</Link>
+            </li>
+          </>
+        )}
+
     </>
   );
 
