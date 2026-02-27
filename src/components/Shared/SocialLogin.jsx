@@ -23,7 +23,10 @@ const SocialLogin = () => {
 
           // send data in database this
           console.log(userInfoDb);
-          // axiosSecure.post('/users', userInfoDb)
+         axiosSecure.post('/api/users', userInfoDb)
+        .then(res => {
+        console.log(res)
+        })
 
           navigate("/");
 

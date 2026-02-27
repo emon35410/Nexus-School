@@ -7,6 +7,7 @@ import SocialLogin from "../../components/Shared/SocialLogin";
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { db } from '../../auth/authInit';
 
+
 const Login = () => {
   const { register, handleSubmit,getValues, formState: {errors} } = useForm();
   const { loginUser,userPassRest } = use(AuthContext);
@@ -15,6 +16,7 @@ const Login = () => {
   
 
   const handleLogin = async userInfo => {
+     setLoading(true);
     if (!userInfo?.email) {
       toast.error('Please enter a valid email');
       return;
@@ -25,6 +27,7 @@ const Login = () => {
 
     if (!docSnap.exists()) {
       toast.info('User not found');
+      setLoading(false)
       return;
     }
 
@@ -32,11 +35,12 @@ const Login = () => {
 
     if (userData.lockUntil && Date.now() < userData.lockUntil) {
       toast.info('Account is locked. Try again later ❌');
+      setLoading(false)
       return;
     }
 
     try {
-      setLoading(true);
+     
 
       // ✅ login try
       const res = await loginUser(userInfo.email, userInfo.password);
