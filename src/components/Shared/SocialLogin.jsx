@@ -19,6 +19,7 @@ const SocialLogin = () => {
           const userInfoDb = {
             name: res.user.displayName,
             email: res.user.email,
+            image: res.user.photoURL,
           };
 
           // send data in database this
