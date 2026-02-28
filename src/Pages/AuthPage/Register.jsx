@@ -76,7 +76,7 @@ const Register = () => {
         image: res.user.photoURL
       };
 
-      const dbRes = await axiosSecure.post('/api/users', userInfoDb);
+      const dbRes = await axiosSecure.post('/users', userInfoDb);
       console.log(dbRes)
         
 

@@ -15,7 +15,7 @@ const Profile = () => {
   const userEmail = user?.email || "user@nexus-school.com";
   const userImg = user?.photoURL || "https://i.pravatar.cc/150?img=11";
   
-  const userRole = "student"; 
+  const userRole = "admin"; 
 
   return (
     <div className="max-w-4xl mx-auto animate-in fade-in slide-in-from-top-4 duration-700">
