@@ -9,6 +9,7 @@ import Notice from "../Pages/Notice/Notice";
 import Profile from "../Pages/Profile/Profile";
 import NotFound from "../components/NotFound/NotFound";
 import NexusLoader from "../components/Nexusloader/Nexusloader";
+import ManageUsers from "../Pages/ManageUsers/ManageUsers";
 
 const router = createBrowserRouter([
   {
@@ -47,9 +48,14 @@ const router = createBrowserRouter([
       {
         path:"/dashboard/profile",
         Component: Profile
-      }
-    ]
-  },
+      },
+      {
+      path:"/dashboard/manage-users",
+      Component: ManageUsers
+    }
+    ],
+    
+  }
 ]);
 
 export default router;
