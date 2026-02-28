@@ -8,12 +8,14 @@ import DashboardLayout from "../Layouts/DashboardLayout";
 import Notice from "../Pages/Notice/Notice";
 import Profile from "../Pages/Profile/Profile";
 import NotFound from "../components/NotFound/NotFound";
+import NexusLoader from "../components/Nexusloader/Nexusloader";
 
 const router = createBrowserRouter([
   {
     path: "/",
     Component: MainLayout,
     errorElement: <NotFound></NotFound>,
+    hydrateFallbackElement: <NexusLoader></NexusLoader>,
     children: [
       {
         index: true,
@@ -31,7 +33,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/dashboard",
-    Component: DashboardLayout,
+    element: <DashboardLayout></DashboardLayout>,
     errorElement: <NotFound></NotFound>,
     children: [
       {

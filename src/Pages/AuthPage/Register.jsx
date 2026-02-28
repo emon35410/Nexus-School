@@ -75,7 +75,7 @@ const Register = () => {
         email: res.user.email,
       };
 
-      const dbRes = await axiosSecure.post('/api/users', userInfoDb);
+      const dbRes = await axiosSecure.post('/users', userInfoDb);
       console.log(dbRes)
         
 

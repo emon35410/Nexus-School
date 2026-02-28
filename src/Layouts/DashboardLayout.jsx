@@ -6,6 +6,8 @@ import {
 } from "lucide-react";
 import { AuthContext } from "../AuthContext/AuthContext";
 import NS1_logo from "../assets/NS1.png";
+import useRole from "../Hooks/useRole";
+
 const NavLinks = ({ isOpen, isMobile = false, userRole, setMobileMenuOpen }) => (
     <ul className="space-y-2">
         <SidebarLink
@@ -50,6 +52,7 @@ const DashboardLayout = () => {
     const navigate = useNavigate();
     const [isSidebarOpen, setSidebarOpen] = useState(true);
     const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
+    
 
     const handleLogout = async () => {
         try {
