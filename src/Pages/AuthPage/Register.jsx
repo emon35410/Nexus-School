@@ -73,6 +73,7 @@ const Register = () => {
       const userInfoDb = {
         name: res.user.displayName,
         email: res.user.email,
+        image: res.user.photoURL
       };
 
       const dbRes = await axiosSecure.post('/api/users', userInfoDb);
