@@ -7,6 +7,7 @@ import {
 import { AuthContext } from "../AuthContext/AuthContext";
 import NS1_logo from "../assets/NS1.png";
 import useRole from "../Hooks/useRole";
+import NexusLoader from "../components/Nexusloader/Nexusloader";
 
 const NavLinks = ({ isOpen, isMobile = false, userRole, setMobileMenuOpen }) => (
     <ul className="space-y-2">
@@ -52,6 +53,7 @@ const DashboardLayout = () => {
     const navigate = useNavigate();
     const [isSidebarOpen, setSidebarOpen] = useState(true);
     const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
+    const [userRole, roleLoading] = useRole();
     
 
     const handleLogout = async () => {
@@ -63,9 +65,15 @@ const DashboardLayout = () => {
         }
     };
 
+    if (roleLoading) {
+        return (
+            <NexusLoader></NexusLoader>
+        );
+    }
+
     const userName = user?.displayName || "Nexus User";
     const userImg = user?.photoURL || "https://i.pravatar.cc/150?img=11";
-    const userRole = "student";
+    // const userRole = "admin";
 
     return (
         <div className="min-h-screen flex bg-[#0F172A] text-[#E2E8F0] font-sans selection:bg-blue-500/30">
