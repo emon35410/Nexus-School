@@ -10,6 +10,7 @@ import Profile from "../Pages/Profile/Profile";
 import NotFound from "../components/NotFound/NotFound";
 import NexusLoader from "../components/Nexusloader/Nexusloader";
 import ManageUsers from "../Pages/ManageUsers/ManageUsers";
+import ViewNotice from "../Pages/Notice/ViewNotice";
 
 const router = createBrowserRouter([
   {
@@ -42,7 +43,7 @@ const router = createBrowserRouter([
         Component: Dashboard
       },
       {
-        path:"/dashboard/notices",
+        path:"/dashboard/noticepost",
         Component: Notice
       },
       {
@@ -52,6 +53,10 @@ const router = createBrowserRouter([
       {
       path:"/dashboard/manage-users",
       Component: ManageUsers
+    },
+    {
+      path:"/dashboard/notices",
+      Component: ViewNotice
     }
     ],
     

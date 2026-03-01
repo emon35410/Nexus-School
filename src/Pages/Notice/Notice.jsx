@@ -1,112 +1,102 @@
 import React from 'react';
-import { Bell, Calendar, Megaphone, Search, Pin } from 'lucide-react';
+import { useForm } from 'react-hook-form'; 
+import { PlusCircle } from 'lucide-react';
+import Swal from 'sweetalert2';
+import useAxiosSecure from '../../Hooks/useAxiosSecure';
 
-const Notice = () => {
-  // ডামি ডাটা (পরবর্তীতে আপনি API থেকে আনবেন)
-  const notices = [
-    {
-      id: 1,
-      title: "School Reopening Ceremony 2026",
-      content: "We are excited to welcome all students back to campus. The ceremony will start at 9:00 AM sharp in the main auditorium.",
-      date: "Feb 28, 2026",
-      category: "Event",
-      priority: "High"
-    },
-    {
-      id: 2,
-      title: "Mid-Term Examination Schedule",
-      content: "The mid-term examination for all classes will begin from March 15. Please collect your admit cards from the office.",
-      date: "Feb 25, 2026",
-      category: "Exam",
-      priority: "Urgent"
-    },
-    {
-      id: 3,
-      title: "New Library Rules",
-      content: "Starting next week, students can borrow up to 3 books at a time for a duration of 14 days.",
-      date: "Feb 20, 2026",
-      category: "Academic",
-      priority: "Normal"
+const Notice = ({ refetch }) => {
+  const axiosSecure = useAxiosSecure();
+
+  // react-hook-form setup
+  const { register, handleSubmit, reset, formState: { errors } } = useForm();
+
+  // form submission handler
+  const onSubmit = async (data) => {
+    try {
+      const res = await axiosSecure.post('/notices', data);
+      console.log("Full Server Response:", res.data);
+
+      // response check: insertedId or status 200
+      if (res.data?.insertedId || res.status === 200) {
+        if (refetch) refetch(); 
+        reset();  
+
+        Swal.fire({
+          icon: 'success',
+          title: 'Notice Published!',
+          background: '#1E293B',
+          color: '#fff',
+          showConfirmButton: false,
+          timer: 1500
+        });
+      } else {
+        // if response doesn't have expected success indicators
+        throw new Error("Failed to get insertion confirmation");
+      }
+    } catch (err) {
+      console.error("Post Error Details:", err);
+
+      // eorror handling with fallback message
+      Swal.fire({
+        icon: 'error',
+        title: 'Submission Failed',
+        text: err.response?.data?.message || 'Check your internet or server connection',
+        background: '#1E293B',
+        color: '#fff',
+        confirmButtonColor: '#3B82F6'
+      });
     }
-  ];
+  };
 
   return (
-    <div className="space-y-8 animate-in slide-in-from-bottom-4 duration-700">
-      
-      {/* --- HEADER SECTION --- */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <aside className="bg-[#1E293B] border border-slate-800 p-8 rounded-[2.5rem] shadow-2xl sticky top-10">
+      <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
+        <PlusCircle size={20} className="text-blue-500" /> New Announcement
+      </h3>
+
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        {/* Title */}
         <div>
-          <h2 className="text-3xl font-black text-white flex items-center gap-3">
-            <Megaphone className="text-blue-500" /> Notice Board
-          </h2>
-          <p className="text-slate-400 mt-1 font-medium">Stay updated with the latest school announcements.</p>
-        </div>
-
-        {/* Search Bar */}
-        <div className="relative group">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-blue-500 transition-colors" size={18} />
-          <input 
-            type="text" 
-            placeholder="Search notices..." 
-            className="bg-[#1E293B] border border-slate-700 rounded-2xl py-3 pl-12 pr-6 outline-none focus:ring-2 focus:ring-blue-500/50 w-full md:w-80 transition-all text-sm"
+          <input
+            {...register("title", { required: "Title is required" })}
+            placeholder="Notice Title"
+            className={`w-full bg-slate-900 border ${errors.title ? 'border-rose-500' : 'border-slate-800'} rounded-xl p-3 text-sm outline-none focus:border-blue-500 text-slate-200`}
           />
+          {errors.title && <p className="text-rose-500 text-[10px] mt-1 ml-2 font-bold">{errors.title.message}</p>}
         </div>
-      </div>
 
-      {/* --- NOTICES LIST --- */}
-      <div className="grid gap-6">
-        {notices.map((notice) => (
-          <div 
-            key={notice.id} 
-            className="group bg-[#1E293B] border border-slate-700 p-6 rounded-4xl hover:border-blue-500/50 transition-all shadow-lg hover:shadow-blue-900/10 relative overflow-hidden"
-          >
-            {/* Priority Indicator */}
-            <div className={`absolute top-0 left-0 w-1.5 h-full ${
-              notice.priority === 'Urgent' ? 'bg-rose-500' : 
-              notice.priority === 'High' ? 'bg-amber-500' : 'bg-blue-500'
-            }`}></div>
-
-            <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
-              <div className="flex-1 space-y-3">
-                <div className="flex items-center gap-3">
-                  <span className={`text-[10px] font-black uppercase tracking-widest px-2.5 py-1 rounded-lg ${
-                    notice.category === 'Exam' ? 'bg-rose-500/10 text-rose-500' : 'bg-blue-500/10 text-blue-500'
-                  }`}>
-                    {notice.category}
-                  </span>
-                  <div className="flex items-center text-slate-500 gap-1 text-xs font-bold">
-                    <Calendar size={14} />
-                    {notice.date}
-                  </div>
-                </div>
-
-                <h3 className="text-xl font-bold text-slate-100 group-hover:text-blue-400 transition-colors flex items-center gap-2">
-                  {notice.title}
-                  {notice.priority === 'Urgent' && <Pin size={16} className="text-rose-500 rotate-45" />}
-                </h3>
-                
-                <p className="text-slate-400 leading-relaxed text-sm md:text-base">
-                  {notice.content}
-                </p>
-              </div>
-
-              <button className="self-start px-6 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-xl font-bold text-sm transition-colors whitespace-nowrap">
-                Download PDF
-              </button>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {/* Empty State Logic (If no notices) */}
-      {notices.length === 0 && (
-        <div className="text-center py-20 bg-[#1E293B] rounded-[3rem] border border-dashed border-slate-700">
-          <Bell className="mx-auto text-slate-600 mb-4" size={48} />
-          <h3 className="text-xl font-bold text-slate-400">No new notices today</h3>
-          <p className="text-slate-600">Check back later for updates!</p>
+        {/* Content */}
+        <div>
+          <textarea
+            {...register("content", { required: "Content cannot be empty" })}
+            placeholder="Write details here..."
+            rows="4"
+            className={`w-full bg-slate-900 border ${errors.content ? 'border-rose-500' : 'border-slate-800'} rounded-xl p-3 text-sm outline-none focus:border-blue-500 text-slate-200 resize-none`}
+          ></textarea>
+          {errors.content && <p className="text-rose-500 text-[10px] mt-1 ml-2 font-bold">{errors.content.message}</p>}
         </div>
-      )}
-    </div>
+
+        {/* Category & Priority */}
+        <div className="grid grid-cols-2 gap-3">
+          <select {...register("category")} className="bg-slate-900 border border-slate-800 rounded-xl p-3 text-xs text-slate-400 outline-none">
+            <option value="General">General</option>
+            <option value="Event">Event</option>
+            <option value="Exam">Exam</option>
+            <option value="Academic">Academic</option>
+          </select>
+
+          <select {...register("priority")} className="bg-slate-900 border border-slate-800 rounded-xl p-3 text-xs text-slate-400 outline-none">
+            <option value="Normal">Normal</option>
+            <option value="High">High</option>
+            <option value="Urgent">Urgent</option>
+          </select>
+        </div>
+
+        <button type="submit" className="w-full py-3.5 bg-blue-600 hover:bg-blue-500 text-white font-black rounded-xl shadow-lg shadow-blue-600/20 transition-all active:scale-95 uppercase tracking-widest text-xs">
+          Publish Notice
+        </button>
+      </form>
+    </aside>
   );
 };
 
