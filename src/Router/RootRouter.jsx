@@ -13,6 +13,7 @@ import ManageUsers from "../Pages/ManageUsers/ManageUsers";
 import ViewNotice from "../Pages/Notice/ViewNotice";
 import Attendance from "../Pages/Dashboard/Teacher/Attendance";
 import AttendanceHistory from "../Pages/Dashboard/Teacher/AttendanceHistory";
+import Assignment from "../Pages/TeacherPages/Assignment";
 
 const router = createBrowserRouter([
   {
@@ -66,8 +67,12 @@ const router = createBrowserRouter([
     },{
       path:"/dashboard/teachersh/AttendanceHistory",
       element:<AttendanceHistory></AttendanceHistory>
-
+    },
+    {
+      path:"/dashboard/assignments",
+      Component: Assignment
     }
+    
     ],
     
   }
