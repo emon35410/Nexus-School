@@ -4,49 +4,102 @@ import {
     LayoutDashboard, Users, BookOpen, FileText,
     Bell, LogOut, Menu, X, UserCircle, GraduationCap
 } from "lucide-react";
+import { FcManager } from 'react-icons/fc';
 import { AuthContext } from "../AuthContext/AuthContext";
 import NS1_logo from "../assets/NS1.png";
 import useRole from "../Hooks/useRole";
 import NexusLoader from "../components/Nexusloader/Nexusloader";
 
-const NavLinks = ({ isOpen, isMobile = false, userRole, setMobileMenuOpen }) => (
-    <ul className="space-y-2">
+const NavLinks = ({
+  isOpen,
+  isMobile = false,
+  userRole,
+  setMobileMenuOpen,
+}) => (
+  <ul className="space-y-2">
+    <SidebarLink
+      to="/dashboard"
+      icon={<LayoutDashboard size={20} />}
+      label="Dashboard"
+      isOpen={isOpen}
+      end={true}
+      onClick={() => isMobile && setMobileMenuOpen(false)}
+    />
+
+    {userRole === 'admin' && (
+      <>
         <SidebarLink
-            to="/dashboard"
-            icon={<LayoutDashboard size={20} />}
-            label="Dashboard"
-            isOpen={isOpen}
-            end={true}
-            onClick={() => isMobile && setMobileMenuOpen(false)}
+          to="/dashboard/manage-users"
+          icon={<Users size={20} />}
+          label="Manage Users"
+          isOpen={isOpen}
+          onClick={() => isMobile && setMobileMenuOpen(false)}
         />
+        <SidebarLink
+          to="/dashboard/noticepost"
+          icon={<Bell size={20} />}
+          label="Post Notice"
+          isOpen={isOpen}
+          onClick={() => isMobile && setMobileMenuOpen(false)}
+        />
+      </>
+    )}
 
-        {userRole === "admin" && (
-            <>
-                <SidebarLink to="/dashboard/manage-users" icon={<Users size={20} />} label="Manage Users" isOpen={isOpen} onClick={() => isMobile && setMobileMenuOpen(false)} />
-                <SidebarLink to="/dashboard/noticepost" icon={<Bell size={20} />} label="Post Notice" isOpen={isOpen} onClick={() => isMobile && setMobileMenuOpen(false)} />
-            </>
-        )}
+    {/* teacher */}
 
-        {userRole === "teacher" && (
-            <>
-                <SidebarLink to="/dashboard/my-classes" icon={<BookOpen size={20} />} label="My Classes" isOpen={isOpen} onClick={() => isMobile && setMobileMenuOpen(false)} />
-                <SidebarLink to="/dashboard/assignments" icon={<FileText size={20} />} label="Assignments" isOpen={isOpen} onClick={() => isMobile && setMobileMenuOpen(false)} />
-                <SidebarLink to="/dashboard/notices" icon={<Bell size={20} />} label="Notice Board" isOpen={isOpen} onClick={() => isMobile && setMobileMenuOpen(false)} />
-            </>
-        )}
+    {userRole === 'student' && (
+      <>
+        <SidebarLink
+          to="/dashboard/my-classes"
+          icon={<BookOpen size={20} />}
+          label="My Classes"
+          isOpen={isOpen}
+          onClick={() => isMobile && setMobileMenuOpen(false)}
+        />
+        <SidebarLink
+          to="/dashboard/assignments"
+          icon={<FileText size={20} />}
+          label="Assignments"
+          isOpen={isOpen}
+          onClick={() => isMobile && setMobileMenuOpen(false)}
+        />
+        <SidebarLink
+          to="/dashboard/notices"
+          icon={<Bell size={20} />}
+          label="Notice Board"
+          isOpen={isOpen}
+          onClick={() => isMobile && setMobileMenuOpen(false)}
+        />
+        <SidebarLink
+          to="/dashboard/manage-student"
+          icon={<FcManager size={20} />}
+          label="Manage_students"
+          isOpen={isOpen}
+          onClick={() => isMobile && setMobileMenuOpen(false)}
+        />
+      </>
+    )}
 
-        {userRole === "student" && (
+    {/* {userRole === "student" && (
             <>
                 <SidebarLink to="/dashboard/my-courses" icon={<GraduationCap size={20} />} label="My Courses" isOpen={isOpen} onClick={() => isMobile && setMobileMenuOpen(false)} />
                 <SidebarLink to="/dashboard/my-results" icon={<FileText size={20} />} label="Exam Results" isOpen={isOpen} onClick={() => isMobile && setMobileMenuOpen(false)} />
                 <SidebarLink to="/dashboard/notices" icon={<Bell size={20} />} label="Notice Board" isOpen={isOpen} onClick={() => isMobile && setMobileMenuOpen(false)} />
             </>
-        )}
+        )} */}
 
-        <div className={`my-4 border-t border-slate-700/50 ${isOpen ? 'pt-4' : 'pt-2'}`}>
-            <SidebarLink to="/dashboard/profile" icon={<UserCircle size={20} />} label="My Profile" isOpen={isOpen} onClick={() => isMobile && setMobileMenuOpen(false)} />
-        </div>
-    </ul>
+    <div
+      className={`my-4 border-t border-slate-700/50 ${isOpen ? 'pt-4' : 'pt-2'}`}
+    >
+      <SidebarLink
+        to="/dashboard/profile"
+        icon={<UserCircle size={20} />}
+        label="My Profile"
+        isOpen={isOpen}
+        onClick={() => isMobile && setMobileMenuOpen(false)}
+      />
+    </div>
+  </ul>
 );
 
 const DashboardLayout = () => {

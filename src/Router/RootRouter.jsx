@@ -11,10 +11,11 @@ import NotFound from "../components/NotFound/NotFound";
 import NexusLoader from "../components/Nexusloader/Nexusloader";
 import ManageUsers from "../Pages/ManageUsers/ManageUsers";
 import ViewNotice from "../Pages/Notice/ViewNotice";
+import ManageStudents from "../Pages/mangeStudent/ManageStudents";
 
 const router = createBrowserRouter([
   {
-    path: "/",
+    path: '/',
     Component: MainLayout,
     errorElement: <NotFound></NotFound>,
     hydrateFallbackElement: <NexusLoader></NexusLoader>,
@@ -24,43 +25,46 @@ const router = createBrowserRouter([
         Component: Home,
       },
       {
-        path: "/register",
+        path: '/register',
         Component: Register,
       },
       {
-        path: "/login",
+        path: '/login',
         Component: Login,
       },
     ],
   },
   {
-    path: "/dashboard",
+    path: '/dashboard',
     element: <DashboardLayout></DashboardLayout>,
     errorElement: <NotFound></NotFound>,
     children: [
       {
-        index:true,
-        Component: Dashboard
+        index: true,
+        Component: Dashboard,
       },
       {
-        path:"/dashboard/noticepost",
-        Component: Notice
+        path: '/dashboard/noticepost',
+        Component: Notice,
       },
       {
-        path:"/dashboard/profile",
-        Component: Profile
+        path: '/dashboard/profile',
+        Component: Profile,
       },
       {
-      path:"/dashboard/manage-users",
-      Component: ManageUsers
-    },
-    {
-      path:"/dashboard/notices",
-      Component: ViewNotice
-    }
+        path: '/dashboard/manage-users',
+        Component: ManageUsers,
+      },
+      {
+        path: '/dashboard/notices',
+        Component: ViewNotice,
+      },
+      {
+        path: '/dashboard/manage-student',
+        Component: ManageStudents,
+      },
     ],
-    
-  }
+  },
 ]);
 
 export default router;
