@@ -11,6 +11,7 @@ import NotFound from "../components/NotFound/NotFound";
 import NexusLoader from "../components/Nexusloader/Nexusloader";
 import ManageUsers from "../Pages/ManageUsers/ManageUsers";
 import ViewNotice from "../Pages/Notice/ViewNotice";
+import Assignment from "../Pages/TeacherPages/Assignment";
 import ManageStudents from "../Pages/mangeStudent/ManageStudents";
 
 const router = createBrowserRouter([
@@ -60,8 +61,12 @@ const router = createBrowserRouter([
         Component: ViewNotice,
       },
       {
+        path: '/dashboard/assignments',
+        Component: Assignment,
+      },
+      {
         path: '/dashboard/manage-student',
-        Component: ManageStudents,
+        Component:ManageStudents
       },
     ],
   },

@@ -14,10 +14,10 @@ const Dashboard = () => {
             <NexusLoader />
         );
     }
-   //'teacher'
+   
     // role based rendering
     if (role === 'admin') return <AdminDashboard />;
-    if (role === 'student') return <TeacherDashboard />;
+    if (role === 'teacher') return <TeacherDashboard />;
   
     return <StudentDashboard />;
 };

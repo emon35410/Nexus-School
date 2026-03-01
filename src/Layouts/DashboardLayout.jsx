@@ -45,9 +45,9 @@ const NavLinks = ({
       </>
     )}
 
-    {/* teacher */}
+   
 
-    {userRole === 'student' && (
+    {userRole === 'teacher' && (
       <>
         <SidebarLink
           to="/dashboard/my-classes"
@@ -80,13 +80,13 @@ const NavLinks = ({
       </>
     )}
 
-    {/* {userRole === "student" && (
+    {userRole === "student" && (
             <>
                 <SidebarLink to="/dashboard/my-courses" icon={<GraduationCap size={20} />} label="My Courses" isOpen={isOpen} onClick={() => isMobile && setMobileMenuOpen(false)} />
                 <SidebarLink to="/dashboard/my-results" icon={<FileText size={20} />} label="Exam Results" isOpen={isOpen} onClick={() => isMobile && setMobileMenuOpen(false)} />
                 <SidebarLink to="/dashboard/notices" icon={<Bell size={20} />} label="Notice Board" isOpen={isOpen} onClick={() => isMobile && setMobileMenuOpen(false)} />
             </>
-        )} */}
+        )}
 
     <div
       className={`my-4 border-t border-slate-700/50 ${isOpen ? 'pt-4' : 'pt-2'}`}
