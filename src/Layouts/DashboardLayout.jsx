@@ -18,7 +18,7 @@ const NavLinks = ({ isOpen, isMobile = false, userRole, setMobileMenuOpen }) => 
             isOpen={isOpen}
             end={true}
             onClick={() => isMobile && setMobileMenuOpen(false)}
-        />
+        /> 
 
         {userRole === "admin" && (
             <>
@@ -41,6 +41,7 @@ const NavLinks = ({ isOpen, isMobile = false, userRole, setMobileMenuOpen }) => 
             <>
                 <SidebarLink to="/dashboard/my-courses" icon={<GraduationCap size={20} />} label="My Courses" isOpen={isOpen} onClick={() => isMobile && setMobileMenuOpen(false)} />
                 <SidebarLink to="/dashboard/my-results" icon={<FileText size={20} />} label="Exam Results" isOpen={isOpen} onClick={() => isMobile && setMobileMenuOpen(false)} />
+                <SidebarLink to="/dashboard/my-assignments" icon={<FileText size={20} />} label="My Assignments" isOpen={isOpen} onClick={() => isMobile && setMobileMenuOpen(false)} />
                 <SidebarLink to="/dashboard/notices" icon={<Bell size={20} />} label="Notice Board" isOpen={isOpen} onClick={() => isMobile && setMobileMenuOpen(false)} />
             </>
         )}
