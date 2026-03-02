@@ -14,7 +14,7 @@ const Dashboard = () => {
             <NexusLoader />
         );
     }
-
+   
     // role based rendering
     if (role === 'admin') return <AdminDashboard />;
     if (role === 'teacher') return <TeacherDashboard />;
