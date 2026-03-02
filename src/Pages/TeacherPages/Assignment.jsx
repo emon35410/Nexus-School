@@ -123,11 +123,11 @@ const Assignment = ({ refetch }) => {
               className="w-full bg-slate-900 border border-slate-800 rounded-xl p-3 text-sm text-slate-400 outline-none appearance-none focus:border-emerald-500"
             >
               <option value="">Select Target Class</option>
-              <option value="Class 6">Class 6</option>
-              <option value="Class 7">Class 7</option>
-              <option value="Class 8">Class 8</option>
-              <option value="Class 9">Class 9</option>
-              <option value="Class 10">Class 10</option>
+              <option value="class-6">Class 6</option>
+              <option value="class-7">Class 7</option>
+              <option value="class-8">Class 8</option>
+              <option value="class-9">Class 9</option>
+              <option value="class-10">Class 10</option>
             </select>
             {errors.targetClass && (
               <p className="text-rose-500 text-[10px] mt-1 ml-2 font-bold">

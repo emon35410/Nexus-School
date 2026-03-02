@@ -169,10 +169,11 @@ const Profile = () => {
                  className="w-full bg-slate-900 border border-slate-700 rounded-2xl p-4 text-white focus:border-blue-500 outline-none text-sm transition-all">
                 
                   <option value="Not set">Not Set</option>
-                  <option value="class-9">Class 9</option>
-                  <option value="class-8">Class 8</option>
-                  <option value="class-7">Class 7</option>
                   <option value="class-6">Class 6</option>
+                  <option value="class-7">Class 7</option>
+                  <option value="class-8">Class 8</option>
+                  <option value="class-9">Class 9</option>
+                  <option value="class-10">Class 10</option>
               </select>
 
 
