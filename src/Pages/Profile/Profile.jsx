@@ -8,12 +8,14 @@ import { useQuery } from '@tanstack/react-query';
 import useAxiosSecure from '../../Hooks/useAxiosSecure';
 import NexusLoader from '../../components/Nexusloader/Nexusloader';
 import Swal from 'sweetalert2';
+import useRole from '../../Hooks/useRole';
 
 const Profile = () => {
   const { user } = useContext(AuthContext);
   const axiosSecure = useAxiosSecure();
   const [isModalOpen, setModalOpen] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
+  const [role, roleLoading]=useRole()
 
   // --- Fetch Profile Data ---
   const { data: dbUser, isLoading, refetch } = useQuery({
@@ -24,6 +26,16 @@ const Profile = () => {
     },
     enabled: !!user?.email,
   });
+
+  // --- fetch feedback data 
+  const { data:feedbacks} = useQuery({
+    queryKey: ['feedback',user?.email],
+    queryFn: async () => {
+      const res = await axiosSecure.get(`/student/feedback?email=${user?.email}`);
+      return res.data
+
+    }
+  })
 
   if (isLoading) return <NexusLoader />;
 
