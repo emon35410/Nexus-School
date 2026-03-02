@@ -11,7 +11,10 @@ import NotFound from "../components/NotFound/NotFound";
 import NexusLoader from "../components/Nexusloader/Nexusloader";
 import ManageUsers from "../Pages/ManageUsers/ManageUsers";
 import ViewNotice from "../Pages/Notice/ViewNotice";
+import Attendance from "../Pages/Dashboard/Teacher/Attendance";
+import AttendanceHistory from "../Pages/Dashboard/Teacher/AttendanceHistory";
 import Assignment from "../Pages/TeacherPages/Assignment";
+import MyAssignments from "../Pages/StudentPages/MyAssignments";
 
 const router = createBrowserRouter([
   {
@@ -60,8 +63,19 @@ const router = createBrowserRouter([
       Component: ViewNotice
     },
     {
+      path:"/dashboard/teachersh/Attendance",
+      element: <Attendance></Attendance>
+    },{
+      path:"/dashboard/teachersh/AttendanceHistory",
+      element:<AttendanceHistory></AttendanceHistory>
+    },
+    {
       path:"/dashboard/assignments",
       Component: Assignment
+    },
+    {
+      path:"/dashboard/my-assignments",
+      Component: MyAssignments
     }
     
     ],

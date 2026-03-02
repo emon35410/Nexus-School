@@ -62,7 +62,11 @@ const Navbar = () => {
         <Menu onClick={()=> setActiveRes(!activeRes)} className="md:hidden"/>
 
         {/* logo */}
-        <Link to="/" className="font-bold text-2xl">
+        
+        <Link to="/" className="font-bold text-2xl flex items-center gap-2">
+        <div className="h-9 w-9 rounded-xl overflow-hidden shadow-sm border border-white">
+          <img className="w-full h-full object-cover" src={logoimg} alt="Logo" />
+        </div>
           Nexus-<span className="text-primary">School</span>
         </Link>
 
