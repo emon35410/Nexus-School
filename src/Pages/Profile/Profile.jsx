@@ -56,6 +56,7 @@ const Profile = () => {
       name: form.name.value,
       phone: form.phone.value,
       address: form.address.value,
+      department : form.department.value
     };
 
     try {
@@ -132,26 +133,10 @@ const Profile = () => {
             </h3>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
-              <InfoBox
-                label="Full Name"
-                value={dbUser?.name || user?.displayName}
-                icon={<User size={16} />}
-              />
-              <InfoBox
-                label="Email Address"
-                value={dbUser?.email}
-                icon={<Mail size={16} />}
-              />
-              <InfoBox
-                label="Phone"
-                value={dbUser?.phone || 'Not Set'}
-                icon={<Phone size={16} />}
-              />
-              <InfoBox
-                label="Department"
-                value={dbUser?.department || 'Computer Science'}
-                icon={<GraduationCap size={16} />}
-              />
+              <InfoBox label="Full Name" value={dbUser?.name || user?.displayName} icon={<User size={16}/>} />
+              <InfoBox label="Email Address" value={dbUser?.email} icon={<Mail size={16}/>} />
+              <InfoBox label="Phone" value={dbUser?.phone || "Not Set"} icon={<Phone size={16}/>} />
+              <InfoBox label="Department" value={dbUser?.department ? dbUser.department.replace('-', ' ').toUpperCase() : "Computer Science"} icon={<GraduationCap size={16}/>} />
             </div>
           </section>
         </div>
@@ -231,7 +216,25 @@ const Profile = () => {
                 />
               </div>
 
-              <button
+              <div className="space-y-2">
+                <label className="text-[10px] font-bold text-slate-500 uppercase ml-1 tracking-widest">Deparment</label>
+               
+
+              <select name="department" defaultValue={`${dbUser?.department}`}
+                 className="w-full bg-slate-900 border border-slate-700 rounded-2xl p-4 text-white focus:border-blue-500 outline-none text-sm transition-all">
+                
+                  <option value="Not set">Not Set</option>
+                  <option value="class-6">Class 6</option>
+                  <option value="class-7">Class 7</option>
+                  <option value="class-8">Class 8</option>
+                  <option value="class-9">Class 9</option>
+                  <option value="class-10">Class 10</option>
+              </select>
+
+
+              </div>
+
+              <button 
                 disabled={isUpdating}
                 className="w-full py-4 bg-blue-600 hover:bg-blue-500 disabled:bg-blue-800 text-white rounded-2xl font-bold transition-all flex items-center justify-center gap-2 active:scale-[0.98] mt-4"
               >
