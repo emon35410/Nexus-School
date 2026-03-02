@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import useAxiosSecure from '../../Hooks/useAxiosSecure';
 
 import StudentCard from './StudentCard';
+import NexusLoader from '../../components/Nexusloader/Nexusloader';
 
 const ManageStudents = () => {
   const axiosSecure = useAxiosSecure()
@@ -16,7 +17,9 @@ const ManageStudents = () => {
     }
   });
   
-
+  if (isLoading) {
+   return <NexusLoader></NexusLoader>
+ }
   return (
     <div className=" grid xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 grid-cols-1">
       {studentData.map(student => (

@@ -30,8 +30,17 @@ const FeedBack = ({ isOpen, setIsOpen, isStudent }) => {
 
     axiosSecure.post('/student/feedback', studentFeedBack)
       .then(res => {
-        toast.info('success-feedback');
+        
+        if (res.data?.message) {
+          toast.info(res.data?.message)
+        } else {
+          toast.info('success-feedback');
+        }
+         
+          
+        
         reset();
+
         setIsOpen(false)
 
       }).catch(err => {
