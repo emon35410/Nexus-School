@@ -8,12 +8,16 @@ import { useQuery } from '@tanstack/react-query';
 import useAxiosSecure from '../../Hooks/useAxiosSecure';
 import NexusLoader from '../../components/Nexusloader/Nexusloader';
 import Swal from 'sweetalert2';
+import useRole from '../../Hooks/useRole';
+import FeedbackModal from './FeedbackModal';
 
 const Profile = () => {
   const { user } = useContext(AuthContext);
   const axiosSecure = useAxiosSecure();
   const [isModalOpen, setModalOpen] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
+  const [role, roleLoading] = useRole();
+  const [isFeedback,setIsFeedback]=useState(false)
 
   // --- Fetch Profile Data ---
   const { data: dbUser, isLoading, refetch } = useQuery({
@@ -25,6 +29,18 @@ const Profile = () => {
     enabled: !!user?.email,
   });
 
+  // --- fetch feedback data 
+  const { data:feedbacks} = useQuery({
+    queryKey: ['feedback',user?.email],
+    queryFn: async () => {
+      const res = await axiosSecure.get(`/student/feedback?email=${user?.email}`);
+      return res.data
+
+    }
+  })
+
+  console.log(feedbacks)
+ 
   if (isLoading) return <NexusLoader />;
 
   const userImg = user?.photoURL || "https://i.pravatar.cc/150?img=11";
@@ -40,6 +56,7 @@ const Profile = () => {
       name: form.name.value,
       phone: form.phone.value,
       address: form.address.value,
+      department : form.department.value
     };
 
     try {
@@ -67,38 +84,39 @@ const Profile = () => {
 
   return (
     <div className="max-w-4xl mx-auto animate-in fade-in slide-in-from-top-4 duration-700 pb-10">
-      
       {/* --- COVER & AVATAR SECTION --- */}
       <div className="relative mb-24">
         <div className="h-48 w-full bg-linear-to-r from-blue-600 to-indigo-800 rounded-[2.5rem] shadow-lg"></div>
-        
+
         <div className="absolute -bottom-16 left-8 flex flex-col md:flex-row items-end gap-6">
           <div className="relative group">
-            <img 
+            <img
               referrerPolicy="no-referrer"
-              src={userImg} 
-              alt="Profile" 
+              src={userImg}
+              alt="Profile"
               className="w-36 h-36 rounded-4xl border-4 border-[#0F172A] object-cover shadow-2xl transition-transform group-hover:scale-[1.02]"
             />
             <button className="absolute bottom-2 right-2 p-2 bg-blue-600 rounded-xl border-2 border-[#0F172A] text-white hover:bg-blue-700 transition-colors">
               <Camera size={16} />
             </button>
           </div>
-          
+
           <div className="pb-4">
-            <h1 className="text-3xl font-black text-white">{dbUser?.name || user?.displayName}</h1>
+            <h1 className="text-3xl font-black text-white">
+              {dbUser?.name || user?.displayName}
+            </h1>
             <div className="flex items-center gap-2 mt-1">
               <span className="px-3 py-1 bg-blue-500/20 text-blue-400 border border-blue-500/30 rounded-lg text-xs font-bold uppercase tracking-widest">
                 {userRole}
               </span>
               <span className="text-slate-400 text-sm flex items-center gap-1">
-                <MapPin size={14} /> {dbUser?.address || "Sylhet, Bangladesh"}
+                <MapPin size={14} /> {dbUser?.address || 'Sylhet, Bangladesh'}
               </span>
             </div>
           </div>
         </div>
 
-        <button 
+        <button
           onClick={() => setModalOpen(true)}
           className="absolute -bottom-12 right-8 flex items-center gap-2 px-6 py-3 bg-[#1E293B] hover:bg-slate-800 border border-slate-700 text-white rounded-2xl font-bold text-sm transition-all shadow-xl active:scale-95"
         >
@@ -108,31 +126,50 @@ const Profile = () => {
 
       {/* --- DETAILS GRID --- */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-32">
-        
         <div className="md:col-span-2">
           <section className="bg-[#1E293B] p-8 rounded-4xl border border-slate-700 shadow-sm h-full">
             <h3 className="text-xl font-bold mb-6 text-white flex items-center gap-2">
               <Shield size={20} className="text-blue-500" /> Account Information
             </h3>
-            
+
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
               <InfoBox label="Full Name" value={dbUser?.name || user?.displayName} icon={<User size={16}/>} />
               <InfoBox label="Email Address" value={dbUser?.email} icon={<Mail size={16}/>} />
               <InfoBox label="Phone" value={dbUser?.phone || "Not Set"} icon={<Phone size={16}/>} />
-              <InfoBox label="Department" value={dbUser?.department || "Computer Science"} icon={<GraduationCap size={16}/>} />
+              <InfoBox label="Department" value={dbUser?.department ? dbUser.department.replace('-', ' ').toUpperCase() : "Computer Science"} icon={<GraduationCap size={16}/>} />
             </div>
           </section>
         </div>
 
         <div className="space-y-6">
-           <div className="bg-linear-to-br from-blue-600/10 to-transparent p-8 rounded-4xl border border-blue-500/20">
-              <h4 className="font-bold text-blue-400 mb-4 uppercase text-xs tracking-widest">Performance</h4>
-              <div className="space-y-4">
-                <StatItem label="Attendance" value="99%" />
-                <StatItem label="Account" value="Active" />
-                <StatItem label="Joined" value="Jan 2026" />
+          <div className="bg-linear-to-br from-blue-600/10 to-transparent p-8 rounded-4xl border border-blue-500/20">
+            <h4 className="font-bold text-blue-400 mb-4 uppercase text-xs tracking-widest">
+              Performance
+            </h4>
+            <div className="space-y-4">
+              <StatItem label="Attendance" value="99%" />
+              <StatItem label="Account" value="Active" />
+              <StatItem label="Joined" value="Jan 2026" />
+              <div>
+                {role === 'student' && (
+                  <div>
+                    <button onClick={()=>setIsFeedback(true)} className=" btn btn-info btn-xs capitalize text-white">
+                      your-feedback
+                    </button>
+                    <div>
+                      {isFeedback &&
+                       
+                        <FeedbackModal
+                          setIsFeedback={setIsFeedback}
+                          feedbacks={feedbacks}
+                        ></FeedbackModal>
+                      }
+                    </div>
+                  </div>
+                )}
               </div>
-           </div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -142,22 +179,59 @@ const Profile = () => {
           <div className="bg-[#1E293B] border border-slate-700 w-full max-w-lg rounded-[2.5rem] overflow-hidden shadow-2xl">
             <div className="p-8 border-b border-slate-700 flex justify-between items-center bg-slate-800/50">
               <h2 className="text-xl font-bold text-white">Update Profile</h2>
-              <button onClick={() => setModalOpen(false)} className="p-2 hover:bg-slate-700 rounded-xl text-slate-400 transition-colors">
-                <X size={20}/>
+              <button
+                onClick={() => setModalOpen(false)}
+                className="p-2 hover:bg-slate-700 rounded-xl text-slate-400 transition-colors"
+              >
+                <X size={20} />
               </button>
             </div>
-            
+
             <form onSubmit={handleUpdateProfile} className="p-8 space-y-5">
-              <ModalInput label="Display Name" name="name" defaultValue={dbUser?.name || user?.displayName} />
-              
+              <ModalInput
+                label="Display Name"
+                name="name"
+                defaultValue={dbUser?.name || user?.displayName}
+              />
+
               <div className="space-y-2">
-                <label className="text-[10px] font-bold text-slate-500 uppercase ml-1 tracking-widest">Phone Number</label>
-                <input name="phone" defaultValue={dbUser?.phone} className="w-full bg-slate-900 border border-slate-700 rounded-2xl p-4 text-white focus:border-blue-500 outline-none text-sm transition-all" />
+                <label className="text-[10px] font-bold text-slate-500 uppercase ml-1 tracking-widest">
+                  Phone Number
+                </label>
+                <input
+                  name="phone"
+                  defaultValue={dbUser?.phone}
+                  className="w-full bg-slate-900 border border-slate-700 rounded-2xl p-4 text-white focus:border-blue-500 outline-none text-sm transition-all"
+                />
               </div>
 
               <div className="space-y-2">
-                <label className="text-[10px] font-bold text-slate-500 uppercase ml-1 tracking-widest">Location / Address</label>
-                <input name="address" defaultValue={dbUser?.address} className="w-full bg-slate-900 border border-slate-700 rounded-2xl p-4 text-white focus:border-blue-500 outline-none text-sm transition-all" />
+                <label className="text-[10px] font-bold text-slate-500 uppercase ml-1 tracking-widest">
+                  Location / Address
+                </label>
+                <input
+                  name="address"
+                  defaultValue={dbUser?.address}
+                  className="w-full bg-slate-900 border border-slate-700 rounded-2xl p-4 text-white focus:border-blue-500 outline-none text-sm transition-all"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-[10px] font-bold text-slate-500 uppercase ml-1 tracking-widest">Deparment</label>
+               
+
+              <select name="department" defaultValue={`${dbUser?.department}`}
+                 className="w-full bg-slate-900 border border-slate-700 rounded-2xl p-4 text-white focus:border-blue-500 outline-none text-sm transition-all">
+                
+                  <option value="Not set">Not Set</option>
+                  <option value="class-6">Class 6</option>
+                  <option value="class-7">Class 7</option>
+                  <option value="class-8">Class 8</option>
+                  <option value="class-9">Class 9</option>
+                  <option value="class-10">Class 10</option>
+              </select>
+
+
               </div>
 
               <button 
@@ -165,9 +239,13 @@ const Profile = () => {
                 className="w-full py-4 bg-blue-600 hover:bg-blue-500 disabled:bg-blue-800 text-white rounded-2xl font-bold transition-all flex items-center justify-center gap-2 active:scale-[0.98] mt-4"
               >
                 {isUpdating ? (
-                  <><Loader2 size={18} className="animate-spin" /> Updating...</>
+                  <>
+                    <Loader2 size={18} className="animate-spin" /> Updating...
+                  </>
                 ) : (
-                  <><Save size={18}/> Save Changes</>
+                  <>
+                    <Save size={18} /> Save Changes
+                  </>
                 )}
               </button>
             </form>

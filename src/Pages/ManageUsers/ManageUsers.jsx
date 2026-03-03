@@ -76,6 +76,7 @@ const ManageUsers = () => {
                                                     src={user.image || "https://i.pravatar.cc/150?u=" + user.email} 
                                                     alt={user.name} 
                                                     className="w-full h-full object-cover"
+                                                    referrerPolicy='no-referrer'
                                                     // onError={(e) => { e.target.src = "https://i.pravatar.cc/150?img=12"; }}
                                                 />
                                             </div>
