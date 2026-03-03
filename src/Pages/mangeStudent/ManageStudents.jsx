@@ -4,38 +4,42 @@ import useAxiosSecure from '../../Hooks/useAxiosSecure';
 
 import StudentCard from './StudentCard';
 import NexusLoader from '../../components/Nexusloader/Nexusloader';
+import { SlArrowLeft, SlArrowRight } from 'react-icons/sl';
 
 const ManageStudents = () => {
   const axiosSecure = useAxiosSecure();
   const [isDepartment, setIsDepartment] = useState('');
-  console.log(isDepartment)
-  
-  const { data: studentData =[], isLoading, refetch } = useQuery({
-    queryKey: ['all-students',isDepartment],
+  // const [isAllStudent, setIsAllStudent] = useState(0);
+  const [isAllPage, setIsAllPage] = useState(0);
+  const [currentPage,setCurrentPage]=useState(0)
+  const limit = 8;
+  const { data: studentData =[], isLoading } = useQuery({
+    queryKey: ['all-students',isDepartment,limit,currentPage],
     queryFn: async () => {
-      const res = await axiosSecure.get(`/student?department=${isDepartment}`);
-      
-      return res.data;
+      const res = await axiosSecure.get(`/student?department=${isDepartment}&limit=${limit}&skip=${currentPage * limit}`);
+      const totalStudent = res.data.allStudent / limit
+      setIsAllPage(Math.ceil(totalStudent));
+      return res.data.result;
     }
   });
-  
+  console.log(currentPage);
   if (isLoading) {
    return <NexusLoader></NexusLoader>
  }
   return (
     <div>
-      <div >
+      <div>
         {/* title and subtitle */}
         <div className=" text-center mb-8 space-y-2 ">
           <h1 className=" text-2xl font-bold">Today’s Feedback</h1>
           <p>Teachers can provide one feedback per subject each day</p>
         </div>
         {/* select with class */}
-        <div className='md:max-w-[350px] w-full mb-3'>
+        <div className="md:max-w-[350px] w-full mb-3">
           <select
             name="department"
             value={isDepartment}
-            onChange={(e)=> setIsDepartment(e.target.value)}
+            onChange={e => setIsDepartment(e.target.value)}
             className="w-full bg-slate-900 border border-slate-700 rounded-2xl p-4 text-white focus:border-blue-500 outline-none text-sm transition-all"
           >
             <option value="">Not Set</option>
@@ -56,6 +60,37 @@ const ManageStudents = () => {
             studentData={studentData}
           ></StudentCard>
         ))}
+      </div>
+
+      <div className=" text-center my-4 space-x-2">
+        {currentPage === 0 || (
+          <button
+            onClick={() => setCurrentPage(currentPage - 1)}
+            className=" btn btn-xs"
+          >
+            <SlArrowLeft />
+          </button>
+        )}
+
+        {Array(isAllPage)
+          .keys()
+          .map(i => (
+            <button
+              onClick={() => setCurrentPage(i)}
+              className={`btn  btn-xs  ${currentPage === i && 'btn-info text-white'}`}
+            >
+              {i + 1}
+            </button>
+          ))}
+
+        {currentPage < isAllPage - 1 && (
+          <button
+            onClick={() => setCurrentPage(currentPage + 1)}
+            className="btn btn-xs"
+          >
+            <SlArrowRight />
+          </button>
+        )}
       </div>
     </div>
   );
