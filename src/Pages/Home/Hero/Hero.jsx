@@ -14,6 +14,7 @@ import heroImg3 from "../../../assets/hero-3.webp";
 import heroImg4 from "../../../assets/hero-4.webp";
 
 import { Autoplay, EffectFade, Navigation, Pagination } from "swiper/modules";
+import { Link } from "react-router";
 
 const Hero = () => {
   const heroImgs = [
@@ -45,12 +46,17 @@ const Hero = () => {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-              <button className="px-8 py-4 bg-blue-600 text-white font-bold rounded-xl hover:bg-blue-700 hover:shadow-lg hover:shadow-blue-200 transition duration-300 transform hover:-translate-y-1">
-                Apply for Admission
-              </button>
-              <button className="px-8 py-4 border-2 border-gray-200 text-gray-700 font-bold rounded-xl hover:bg-gray-50 hover:border-blue-200 transition duration-300">
-                View Result & Marksheet
-              </button>
+              <Link to="/admission">
+                <button className="px-8 py-4 bg-blue-600 text-white font-bold rounded-xl hover:bg-blue-700 hover:shadow-lg hover:shadow-blue-200 transition duration-300 transform hover:-translate-y-1">
+                  Apply for Admission
+                </button>
+              </Link>
+
+              <Link to="/result">
+                <button className="px-8 py-4 border-2 border-gray-200 text-gray-700 font-bold rounded-xl hover:bg-gray-50 hover:border-blue-200 transition duration-300">
+                  View Result & Marksheet
+                </button>
+              </Link>
             </div>
 
             {/* Added dynamic stats to attract parents/students */}
@@ -117,8 +123,8 @@ const Hero = () => {
               // 1. Smooth Entrance
               initial={{ opacity: 0, scale: 0.95, x: -20 }}
               animate={{
-                  opacity: 1,
-                   x: 0,
+                opacity: 1,
+                x: 0,
                 scale: [1, 1.03, 1], // Subtle Heartbeat/Pulse effect
               }}
               transition={{
