@@ -15,7 +15,8 @@ import { toast } from 'react-toastify';
 const FeedBack = ({ isOpen, setIsOpen, isStudent }) => {
   const { register, handleSubmit ,reset} = useForm();
   const { user } = useAuth();
-  const axiosSecure=useAxiosSecure()
+  const axiosSecure = useAxiosSecure()
+  
   
   const handleFeedBack = (feedback) => {
     const studentFeedBack = {
@@ -23,6 +24,7 @@ const FeedBack = ({ isOpen, setIsOpen, isStudent }) => {
       studentEmail: isStudent.email,
       studentId: isStudent._id,
       teacherEmail: user.email,
+      teacherName: user?.displayName,
       role:isStudent.role
       
       
@@ -30,7 +32,7 @@ const FeedBack = ({ isOpen, setIsOpen, isStudent }) => {
 
     axiosSecure.post('/student/feedback', studentFeedBack)
       .then(res => {
-        
+        console.log(res.data)
         if (res.data?.message) {
           toast.info(res.data?.message)
         } else {
