@@ -2,7 +2,8 @@ import { useContext, useState } from "react";
 import { NavLink, Link, useNavigate, Outlet } from "react-router";
 import {
     LayoutDashboard, Users, BookOpen, FileText,
-    Bell, LogOut, Menu, X, UserCircle, GraduationCap
+    Bell, LogOut, Menu, X, UserCircle, GraduationCap,
+    ClipboardList
 } from "lucide-react";
 import { FcManager } from 'react-icons/fc';
 import { AuthContext } from "../AuthContext/AuthContext";
@@ -46,9 +47,16 @@ const NavLinks = ({
           onClick={() => isMobile && setMobileMenuOpen(false)}
         />
         <SidebarLink
+          to="/dashboard/admissions"
+          icon={<ClipboardList size={20} />}
+          label="Admission Apps"
+          isOpen={isOpen}
+          onClick={() => isMobile && setMobileMenuOpen(false)}
+        />
+        <SidebarLink
           to="/dashboard/create-routine"
           icon={<IoCreateOutline size={20} />}
-          label="CreateRoutine"
+          label="Create Routine"
           isOpen={isOpen}
           onClick={() => isMobile && setMobileMenuOpen(false)}
         />
@@ -162,7 +170,7 @@ const DashboardLayout = () => {
     const [isSidebarOpen, setSidebarOpen] = useState(true);
     const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
     const [userRole, roleLoading] = useRole();
-    
+
 
     const handleLogout = async () => {
         try {

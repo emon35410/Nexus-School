@@ -1,14 +1,13 @@
 import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import useAxiosSecure from '../../Hooks/useAxiosSecure';
-import { ShieldCheck, UserCog, Trash2, Mail, Calendar } from 'lucide-react';
+import { ShieldCheck, UserCog, Trash2, Mail, Calendar, User } from 'lucide-react';
 import Swal from 'sweetalert2';
 import NexusLoader from '../../components/Nexusloader/Nexusloader';
 
 const ManageUsers = () => {
     const axiosSecure = useAxiosSecure();
 
-    // ১. API থেকে ইউজার ডাটা নিয়ে আসা
     const { data: users = [], isLoading, refetch } = useQuery({
         queryKey: ['all-users'],
         queryFn: async () => {
@@ -17,7 +16,6 @@ const ManageUsers = () => {
         }
     });
 
-    // ২. রোল আপডেট করার ফাংশন (PATCH)
     const handleRoleChange = async (user, newRole) => {
         try {
             const res = await axiosSecure.patch(`/users/${user.email}`, { role: newRole });
@@ -29,7 +27,8 @@ const ManageUsers = () => {
                     icon: "success",
                     background: '#1E293B',
                     color: '#fff',
-                    confirmButtonColor: '#3B82F6'
+                    showConfirmButton: false,
+                    timer: 1500
                 });
             }
         } catch (err) {
@@ -67,11 +66,9 @@ const ManageUsers = () => {
                         <tbody className="divide-y divide-slate-800/50">
                             {users.map((user) => (
                                 <tr key={user._id} className="group hover:bg-slate-800/30 transition-all">
-                                    {/* User Profile */}
                                     <td className="p-6">
                                         <div className="flex items-center gap-4">
                                             <div className="w-12 h-12 rounded-2xl bg-slate-900 border border-slate-700 overflow-hidden shadow-inner shrink-0">
-                                                {/* আপনার দেওয়া অরিজিনাল ইমেজ এখানে লোড হবে */}
                                                 <img 
                                                     src={user.image || "https://i.pravatar.cc/150?u=" + user.email} 
                                                     alt={user.name} 
@@ -89,7 +86,6 @@ const ManageUsers = () => {
                                         </div>
                                     </td>
 
-                                    {/* Joined Date */}
                                     <td className="p-6 text-slate-400 text-xs font-medium">
                                         <div className="flex items-center gap-2">
                                             <Calendar size={14} className="text-slate-600" />
@@ -97,20 +93,19 @@ const ManageUsers = () => {
                                         </div>
                                     </td>
 
-                                    {/* Role Badge */}
                                     <td className="p-6">
                                         <span className={`px-3 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest border ${
                                             user.role === 'admin' ? 'bg-rose-500/10 text-rose-500 border-rose-500/20' :
                                             user.role === 'teacher' ? 'bg-indigo-500/10 text-indigo-400 border-indigo-500/20' :
-                                            'bg-slate-700/30 text-slate-400 border-slate-600/30'
+                                            'bg-blue-500/10 text-blue-400 border-blue-500/20'
                                         }`}>
-                                            {user.role}
+                                            {user.role || 'student'}
                                         </span>
                                     </td>
 
-                                    {/* Change Role Buttons */}
                                     <td className="p-6">
                                         <div className="flex justify-center items-center gap-2">
+                                            {/* Admin */}
                                             <button 
                                                 onClick={() => handleRoleChange(user, 'admin')}
                                                 disabled={user.role === 'admin'}
@@ -119,6 +114,8 @@ const ManageUsers = () => {
                                             >
                                                 <ShieldCheck size={18} />
                                             </button>
+
+                                            {/* Teacher */}
                                             <button 
                                                 onClick={() => handleRoleChange(user, 'teacher')}
                                                 disabled={user.role === 'teacher'}
@@ -127,6 +124,18 @@ const ManageUsers = () => {
                                             >
                                                 <UserCog size={18} />
                                             </button>
+
+                                            {/* Student (Added Option) */}
+                                            <button 
+                                                onClick={() => handleRoleChange(user, 'student')}
+                                                disabled={user.role === 'student' || !user.role}
+                                                className={`p-2 rounded-xl border transition-all ${user.role === 'student' || !user.role ? 'opacity-20 cursor-not-allowed border-slate-700' : 'border-slate-700 text-blue-400 hover:bg-blue-500 hover:text-white hover:border-transparent active:scale-95'}`}
+                                                title="Make Student"
+                                            >
+                                                <User size={18} />
+                                            </button>
+
+                                            {/* Delete */}
                                             <button 
                                                 className="p-2 border border-slate-700 text-slate-500 hover:bg-rose-500/10 hover:text-rose-500 rounded-xl transition-all"
                                                 title="Remove User"

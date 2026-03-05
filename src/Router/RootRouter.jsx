@@ -18,6 +18,8 @@ import MyAssignments from "../Pages/StudentPages/MyAssignments";
 import ManageStudents from "../Pages/mangeStudent/ManageStudents";
 import CreateRoutine from "../Pages/DynamicRoutine/CreateRoutine";
 import ClassRoutine from "../Pages/DynamicRoutine/ClassRoutine";
+import AdmissionForm from "../Pages/Admission/AdmissionForm";
+import AdmissionApplication from "../Pages/AdminAdmissionCheck/AdmissionApplication";
 
 const router = createBrowserRouter([
   {
@@ -38,6 +40,10 @@ const router = createBrowserRouter([
         path: '/login',
         Component: Login,
       },
+      {
+        path: '/admission',
+        Component: AdmissionForm,
+      }
     ],
   },
   {
@@ -60,6 +66,10 @@ const router = createBrowserRouter([
       {
       path:"/dashboard/manage-users",
       Component: ManageUsers
+    },
+    {
+      path:"/dashboard/admissions",
+      element: <AdmissionApplication></AdmissionApplication>
     },
     {
       path:"/dashboard/notices",
