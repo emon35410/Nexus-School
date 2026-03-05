@@ -1,6 +1,6 @@
 import React from "react";
 import useAuth from "../../Hooks/useAuth";
-import axios from "axios";
+// import axios from "axios";
 import useAxiosSecure from "../../Hooks/useAxiosSecure";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router";
@@ -19,11 +19,15 @@ const SocialLogin = () => {
           const userInfoDb = {
             name: res.user.displayName,
             email: res.user.email,
+            image: res.user.photoURL,
           };
 
           // send data in database this
           console.log(userInfoDb);
-          // axiosSecure.post('/users', userInfoDb)
+         axiosSecure.post('/users', userInfoDb)
+        .then(res => {
+        console.log(res)
+        })
 
           navigate("/");
 
