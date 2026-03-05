@@ -10,6 +10,8 @@ import NS1_logo from "../assets/NS1.png";
 import useRole from "../Hooks/useRole";
 import NexusLoader from "../components/Nexusloader/Nexusloader";
 import { PiStudentFill } from 'react-icons/pi';
+import { IoCreateOutline } from 'react-icons/io5';
+import { FaBookOpenReader } from "react-icons/fa6";
 
 const NavLinks = ({
   isOpen,
@@ -40,6 +42,13 @@ const NavLinks = ({
           to="/dashboard/noticepost"
           icon={<Bell size={20} />}
           label="Post Notice"
+          isOpen={isOpen}
+          onClick={() => isMobile && setMobileMenuOpen(false)}
+        />
+        <SidebarLink
+          to="/dashboard/create-routine"
+          icon={<IoCreateOutline size={20} />}
+          label="CreateRoutine"
           isOpen={isOpen}
           onClick={() => isMobile && setMobileMenuOpen(false)}
         />
@@ -120,6 +129,13 @@ const NavLinks = ({
           to="/dashboard/notices"
           icon={<Bell size={20} />}
           label="Notice Board"
+          isOpen={isOpen}
+          onClick={() => isMobile && setMobileMenuOpen(false)}
+        />
+        <SidebarLink
+          to="/dashboard/class-routine"
+          icon={<FaBookOpenReader size={20} />}
+          label="Class Routine"
           isOpen={isOpen}
           onClick={() => isMobile && setMobileMenuOpen(false)}
         />

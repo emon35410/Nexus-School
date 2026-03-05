@@ -16,6 +16,8 @@ import AttendanceHistory from "../Pages/Dashboard/Teacher/AttendanceHistory";
 import Assignment from "../Pages/TeacherPages/Assignment";
 import MyAssignments from "../Pages/StudentPages/MyAssignments";
 import ManageStudents from "../Pages/mangeStudent/ManageStudents";
+import CreateRoutine from "../Pages/DynamicRoutine/CreateRoutine";
+import ClassRoutine from "../Pages/DynamicRoutine/ClassRoutine";
 
 const router = createBrowserRouter([
   {
@@ -81,6 +83,14 @@ const router = createBrowserRouter([
       {
         path: '/dashboard/manage-student',
         Component:ManageStudents
+    },
+      {
+        path: '/dashboard/create-routine',
+        Component:CreateRoutine
+    },
+      {
+        path: '/dashboard/class-routine',
+        Component:ClassRoutine
     }
     
     ],
