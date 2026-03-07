@@ -1,80 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import useAxiosSecure from '../../Hooks/useAxiosSecure';
 import { toast } from 'react-toastify';
+import { useForm } from 'react-hook-form';
+
 
 const CreateRoutine = () => {
-  const axiosSecure=useAxiosSecure()
-  // 7 days data save
-  const [formData, setFormData] = useState({
-    day: '',
-    subject: '',
-    class: '',
-    teacherName: '',
-    time: '',
-  });
-
-  // day by data formate
-  const [routine, setRoutine] = useState(() => {
-    const saved = localStorage.getItem('routineData');
-    if (saved && saved !== 'undefined') {
-      return JSON.parse(saved);
-    }
-    return{
-      Saturday: [],
-      Sunday: [],
-      Monday: [],
-      Tuesday: [],
-      Wednesday: [],
-      Thursday: [],
-      Friday: [],}
-  });
-  //  only save localStorage before save in data base
-  useEffect(() => {
-    localStorage.setItem('routineData', JSON.stringify(routine));
-  }, [routine]);
-
+  const axiosSecure = useAxiosSecure();
+  const {handleSubmit,register} =useForm()
   
 
-  // get value
-  const handleChange = e => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
-
-  // save data on data base;
-
-  const handleAdd = () => {
-    const { day, subject, class: className, teacherName, time } = formData;
-    const newClass = {
-      subject,
-      class: className,
-      day,
-      teacherName,
-      time,
-    };
-    setRoutine({
-      ...routine,
-      [day]: [...(routine[day] || []), newClass],
-    });
-  };
-
-  const handleSubmit = () => {
-    axiosSecure.post('/routine', routine)
+  const handleSubmitRoutine = (routines) => {
+    axiosSecure.post('/routine', routines)
       .then(res => {
-        if (res?.data?.acknowledged) {
-          toast.info('successful create routine');
-          localStorage.removeItem('routineData');
-        } 
+       toast.info('success')
       }).catch(err => {
-      console.log(err)
-    })
-   
+        console.log(err)
+      });
   }
 
-  
   return (
     <div className="flex items-center justify-center min-h-screen  font-sans">
       {/* Animated Border Wrapper - added responsive max-width and padding */}
@@ -93,112 +36,99 @@ const CreateRoutine = () => {
             </p>
           </div>
 
-          {/* Form Grid: Mobile-এ 1 column, Medium স্ক্রিনে 2 column */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-8">
-            {/* Class Selection */}
-            <div className="space-y-2">
-              <label className="text-[10px] sm:text-xs font-bold text-blue-400 uppercase tracking-widest ml-1">
-                Class Name
-              </label>
-              <select
-                name="class"
-                required
-                onChange={handleChange}
-                className="w-full bg-[#1e293b] text-white border border-blue-900/50 rounded-xl sm:rounded-2xl px-4 sm:px-5 py-3 sm:py-4 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all appearance-none cursor-pointer hover:bg-[#26334d] "
-              >
-                <option>Select Class</option>
-                <option value={'class-6'}>Class 6</option>
-                <option value={'Class-7'}>Class 7</option>
-                <option value={'Class-8'}>Class 8</option>
-                <option value={'Class-9'}>Class 9</option>
-                <option value={'Class-10'}>Class 10</option>
-              </select>
-            </div>
+          <form onSubmit={handleSubmit(handleSubmitRoutine)}>
+            {/* Form Grid: Mobile-এ 1 column, Medium স্ক্রিনে 2 column */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-8">
+              {/* Class Selection */}
+              <div className="space-y-2">
+                <label className="text-[10px] sm:text-xs font-bold text-blue-400 uppercase tracking-widest ml-1">
+                  Class Name
+                </label>
+                <select
+                  {...register('department', { required: true })}
+                  className="w-full bg-[#1e293b] text-white border border-blue-900/50 rounded-xl sm:rounded-2xl px-4 sm:px-5 py-3 sm:py-4 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all appearance-none cursor-pointer hover:bg-[#26334d] "
+                >
+                  <option>Select Class</option>
+                  <option value={'class-6'}>Class 6</option>
+                  <option value={'class-7'}>Class 7</option>
+                  <option value={'class-8'}>Class 8</option>
+                  <option value={'class-9'}>Class 9</option>
+                  <option value={'class-10'}>Class 10</option>
+                </select>
+              </div>
 
-            {/* Subject Selection */}
-            <div className="space-y-2">
-              <label className="text-[10px] sm:text-xs font-bold text-blue-400 uppercase tracking-widest ml-1">
-                Subject Name
-              </label>
-              <select
-                name="subject"
-                required
-                onChange={handleChange}
-                className="w-full bg-[#1e293b] text-white border border-blue-900/50 rounded-xl sm:rounded-2xl px-4 sm:px-5 py-3 sm:py-4 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all appearance-none cursor-pointer hover:bg-[#26334d]"
-              >
-                <option>Select Subject</option>
-                <option value={'Mathematics'}>Mathematics</option>
-                <option value={'English'}>English</option>
-                <option value={'Bangla'}>Bangla</option>
-                <option value={'Physics'}>Physics</option>
-                <option value={'ICT'}>ICT</option>
-              </select>
-            </div>
+              {/* Subject Selection */}
+              <div className="space-y-2">
+                <label className="text-[10px] sm:text-xs font-bold text-blue-400 uppercase tracking-widest ml-1">
+                  Subject Name
+                </label>
+                <select
+                  {...register('subject', { required: true })}
+                  className="w-full bg-[#1e293b] text-white border border-blue-900/50 rounded-xl sm:rounded-2xl px-4 sm:px-5 py-3 sm:py-4 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all appearance-none cursor-pointer hover:bg-[#26334d]"
+                >
+                  <option>Select Subject</option>
+                  <option value={'Mathematics'}>Mathematics</option>
+                  <option value={'English'}>English</option>
+                  <option value={'Bangla'}>Bangla</option>
+                  <option value={'Physics'}>Physics</option>
+                  <option value={'ICT'}>ICT</option>
+                </select>
+              </div>
 
-            {/* Day Selection */}
-            <div className="space-y-2">
-              <label className="text-[10px] sm:text-xs font-bold text-blue-400 uppercase tracking-widest ml-1">
-                Select Day
-              </label>
-              <select
-                required
-                name="day"
-                onChange={handleChange}
-                className="w-full bg-[#1e293b] text-white border border-blue-900/50 rounded-xl sm:rounded-2xl px-4 sm:px-5 py-3 sm:py-4 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all appearance-none cursor-pointer hover:bg-[#26334d]"
-              >
-                <option value={''}>Saturday</option>
-                <option value={'Sunday'}>Sunday</option>
-                <option value={'Monday'}>Monday</option>
-                <option value={'Tuesday'}>Tuesday</option>
-                <option value={'Wednesday'}>Wednesday</option>
-                <option value={'Thursday'}>Thursday</option>
-                <option value={'Friday'}>Friday</option>
-              </select>
-            </div>
+              {/* Day Selection */}
+              <div className="space-y-2">
+                <label className="text-[10px] sm:text-xs font-bold text-blue-400 uppercase tracking-widest ml-1">
+                  Select Day
+                </label>
+                <select
+                  {...register('day', { required: true })}
+                  className="w-full bg-[#1e293b] text-white border border-blue-900/50 rounded-xl sm:rounded-2xl px-4 sm:px-5 py-3 sm:py-4 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all appearance-none cursor-pointer hover:bg-[#26334d]"
+                >
+                  <option value={''}>Saturday</option>
+                  <option value={'Sunday'}>Sunday</option>
+                  <option value={'Monday'}>Monday</option>
+                  <option value={'Tuesday'}>Tuesday</option>
+                  <option value={'Wednesday'}>Wednesday</option>
+                  <option value={'Thursday'}>Thursday</option>
+                  <option value={'Friday'}>Friday</option>
+                </select>
+              </div>
 
-            {/* Teacher Name */}
-            <div className="space-y-2">
-              <label className="text-[10px] sm:text-xs font-bold text-blue-400 uppercase tracking-widest ml-1">
-                Teacher Name
-              </label>
-              <input
-                type="text"
-                name="teacherName"
-                onChange={handleChange}
-                placeholder="e.g. Mr. Kabir"
-                className="w-full bg-[#1e293b] text-white border border-blue-900/50 rounded-xl sm:rounded-2xl px-4 sm:px-5 py-3 sm:py-4 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all placeholder:text-gray-600 hover:bg-[#26334d]"
-              />
-            </div>
-
-            {/* Time Picker - Fully Responsive for Mobile */}
-            <div className="space-y-2 md:col-span-2">
-              <label className="text-[10px] sm:text-xs font-bold text-blue-400 uppercase tracking-widest ml-1 text-center block">
-                Schedule Time
-              </label>
-              <div className="w-full ">
+              {/* Teacher Name */}
+              <div className="space-y-2">
+                <label className="text-[10px] sm:text-xs font-bold text-blue-400 uppercase tracking-widest ml-1">
+                  Teacher Name
+                </label>
                 <input
-                  required
-                  type="time"
-                  name="time"
-                  onChange={handleChange}
-                  className="w-full  bg-[#1e293b] text-white border border-blue-900/50 rounded-xl sm:rounded-2xl px-4 sm:px-5 py-3 sm:py-4 focus:outline-none focus:ring-2 focus:ring-blue-500/50"
+                  type="text"
+                  {...register('teacherName', { required: true })}
+                  placeholder="e.g. Mr. Kabir"
+                  className="w-full bg-[#1e293b] text-white border border-blue-900/50 rounded-xl sm:rounded-2xl px-4 sm:px-5 py-3 sm:py-4 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all placeholder:text-gray-600 hover:bg-[#26334d]"
                 />
               </div>
-            </div>
-          </div>
 
-          {/* Buttons Section - Mobile-এ stack হয়ে যাবে */}
-          <div className="flex flex-col sm:flex-row gap-4 mt-8 sm:mt-10">
-            <button
-              onClick={handleAdd}
-              className=" cursor-pointer flex-1 bg-transparent border-2 border-blue-600 text-blue-400 font-bold py-3 sm:py-4 rounded-xl sm:rounded-2xl hover:bg-blue-600/10 transition-all active:scale-95 text-sm sm:text-base"
-            >
-              Add More Class +
-            </button>
-            <button onClick={handleSubmit} className="flex-1 cursor-pointer bg-linear-to-r from-blue-600 to-indigo-700 text-white font-bold py-3 sm:py-4 rounded-xl sm:rounded-2xl shadow-[0_10px_20px_rgba(37,99,235,0.4)] hover:shadow-blue-500/50 transition-all active:scale-95 text-sm sm:text-base">
-              Publish Routine 🚀
-            </button>
-          </div>
+              {/* Time Picker - Fully Responsive for Mobile */}
+              <div className="space-y-2 md:col-span-2">
+                <label className="text-[10px] sm:text-xs font-bold text-blue-400 uppercase tracking-widest ml-1 text-center block">
+                  Schedule Time
+                </label>
+                <div className="w-full ">
+                  <input
+                    type="time"
+                    {...register('time', { required: true })}
+                    className="w-full  bg-[#1e293b] text-white border border-blue-900/50 rounded-xl sm:rounded-2xl px-4 sm:px-5 py-3 sm:py-4 focus:outline-none focus:ring-2 focus:ring-blue-500/50"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Buttons Section - Mobile-এ stack হয়ে যাবে */}
+            <div className="flex flex-col sm:flex-row gap-4 mt-8 sm:mt-10">
+              <button className="flex-1 cursor-pointer bg-linear-to-r from-blue-600 to-indigo-700 text-white font-bold py-3 sm:py-4 rounded-xl sm:rounded-2xl shadow-[0_10px_20px_rgba(37,99,235,0.4)] hover:shadow-blue-500/50 transition-all active:scale-95 text-sm sm:text-base">
+                Publish Routine 🚀
+              </button>
+            </div>
+          </form>
         </div>
       </div>
     </div>
