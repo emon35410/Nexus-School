@@ -13,11 +13,14 @@ const CreateRoutine = () => {
   const handleSubmitRoutine = (routines) => {
     axiosSecure.post('/routine', routines)
       .then(res => {
+        console.log(res)
         if (res?.data?.message) {
-        toast.info(res?.data?.message)
+          toast.info(res?.data?.message)
+          
         } else {
            toast.info('success');
-      }
+        }
+        console.log(res)
       }).catch(err => {
         console.log(err)
       });
