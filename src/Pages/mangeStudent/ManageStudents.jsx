@@ -22,7 +22,7 @@ const ManageStudents = () => {
       return res.data.result;
     }
   });
-  console.log(currentPage);
+  
   if (isLoading) {
    return <NexusLoader></NexusLoader>
  }
