@@ -18,6 +18,7 @@ import MyAssignments from "../Pages/StudentPages/MyAssignments";
 import ManageStudents from "../Pages/mangeStudent/ManageStudents";
 import AdmissionForm from "../Pages/Admission/AdmissionForm";
 import AdmissionApplication from "../Pages/AdminAdmissionCheck/AdmissionApplication";
+import ExamShedule from "../Pages/TeacherPages/ExamShedule";
 
 const router = createBrowserRouter([
   {
@@ -91,6 +92,10 @@ const router = createBrowserRouter([
       {
         path: '/dashboard/manage-student',
         Component:ManageStudents
+    },
+      {
+        path: '/dashboard/exam-shedule',
+        Component:ExamShedule
     }
     
     ],

@@ -3,7 +3,8 @@ import { NavLink, Link, useNavigate, Outlet } from "react-router";
 import {
     LayoutDashboard, Users, BookOpen, FileText,
     Bell, LogOut, Menu, X, UserCircle, GraduationCap,
-    ClipboardList
+    ClipboardList,
+    Calendar
 } from "lucide-react";
 import { FcManager } from 'react-icons/fc';
 import { AuthContext } from "../AuthContext/AuthContext";
@@ -134,6 +135,17 @@ const NavLinks = ({
             </>
         )}
 
+        <div
+            className={`my-4 border-t border-slate-700/50 ${isOpen ? 'pt-4' : 'pt-2'}`}
+        >
+            <SidebarLink
+                to="/dashboard/exam-shedule"
+                icon={<Calendar size={20} />}
+                label="Exam Shedule"
+                isOpen={isOpen}
+                onClick={() => isMobile && setMobileMenuOpen(false)}
+            />
+        </div>
         <div
             className={`my-4 border-t border-slate-700/50 ${isOpen ? 'pt-4' : 'pt-2'}`}
         >
