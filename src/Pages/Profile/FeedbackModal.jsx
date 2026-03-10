@@ -5,9 +5,9 @@ import { HiHomeModern } from 'react-icons/hi2';
 
 const FeedbackModal = ({ setIsFeedback,feedbacks }) => {
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm border-b-2 overflow-auto">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm border-b-2  ">
       {/* Modal Container */}
-      <div className="relative w-full max-w-md p-[2px] overflow-hidden rounded-3xl bg-gradient-to-br from-cyan-500 via-purple-500 to-pink-500">
+      <div className="relative w-full max-w-md p-[2px] overflow-auto rounded-3xl bg-gradient-to-br from-cyan-500 via-purple-500 to-pink-500 h-[400px] ">
         <div className="relative bg-slate-900 rounded-[22px] p-8 text-white">
           {/* Close Button */}
           <button
