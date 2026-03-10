@@ -13,6 +13,7 @@ import NexusLoader from "../components/Nexusloader/Nexusloader";
 import { PiStudentFill } from 'react-icons/pi';
 import { IoCreateOutline } from 'react-icons/io5';
 import { FaBookOpenReader } from "react-icons/fa6";
+import { ImFileText } from 'react-icons/im';
 
 const NavLinks = ({
   isOpen,
@@ -30,7 +31,7 @@ const NavLinks = ({
       onClick={() => isMobile && setMobileMenuOpen(false)}
     />
 
-    {userRole === 'admin' && (
+    {userRole === 'student' && (
       <>
         <SidebarLink
           to="/dashboard/manage-users"
@@ -57,6 +58,13 @@ const NavLinks = ({
           to="/dashboard/create-routine"
           icon={<IoCreateOutline size={20} />}
           label="Create Routine"
+          isOpen={isOpen}
+          onClick={() => isMobile && setMobileMenuOpen(false)}
+        />
+        <SidebarLink
+          to="/dashboard/create-result-sheet"
+          icon={<ImFileText size={20} />}
+          label="CreateResultSheet"
           isOpen={isOpen}
           onClick={() => isMobile && setMobileMenuOpen(false)}
         />
@@ -109,7 +117,7 @@ const NavLinks = ({
         />
       </>
     )}
-
+    {/* 
     {userRole === 'student' && (
       <>
         <SidebarLink
@@ -148,7 +156,7 @@ const NavLinks = ({
           onClick={() => isMobile && setMobileMenuOpen(false)}
         />
       </>
-    )}
+    )} */}
 
     <div
       className={`my-4 border-t border-slate-700/50 ${isOpen ? 'pt-4' : 'pt-2'}`}

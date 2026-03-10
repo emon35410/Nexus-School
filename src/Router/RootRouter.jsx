@@ -20,6 +20,7 @@ import CreateRoutine from "../Pages/DynamicRoutine/CreateRoutine";
 import ClassRoutine from "../Pages/DynamicRoutine/ClassRoutine";
 import AdmissionForm from "../Pages/Admission/AdmissionForm";
 import AdmissionApplication from "../Pages/AdminAdmissionCheck/AdmissionApplication";
+import CreateResultSheet from "../Pages/PublishResultSheet/CreateResultSheet";
 
 const router = createBrowserRouter([
   {
@@ -101,6 +102,11 @@ const router = createBrowserRouter([
       {
         path: '/dashboard/class-routine',
         Component:ClassRoutine
+    },
+    
+      {
+        path: '/dashboard/create-result-sheet',
+        Component:CreateResultSheet
     }
     
     ],
