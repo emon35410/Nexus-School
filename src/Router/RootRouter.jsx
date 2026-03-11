@@ -21,6 +21,8 @@ import ClassRoutine from "../Pages/DynamicRoutine/ClassRoutine";
 import AdmissionForm from "../Pages/Admission/AdmissionForm";
 import AdmissionApplication from "../Pages/AdminAdmissionCheck/AdmissionApplication";
 import UserInfoDownload from "../components/Shared/UserInfoDownload";
+import AllTeachers from "../Pages/BookingTeacher/AllTeachers";
+import ManageMeetings from "../Pages/ManageMeetings/ManageMeetings";
 
 const router = createBrowserRouter([
   {
@@ -44,6 +46,14 @@ const router = createBrowserRouter([
       {
         path: "/admission",
         Component: AdmissionForm,
+      },
+      {
+        path: "/booking-teachers",
+        Component: AllTeachers,
+      },
+      {
+        path: "/manage-meetings",
+        Component: ManageMeetings,
       },
     ],
   },
