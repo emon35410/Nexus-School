@@ -20,10 +20,11 @@ import CreateRoutine from "../Pages/DynamicRoutine/CreateRoutine";
 import ClassRoutine from "../Pages/DynamicRoutine/ClassRoutine";
 import AdmissionForm from "../Pages/Admission/AdmissionForm";
 import AdmissionApplication from "../Pages/AdminAdmissionCheck/AdmissionApplication";
+import UserInfoDownload from "../components/Shared/UserInfoDownload";
 
 const router = createBrowserRouter([
   {
-    path: '/',
+    path: "/",
     Component: MainLayout,
     errorElement: <NotFound></NotFound>,
     hydrateFallbackElement: <NexusLoader></NexusLoader>,
@@ -33,21 +34,21 @@ const router = createBrowserRouter([
         Component: Home,
       },
       {
-        path: '/register',
+        path: "/register",
         Component: Register,
       },
       {
-        path: '/login',
+        path: "/login",
         Component: Login,
       },
       {
-        path: '/admission',
+        path: "/admission",
         Component: AdmissionForm,
-      }
+      },
     ],
   },
   {
-    path: '/dashboard',
+    path: "/dashboard",
     element: <DashboardLayout></DashboardLayout>,
     errorElement: <NotFound></NotFound>,
     children: [
@@ -56,54 +57,58 @@ const router = createBrowserRouter([
         Component: Dashboard,
       },
       {
-        path: '/dashboard/noticepost',
+        path: "/dashboard/noticepost",
         Component: Notice,
       },
       {
-        path: '/dashboard/profile',
+        path: "/dashboard/profile",
         Component: Profile,
       },
       {
-      path:"/dashboard/manage-users",
-      Component: ManageUsers
-    },
-    {
-      path:"/dashboard/admissions",
-      element: <AdmissionApplication></AdmissionApplication>
-    },
-    {
-      path:"/dashboard/notices",
-      Component: ViewNotice
-    },
-    {
-      path:"/dashboard/teachersh/Attendance",
-      element: <Attendance></Attendance>
-    },{
-      path:"/dashboard/teachersh/AttendanceHistory",
-      element:<AttendanceHistory></AttendanceHistory>
-    },
-    {
-      path:"/dashboard/assignments",
-      Component: Assignment
-    },
-    {
-      path:"/dashboard/my-assignments",
-      Component: MyAssignments
+        path: "/dashboard/manage-users",
+        Component: ManageUsers,
       },
       {
-        path: '/dashboard/manage-student',
-        Component:ManageStudents
-    },
+        path: "/dashboard/admissions",
+        element: <AdmissionApplication></AdmissionApplication>,
+      },
       {
-        path: '/dashboard/create-routine',
-        Component:CreateRoutine
-    },
+        path: "/dashboard/notices",
+        Component: ViewNotice,
+      },
       {
-        path: '/dashboard/class-routine',
-        Component:ClassRoutine
-    }
-    
+        path: "/dashboard/teachersh/Attendance",
+        element: <Attendance></Attendance>,
+      },
+      {
+        path: "/dashboard/teachersh/AttendanceHistory",
+        element: <AttendanceHistory></AttendanceHistory>,
+      },
+      {
+        path: "/dashboard/assignments",
+        Component: Assignment,
+      },
+      {
+        path: "/dashboard/my-assignments",
+        Component: MyAssignments,
+      },
+      {
+        path: "/dashboard/manage-student",
+        Component: ManageStudents,
+      },
+      {
+        path: "/dashboard/create-routine",
+        Component: CreateRoutine,
+      },
+      {
+        path: "/dashboard/class-routine",
+        Component: ClassRoutine,
+      },
     ],
+  },
+  {
+    path: "/pdf",
+    element: <UserInfoDownload></UserInfoDownload>,
   },
 ]);
 

@@ -1,6 +1,18 @@
 @import "tailwindcss";
 @plugin "daisyui";
 
+/* ১. গ্লোবাল বর্ডার ফিক্স: 
+   অনেক সময় ব্রাউজার বা টেইলউইন্ড ডিফল্ট আউটলাইন দিয়ে দেয় যা পিডিএফ-এ কালো দেখায়।
+   এটি সব এলিমেন্টের ডিফল্ট বর্ডার এবং আউটলাইন বন্ধ করবে।
+*/
+*,
+::before,
+::after {
+  border-width: 0;
+  border-style: solid;
+  border-color: transparent;
+}
+
 /* Default theme */
 :root {
   color-scheme: light;
@@ -11,6 +23,19 @@
   @apply md:max-w-7xl mx-auto px-4 w-full;
 }
 
+/* ============================================================ */
+/* PDF Specific Fix: OKLCH থেকে HEX/RGB তে রূপান্তর করার জন্য */
+/* ============================================================ */
+@layer base {
+  :root,
+  [data-theme] {
+    /* PDF লাইব্রেরি যেন আধুনিক oklch না দেখে কনফিউজ না হয়, 
+       তাই আমরা স্ট্যান্ডার্ড কালার স্পেস ফোর্স করছি।
+    */
+    color-interpolation: sRGB;
+  }
+}
+
 /* ============================= */
 /* Custom Dark Theme - nexusdark */
 /* ============================= */
@@ -18,24 +43,19 @@
 [data-theme="nexusdark"] {
   color-scheme: dark;
 
+  /* এখানে কালার গুলোকে hsl হিসেবে রাখা হয়েছে যা আধুনিক ব্রাউজার বুঝে নেয় */
   --p: 243 75% 59%;
   --pf: 243 75% 49%;
-
   --s: 187 100% 42%;
   --sf: 187 100% 32%;
-
   --a: 160 84% 39%;
   --af: 160 84% 29%;
-
   --n: 222 47% 11%;
   --nf: 222 47% 21%;
-
   --b1: 222 47% 8%;
   --b2: 222 47% 12%;
   --b3: 222 47% 16%;
-
   --bc: 210 40% 98%;
-
   --in: 198 93% 60%;
   --su: 158 64% 52%;
   --wa: 43 96% 56%;
@@ -43,4 +63,14 @@
 
   --rounded-box: 1rem;
   --rounded-btn: 0.75rem;
+}
+
+/* ২. পিডিএফ এরিয়া স্পেশাল ফিক্স:
+   পিডিএফ এরিয়াতে কোনোভাবেই যেন কালো বর্ডার বা আউটলাইন না আসে।
+*/
+#pdf-report-content,
+#pdf-report-content * {
+  outline: none !important;
+  box-shadow: none !important;
+  -webkit-print-color-adjust: exact;
 }
