@@ -137,7 +137,7 @@ const UserInfoDownload = () => {
     const element = reportRef.current;
 
     try {
-      const scale = 2; // হাই কোয়ালিটির জন্য
+      const scale = 2; // to make high quality pdf
       const options = {
         width: element.clientWidth * scale,
         height: element.clientHeight * scale,
@@ -168,9 +168,6 @@ const UserInfoDownload = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 pb-20">
-      {/* মেইন কন্টেন্ট এলাকা - এখান থেকে সব বর্ডার সরানো হয়েছে
-          Shadow বা Border ক্লাস একদম বাদ দেওয়া হয়েছে
-      */}
       <div
         ref={reportRef}
         className="bg-white mx-auto p-8"
