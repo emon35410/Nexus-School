@@ -14,6 +14,7 @@ import { PiStudentFill } from 'react-icons/pi';
 import { IoCreateOutline } from 'react-icons/io5';
 import { FaBookOpenReader } from "react-icons/fa6";
 import { ImFileText } from 'react-icons/im';
+import { BiSpreadsheet } from 'react-icons/bi';
 
 const NavLinks = ({
   isOpen,
@@ -31,7 +32,7 @@ const NavLinks = ({
       onClick={() => isMobile && setMobileMenuOpen(false)}
     />
 
-    {userRole === 'student' && (
+    {userRole === 'admin' && (
       <>
         <SidebarLink
           to="/dashboard/manage-users"
@@ -117,7 +118,7 @@ const NavLinks = ({
         />
       </>
     )}
-    {/* 
+
     {userRole === 'student' && (
       <>
         <SidebarLink
@@ -128,8 +129,8 @@ const NavLinks = ({
           onClick={() => isMobile && setMobileMenuOpen(false)}
         />
         <SidebarLink
-          to="/dashboard/my-results"
-          icon={<FileText size={20} />}
+          to="/dashboard/result-sheet"
+          icon={<BiSpreadsheet size={20} />}
           label="Exam Results"
           isOpen={isOpen}
           onClick={() => isMobile && setMobileMenuOpen(false)}
@@ -156,7 +157,7 @@ const NavLinks = ({
           onClick={() => isMobile && setMobileMenuOpen(false)}
         />
       </>
-    )} */}
+    )}
 
     <div
       className={`my-4 border-t border-slate-700/50 ${isOpen ? 'pt-4' : 'pt-2'}`}

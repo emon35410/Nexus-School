@@ -23,6 +23,7 @@ import AdmissionApplication from "../Pages/AdminAdmissionCheck/AdmissionApplicat
 import CreateResultSheet from "../Pages/PublishResultSheet/CreateResultSheet";
 import AllTeachers from "../Pages/BookingTeacher/AllTeachers";
 import ManageMeetings from "../Pages/ManageMeetings/ManageMeetings";
+import ResultSheet from "../Pages/PublishResultSheet/ResultSheet";
 
 const router = createBrowserRouter([
   {
@@ -117,7 +118,11 @@ const router = createBrowserRouter([
       {
         path: '/dashboard/create-result-sheet',
         Component:CreateResultSheet
-    }
+    },
+      {
+        path: '/dashboard/result-sheet',
+        Component:ResultSheet
+    },
     
     ],
   },
