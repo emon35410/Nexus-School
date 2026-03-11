@@ -77,15 +77,15 @@ const AddExamSchedule = ({ refetch }) => {
   const classOptions = [6, 7, 8, 9, 10];
 
   return (
-    <div className="p-6 md:p-10 flex justify-center">
-      <div className="w-full bg-[#1E293B] border border-slate-800 p-8 rounded-[2.5rem] shadow-2xl">
+    <div className=" md:p-10 flex justify-center">
+      <div className="w-full md:bg-[#1E293B] md:border md:border-slate-800 md:p-8 rounded-xl md:rounded-[2.5rem] shadow-2xl">
         {/* Header */}
         <div className="flex items-center gap-3 mb-8">
           <div className="p-3 bg-blue-600/20 rounded-2xl">
             <CalendarIcon className="text-blue-500" size={28} />
           </div>
           <div>
-            <h2 className="text-2xl font-bold text-white">
+            <h2 className="text-xl md:text-2xl font-bold text-white">
               Create Exam Routine
             </h2>
             <p className="text-slate-400 text-sm">
@@ -96,14 +96,14 @@ const AddExamSchedule = ({ refetch }) => {
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
           {/* Top Section */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 bg-slate-900/50 p-6 rounded-3xl border border-slate-800">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 bg-slate-900/50 p-4 rounded-3xl border border-slate-800">
             <div>
               <label className="block text-xs font-bold text-slate-500 uppercase mb-2 ml-1">
                 Select Class
               </label>
               <select
                 {...register("class", { required: true })}
-                className="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-slate-200 outline-none focus:border-blue-500"
+                className="w-full bg-slate-900 border border-slate-700 rounded-sm p-3 text-slate-200 outline-none focus:border-blue-500"
               >
                 <option value="">-- Class --</option>
                 {classOptions.map((c) => (

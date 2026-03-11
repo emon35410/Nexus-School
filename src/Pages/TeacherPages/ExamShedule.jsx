@@ -19,7 +19,7 @@ const ExamShedule = () => {
 
   return (
     <>
-      <div className="p-6 md:p-10 min-h-screen space-y-8">
+      <div className=" md:p-10 min-h-screen space-y-8">
         <AddExamShedule refetch={refetch} />
 
         {/* Header Section */}

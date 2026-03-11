@@ -81,13 +81,15 @@ const downloadPDF = (exam) => {
 };
 
     return (
-        <button
-            onClick={() => downloadPDF(e)}
-            className="w-full flex items-center justify-center gap-2 py-3 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl transition-all shadow-md uppercase text-[11px] tracking-wider"
-        >
-            <Download size={16} />
-            Download Routine PDF
-        </button>
+       <button
+  onClick={() => downloadPDF(e)}
+  className="w-full flex items-center justify-center gap-2 py-3 px-4 md:py-3.5 md:px-6 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl transition-all shadow-md active:scale-95 uppercase text-[10px] md:text-[11px] tracking-widest whitespace-nowrap"
+>
+  <Download size={16} />
+  <span>
+    Download <span className="hidden sm:inline">Routine</span> <span className="hidden md:inline">PDF</span>
+  </span>
+</button>
     );
 };
 
