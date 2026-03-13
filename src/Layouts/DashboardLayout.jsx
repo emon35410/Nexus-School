@@ -130,7 +130,7 @@ const NavLinks = ({
           onClick={() => isMobile && setMobileMenuOpen(false)}
         />
         <SidebarLink
-          to="/dashboard/result-sheet"
+          to="/dashboard/student-result"
           icon={<BiSpreadsheet size={20} />}
           label="Exam Results"
           isOpen={isOpen}
@@ -269,8 +269,8 @@ const DashboardLayout = () => {
             </aside>
 
             {/* --- MAIN CONTENT AREA --- */}
-            <div className="flex-1 flex flex-col min-h-screen">
-                <header className="h-20 bg-[#1E293B]/80 backdrop-blur-md flex justify-between items-center px-6 md:px-8 border-b border-slate-700 sticky top-0 z-40">
+            <div className="flex-1 flex flex-col min-h-screen ">
+                <header className="h-20 bg-[#1E293B]/80 backdrop-blur-md flex justify-between items-center px-4 md:px-8 border-b border-slate-700 sticky top-0 z-40">
                     <div className="flex items-center gap-4">
                         <button onClick={() => setMobileMenuOpen(true)} className="p-2 hover:bg-slate-800 rounded-lg md:hidden text-slate-400">
                             <Menu size={24} />
@@ -286,7 +286,7 @@ const DashboardLayout = () => {
                     </button>
                 </header>
 
-                <main className="p-4 md:p-10 w-full max-w-7xl mx-auto">
+                <main className="p-4 md:p-8 w-full md:max-w-7xl ">
                     <Outlet />
                 </main>
             </div>

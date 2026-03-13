@@ -166,8 +166,7 @@ const CreateResultSheet = () => {
       subjects,
     };
 
-    axiosSecure
-      .post('/result', newResultSheet)
+    axiosSecure.post('/result', newResultSheet)
       .then(res => {
         toast.success('Result submitted successfully!');
       })
@@ -178,7 +177,7 @@ const CreateResultSheet = () => {
   };
 
   return (
-    <div className="min-h-screen py-10 px-4">
+    <div className="min-h-screen   mx-auto">
       <form
         onSubmit={handleSubmit(handleSubmitResult)}
         className="bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900 border border-blue-500/30 shadow-2xl shadow-blue-500/20 md:max-w-[800px] rounded-2xl mx-auto p-6 w-full text-slate-200"

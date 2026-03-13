@@ -16,7 +16,7 @@ const Dashboard = () => {
     }
    
     // role based rendering
-    if (role === 'student') return <AdminDashboard />;
+    if (role === 'admin') return <AdminDashboard />;
     if (role === 'teacher') return <TeacherDashboard />;
   
     return <StudentDashboard />;
