@@ -3,7 +3,8 @@ import { NavLink, Link, useNavigate, Outlet } from "react-router";
 import {
     LayoutDashboard, Users, BookOpen, FileText,
     Bell, LogOut, Menu, X, UserCircle, GraduationCap,
-    ClipboardList
+    ClipboardList,
+    Calendar
 } from "lucide-react";
 import { FcManager } from 'react-icons/fc';
 import { AuthContext } from "../AuthContext/AuthContext";
