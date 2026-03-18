@@ -26,6 +26,7 @@ import AllTeachers from "../Pages/BookingTeacher/AllTeachers";
 import ManageMeetings from "../Pages/ManageMeetings/ManageMeetings";
 import ResultSheet from "../Pages/PublishResultSheet/ResultSheet";
 import StudentResult from "../Pages/PublishResultSheet/StudentResult";
+import UpdateRoutine from "../Pages/DynamicRoutine/UpdateRoutine";
 
 const router = createBrowserRouter([
   {
@@ -133,6 +134,10 @@ const router = createBrowserRouter([
       {
         path: '/dashboard/student-result',
         Component: StudentResult
+     },
+      {
+        path: '/dashboard/check-routine',
+        Component:UpdateRoutine
      }
     ],
   },
