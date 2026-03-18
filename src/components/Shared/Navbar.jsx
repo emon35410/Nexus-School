@@ -65,6 +65,11 @@ const Navbar = () => {
            Contact
         </NavLink>
       </li>
+      <li>
+        <NavLink to="/result-sheet" className={({ isActive }) => `flex items-center gap-2 px-4 py-2 rounded-xl transition-all duration-300 ${isActive ? "bg-primary/10 text-primary font-bold shadow-sm" : "hover:bg-slate-50 text-slate-600 font-medium"}`}>
+           SeeResult
+        </NavLink>
+      </li>
     </>
   );
 

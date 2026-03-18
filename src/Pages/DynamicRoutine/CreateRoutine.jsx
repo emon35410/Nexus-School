@@ -3,6 +3,7 @@ import useAxiosSecure from '../../Hooks/useAxiosSecure';
 import { toast } from 'react-toastify';
 import { useForm } from 'react-hook-form';
 import UpdateRoutine from './UpdateRoutine';
+import { Link } from 'react-router';
 
 
 const CreateRoutine = () => {
@@ -27,11 +28,8 @@ const CreateRoutine = () => {
   }
 
   return (
-    <div>
-      <div>
-        <UpdateRoutine></UpdateRoutine>
-      </div>
-      <div className="flex items-center justify-center min-h-screen  font-sans">
+    <div  className=" mx-auto ">
+      <div className=" flex justify-center font-sans">
         {/* Animated Border Wrapper - added responsive max-width and padding */}
         <div className="relative group p-[2px] rounded-[1.5rem] sm:rounded-[2.5rem] overflow-hidden w-full max-w-2xl transition-all duration-500 hover:shadow-[0_0_50px_rgba(59,130,246,0.2)]">
           {/* The Rotating Neon Border */}
@@ -145,6 +143,10 @@ const CreateRoutine = () => {
 
               {/* Buttons Section - Mobile-এ stack হয়ে যাবে */}
               <div className="flex flex-col sm:flex-row gap-4 mt-8 sm:mt-10">
+                
+                <Link to={'/dashboard/check-routine'} className="flex-1 text-center cursor-pointer bg-linear-to-r from-blue-600 to-indigo-700 text-white font-bold py-3 sm:py-4 rounded-xl sm:rounded-2xl shadow-[0_10px_20px_rgba(37,99,235,0.4)] hover:shadow-blue-500/50 transition-all active:scale-95 text-sm sm:text-base">
+                  Check Routine
+                </Link>
                 <button className="flex-1 cursor-pointer bg-linear-to-r from-blue-600 to-indigo-700 text-white font-bold py-3 sm:py-4 rounded-xl sm:rounded-2xl shadow-[0_10px_20px_rgba(37,99,235,0.4)] hover:shadow-blue-500/50 transition-all active:scale-95 text-sm sm:text-base">
                   Publish Routine 🚀
                 </button>
@@ -153,6 +155,8 @@ const CreateRoutine = () => {
           </div>
         </div>
       </div>
+
+     
     </div>
   );
 };;
