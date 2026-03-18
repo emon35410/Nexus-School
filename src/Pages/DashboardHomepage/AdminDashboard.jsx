@@ -8,7 +8,6 @@ import {
   Tooltip, ResponsiveContainer, AreaChart, Area 
 } from 'recharts';
 
-// ডামি ডাটা (চার্টের জন্য)
 const chartData = [
   { name: 'Jan', students: 400, revenue: 2400 },
   { name: 'Feb', students: 700, revenue: 3600 },
@@ -19,7 +18,7 @@ const chartData = [
 
 const AdminDashboard = () => {
   return (
-    <div className="min-h-screen bg-[#0F172A] text-slate-200 p-8 animate-in fade-in duration-700">
+    <div className="min-h-screen bg-[#0F172A] text-slate-200 p-3 animate-in fade-in duration-700">
       
       {/* --- HEADER --- */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-10">

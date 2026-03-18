@@ -31,13 +31,13 @@ const Home = () => {
       {/* </div> */}
       {/* Koushik - Codes - End */}
       {/* create by polok */}
+       {/* Create By Emon */}
+      <SocialProof></SocialProof>
       <SecureCloudSystem></SecureCloudSystem>
       {/* create by polok */}
       <Testimonials></Testimonials>
       {/* Create By Emon */}
       <Collaboration></Collaboration>
-      {/* Create By Emon */}
-      <SocialProof></SocialProof>
       {/* created by Peyas */}
       <HowItWorks />
       {/* created by peyas */}

@@ -24,6 +24,8 @@ import CreateResultSheet from "../Pages/PublishResultSheet/CreateResultSheet";
 import ExamShedule from "../Pages/TeacherPages/ExamShedule";
 import AllTeachers from "../Pages/BookingTeacher/AllTeachers";
 import ManageMeetings from "../Pages/ManageMeetings/ManageMeetings";
+import About from "../Pages/Home/About/About";
+import Contact from "../components/Home/Contact";
 import ResultSheet from "../Pages/PublishResultSheet/ResultSheet";
 import StudentResult from "../Pages/PublishResultSheet/StudentResult";
 import UpdateRoutine from "../Pages/DynamicRoutine/UpdateRoutine";
@@ -63,6 +65,14 @@ const router = createBrowserRouter([
         path: '/result-sheet',
         Component: ResultSheet,
       },
+      {
+        path:"about",
+        Component: About
+      },
+      {
+        path:"contact",
+        Component: Contact
+      }
     ],
   },
   {

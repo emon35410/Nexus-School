@@ -61,7 +61,7 @@ const ManageMeetings = () => {
 
               <div className="flex items-center gap-4 mb-6">
                  <div className="h-14 w-14 bg-slate-50 rounded-2xl flex items-center justify-center text-slate-400">
-                    <User size={28} />
+                    <img src={meeting.studentImage} alt={meeting.studentName} className="h-full w-full object-cover rounded-2xl" />
                  </div>
                  <div>
                     <h3 className="font-black text-slate-800 leading-tight">{meeting.studentName}</h3>
