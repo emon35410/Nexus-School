@@ -23,6 +23,8 @@ import AdmissionApplication from "../Pages/AdminAdmissionCheck/AdmissionApplicat
 import ExamShedule from "../Pages/TeacherPages/ExamShedule";
 import AllTeachers from "../Pages/BookingTeacher/AllTeachers";
 import ManageMeetings from "../Pages/ManageMeetings/ManageMeetings";
+import About from "../Pages/Home/About/About";
+import Contact from "../components/Home/Contact";
 
 const router = createBrowserRouter([
   {
@@ -55,6 +57,14 @@ const router = createBrowserRouter([
         path:"/manage-meetings",
         Component: ManageMeetings
       },
+      {
+        path:"about",
+        Component: About
+      },
+      {
+        path:"contact",
+        Component: Contact
+      }
     ],
   },
   {

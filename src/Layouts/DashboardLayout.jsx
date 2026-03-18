@@ -193,7 +193,7 @@ const DashboardLayout = () => {
     // const userRole = "admin";
 
     return (
-        <div className="min-h-screen flex bg-[#0F172A] text-[#E2E8F0] font-sans selection:bg-blue-500/30">
+        <div className="min-h-screen flex bg-[#111827] text-[#E2E8F0] font-sans selection:bg-blue-500/30">
 
             {/* --- MOBILE SIDEBAR (Drawer) --- */}
             <div className={`fixed inset-0 z-50 md:hidden transition-all duration-300 ${isMobileMenuOpen ? "visible opacity-100" : "invisible opacity-0"}`}>
@@ -226,7 +226,7 @@ const DashboardLayout = () => {
             </div>
 
             {/* --- DESKTOP SIDEBAR --- */}
-            <aside className={`${isSidebarOpen ? 'w-64' : 'w-30'} bg-[#1E293B] p-6 hidden md:flex flex-col border-r border-slate-700 shadow-2xl transition-all duration-300 h-screen sticky top-0`}>
+            <aside className={`${isSidebarOpen ? 'w-64' : 'w-30'} bg-slate-800 p-6 hidden md:flex flex-col border-r border-slate-700 shadow-2xl transition-all duration-300 h-screen sticky top-0`}>
                 <div className="mb-10 flex items-center gap-3 overflow-hidden">
                     <Link to="/" className="flex items-center gap-3 group">
                         <img

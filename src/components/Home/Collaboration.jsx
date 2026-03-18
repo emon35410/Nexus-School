@@ -1,6 +1,7 @@
 import React from 'react';
+import { Handshake } from 'lucide-react';
+import Container from '../../Layouts/Container';
 
-// Made by Emon
 const Collaboration = () => {
   const sponsors = [
     "Panjabi Guide", "Edu Board", "Creative IT", "Study Care",
@@ -8,64 +9,110 @@ const Collaboration = () => {
     "Knowledge Co", "Tutor Point", "Science Academy", "Alpha Library"
   ];
 
-  const marqueeSponsors = [...sponsors, ...sponsors];
+  const doubled = [...sponsors, ...sponsors];
+  const doubledRev = [...sponsors].reverse().flatMap(s => [s, s]);
+
+  const Item = ({ name }) => (
+    <div className="inline-flex items-center gap-5 px-7">
+      <div className="w-1.5 h-1.5 rotate-45 border border-[#c8bfb2] shrink-0" />
+      <span
+        className="font-bold uppercase tracking-[0.12em] text-[13px] text-[#4a4238] hover:text-blue-600 transition-colors cursor-default"
+        style={{ fontFamily: "'Syne', sans-serif" }}
+      >
+        {name}
+      </span>
+    </div>
+  );
+
+  const ItemSmall = ({ name }) => (
+    <div className="inline-flex items-center gap-5 px-7">
+      <div className="w-1 h-1 rotate-45 border border-[#ddd5cb] shrink-0" />
+      <span
+        className="font-bold uppercase tracking-[0.12em] text-[12px] text-[#8a7e72] hover:text-blue-600 transition-colors cursor-default"
+        style={{ fontFamily: "'Syne', sans-serif" }}
+      >
+        {name}
+      </span>
+    </div>
+  );
 
   return (
-    <div className=" py-16 overflow-hidden">
-
+    <section
+      className="py-10 overflow-hidden relative bg-[#f8f6f1]"
+    >
       {/* Header */}
-      <div className="text-center mb-10">
-        <p className="text-xs font-semibold tracking-[0.3em] uppercase text-blue-500 mb-3">
-          Our Partners
-        </p>
-        <h2 className="text-3xl font-bold text-white">
-          Trusted{" "}
-          <span className="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
-            Collaborators
-          </span>
-        </h2>
-      </div>
+      <Container>
+        <div className="text-center mb-14 px-6">
+          <div className="inline-flex items-center gap-2 text-blue-600 text-[10px] font-semibold uppercase tracking-[0.2em] mb-5">
+            <span className="w-1.25 h-1.25 rounded-full bg-blue-600" />
+            Strategic Partnerships
+            <span className="w-1.25 h-1.25 rounded-full bg-blue-600" />
+          </div>
 
-      <div className="relative flex w-full overflow-hidden mb-4 ">
-        <div className="flex flex-nowrap gap-4 animate-[marquee_35s_linear_infinite] hover:[animation-play-state:paused]">
-          {marqueeSponsors.map((name, i) => (
-            <div
-              key={i}
-              className="flex items-center gap-2 px-6 py-3 rounded-full border border-slate-700/60 bg-slate-900/60 hover:border-blue-500/50 hover:bg-slate-800 transition-all duration-300 cursor-default whitespace-nowrap group"
-            >
-              <span className="w-1.5 h-1.5 rounded-full bg-blue-500/50 group-hover:bg-blue-400 transition-colors" />
-              <span className="text-slate-400 font-medium text-sm tracking-wide group-hover:text-slate-200 transition-colors">
-                {name}
-              </span>
-            </div>
-          ))}
+          <h2
+            className="text-4xl font-black tracking-tight text-slate-800 leading-tight"
+            style={{ fontFamily: "'Syne', sans-serif" }}
+          >
+            Trusted by <span className="text-blue-600">Education Leaders</span>
+          </h2>
+
+          <p className="text-sm text-slate-500 mt-3">
+            Institutions and platforms that rely on our infrastructure
+          </p>
+        </div>
+      </Container>
+
+      {/* Row 1 */}
+      <div className="relative py-7 border-y border-[#c8bfb2]/50 mb-3">
+        <div
+          className="relative overflow-hidden"
+          style={{
+            maskImage:
+              'linear-gradient(to right, transparent, black 12%, black 88%, transparent)',
+            WebkitMaskImage:
+              'linear-gradient(to right, transparent, black 12%, black 88%, transparent)',
+          }}
+        >
+          <div className="flex whitespace-nowrap animate-marquee">
+            {doubled.map((name, i) => (
+              <Item key={i} name={name} />
+            ))}
+          </div>
         </div>
       </div>
 
-      {/* Row 2 — reverse */}
-      <div className="relative flex w-full overflow-hidden ">
-        <div className="flex flex-nowrap gap-4 animate-[marquee-reverse_45s_linear_infinite] hover:[animation-play-state:paused]">
-          {[...marqueeSponsors].reverse().map((name, i) => (
-            <div
-              key={i}
-              className="flex items-center gap-2 px-6 py-3 rounded-full border border-slate-700/60 bg-slate-900/60 hover:border-purple-500/50 hover:bg-slate-800 transition-all duration-300 cursor-default whitespace-nowrap group"
-            >
-              <span className="w-1.5 h-1.5 rounded-full bg-purple-500/50 group-hover:bg-purple-400 transition-colors" />
-              <span className="text-slate-400 font-medium text-sm tracking-wide group-hover:text-slate-200 transition-colors">
-                {name}
-              </span>
-            </div>
-          ))}
+      {/* Row 2 */}
+      <div className="relative py-7 border-b border-[#c8bfb2]/50">
+        <div
+          className="relative overflow-hidden"
+          style={{
+            maskImage:
+              'linear-gradient(to right, transparent, black 12%, black 88%, transparent)',
+            WebkitMaskImage:
+              'linear-gradient(to right, transparent, black 12%, black 88%, transparent)',
+          }}
+        >
+          <div className="flex whitespace-nowrap animate-marquee-reverse">
+            {doubledRev.map((name, i) => (
+              <ItemSmall key={i} name={name} />
+            ))}
+          </div>
         </div>
       </div>
 
-      {/* Keyframes */}
       <style>{`
-        @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-        @keyframes marquee-reverse { from { transform: translateX(-50%); } to { transform: translateX(0); } }
+        @keyframes marquee {
+          from { transform: translateX(0); }
+          to   { transform: translateX(-50%); }
+        }
+        @keyframes marquee-reverse {
+          from { transform: translateX(-50%); }
+          to   { transform: translateX(0); }
+        }
+        .animate-marquee         { animation: marquee 35s linear infinite; }
+        .animate-marquee-reverse { animation: marquee-reverse 42s linear infinite; }
       `}</style>
-
-    </div>
+    </section>
   );
 };
 
