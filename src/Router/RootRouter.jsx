@@ -20,11 +20,18 @@ import CreateRoutine from "../Pages/DynamicRoutine/CreateRoutine";
 import ClassRoutine from "../Pages/DynamicRoutine/ClassRoutine";
 import AdmissionForm from "../Pages/Admission/AdmissionForm";
 import AdmissionApplication from "../Pages/AdminAdmissionCheck/AdmissionApplication";
+import CreateResultSheet from "../Pages/PublishResultSheet/CreateResultSheet";
 import ExamShedule from "../Pages/TeacherPages/ExamShedule";
 import AllTeachers from "../Pages/BookingTeacher/AllTeachers";
 import ManageMeetings from "../Pages/ManageMeetings/ManageMeetings";
+<<<<<<< HEAD
 import About from "../Pages/Home/About/About";
 import Contact from "../components/Home/Contact";
+=======
+import ResultSheet from "../Pages/PublishResultSheet/ResultSheet";
+import StudentResult from "../Pages/PublishResultSheet/StudentResult";
+import UpdateRoutine from "../Pages/DynamicRoutine/UpdateRoutine";
+>>>>>>> cb901e2d6da2fc52e07232d798ead4058ae670ae
 
 const router = createBrowserRouter([
   {
@@ -50,12 +57,16 @@ const router = createBrowserRouter([
         Component: AdmissionForm,
       },
       {
-        path:"/booking-teachers",
-        Component: AllTeachers
+        path: '/booking-teachers',
+        Component: AllTeachers,
       },
       {
-        path:"/manage-meetings",
-        Component: ManageMeetings
+        path: '/manage-meetings',
+        Component: ManageMeetings,
+      },
+      {
+        path: '/result-sheet',
+        Component: ResultSheet,
       },
       {
         path:"about",
@@ -85,49 +96,62 @@ const router = createBrowserRouter([
         Component: Profile,
       },
       {
-      path:"/dashboard/manage-users",
-      Component: ManageUsers
-    },
-    {
-      path:"/dashboard/admissions",
-      element: <AdmissionApplication></AdmissionApplication>
-    },
-    {
-      path:"/dashboard/notices",
-      Component: ViewNotice
-    },
-    {
-      path:"/dashboard/teachersh/Attendance",
-      element: <Attendance></Attendance>
-    },{
-      path:"/dashboard/teachersh/AttendanceHistory",
-      element:<AttendanceHistory></AttendanceHistory>
-    },
-    {
-      path:"/dashboard/assignments",
-      Component: Assignment
-    },
-    {
-      path:"/dashboard/my-assignments",
-      Component: MyAssignments
+        path: '/dashboard/manage-users',
+        Component: ManageUsers,
+      },
+      {
+        path: '/dashboard/admissions',
+        element: <AdmissionApplication></AdmissionApplication>,
+      },
+      {
+        path: '/dashboard/notices',
+        Component: ViewNotice,
+      },
+      {
+        path: '/dashboard/teachersh/Attendance',
+        element: <Attendance></Attendance>,
+      },
+      {
+        path: '/dashboard/teachersh/AttendanceHistory',
+        element: <AttendanceHistory></AttendanceHistory>,
+      },
+      {
+        path: '/dashboard/assignments',
+        Component: Assignment,
+      },
+      {
+        path: '/dashboard/my-assignments',
+        Component: MyAssignments,
       },
       {
         path: '/dashboard/manage-student',
-        Component:ManageStudents
-    },
+        Component: ManageStudents,
+      },
       {
         path: '/dashboard/exam-shedule',
-        Component: ExamShedule
-      },{
-
+        Component: ExamShedule,
+      },
+      {
         path: '/dashboard/create-routine',
-        Component:CreateRoutine
-    },
+        Component: CreateRoutine,
+      },
       {
         path: '/dashboard/class-routine',
-        Component:ClassRoutine
-    }
-    
+        Component: ClassRoutine,
+      },
+
+      {
+        path: '/dashboard/create-result-sheet',
+        Component: CreateResultSheet,
+      },
+      {
+        path: '/dashboard/student-result',
+        Component: StudentResult
+     },
+      {
+        path: '/dashboard/check-routine',
+        Component:UpdateRoutine
+     }
     ],
   },
 ]);
