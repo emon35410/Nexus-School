@@ -8,20 +8,20 @@ const Contact = () => {
   const [loading, setLoading] = useState(false);
 
 
-  const handleSubmit = async(e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true)
-   
+
     try {
       await new Promise(resolve => setTimeout(resolve, 2000));
-    toast.success("Message sent successfully!");
-    e.target.reset();
+      toast.success("Message sent successfully!");
+      e.target.reset();
     } catch (error) {
       console.log(error)
     } finally {
       setLoading(false)
     }
-    
+
   }
   return (
     <section className="py-12 md:py-20 lg:py-28 bg-gray-50">
@@ -37,9 +37,9 @@ const Contact = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Contact Info Cards */}
-          <div className="space-y-4">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch">
+          {/* Left Side: Contact Info Cards (এখানে কোনো পরিবর্তন করিনি) */}
+          <div className="flex flex-col gap-4">
             <div className="p-6 bg-white rounded-xl shadow-sm border border-gray-100 flex items-start gap-4">
               <div className="p-3 bg-blue-100 rounded-lg text-blue-600">
                 <Mail size={24} />
@@ -71,51 +71,51 @@ const Contact = () => {
             </div>
           </div>
 
-          {/* Contact Form */}
-          <div className="lg:col-span-2 bg-white px-4 py-8 md:p-8 rounded-2xl shadow-lg border border-gray-100">
-            <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="space-y-2">
-                <label className="text-sm font-semibold text-gray-700">
-                  Full Name
-                </label>
-                <input
-                  type="text"
-                  placeholder="Enter your name"
-                  className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
-                />
+          {/* Right Side: Contact Form (বাম পাশের উচ্চতা অনুযায়ী অ্যাডজাস্ট করা হয়েছে) */}
+          <div className="lg:col-span-2 bg-white px-6 py-6 rounded-2xl shadow-lg border border-gray-100 flex flex-col h-full">
+            <form onSubmit={handleSubmit} className="flex flex-col h-full justify-between gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-1">
+                  <label className="text-sm font-semibold text-gray-700">Full Name</label>
+                  <input
+                    type="text"
+                    placeholder="Enter your name"
+                    className="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 outline-none transition"
+                  />
+                </div>
+                <div className="space-y-1">
+                  <label className="text-sm font-semibold text-gray-700">School Name</label>
+                  <input
+                    type="text"
+                    placeholder="Your School"
+                    className="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 outline-none transition"
+                  />
+                </div>
               </div>
-              <div className="space-y-2">
-                <label className="text-sm font-semibold text-gray-700">
-                  School Name
-                </label>
-                <input
-                  type="text"
-                  placeholder="Your School/College"
-                  className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
-                />
-              </div>
-              <div className="space-y-2 md:col-span-2">
-                <label className="text-sm font-semibold text-gray-700">
-                  Email Address
-                </label>
+
+              <div className="space-y-1">
+                <label className="text-sm font-semibold text-gray-700">Email Address</label>
                 <input
                   type="email"
                   placeholder="example@mail.com"
-                  className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
+                  className="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 outline-none transition"
                 />
               </div>
-              <div className="space-y-2 md:col-span-2">
-                <label className="text-sm font-semibold text-gray-700">
-                  Message / Inquiry
-                </label>
+
+              {/* Message Area: flex-grow ensures it fills the exact remaining height */}
+              <div className="space-y-1 flex-grow flex flex-col">
+                <label className="text-sm font-semibold text-gray-700">Message</label>
                 <textarea
-                  rows="4"
-                  placeholder="Admission query or software issue details..."
-                  className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
+                  placeholder="How can we help?"
+                  className="w-full flex-grow px-4 py-2 rounded-lg border border-gray-200 focus:ring-2 focus:ring-blue-500 outline-none transition resize-none min-h-[80px]"
                 ></textarea>
               </div>
-              <button disabled={loading} className={`md:col-span-2 w-full py-4 cursor-pointer text-white font-bold rounded-lg  transform hover:-translate-y-1 transition duration-300 shadow-md ${loading ? 'bg-black/80' : 'bg-blue-600 hover:bg-blue-700'} `}>
-                {loading ? <span>Loading... </span> : <span>Send Message</span> }
+
+              <button
+                disabled={loading}
+                className={`w-full py-3.5 text-white font-bold rounded-lg transition duration-300 shadow-md ${loading ? 'bg-gray-400' : 'bg-blue-600 hover:bg-blue-700'}`}
+              >
+                {loading ? "Sending..." : "Send Message"}
               </button>
             </form>
           </div>
