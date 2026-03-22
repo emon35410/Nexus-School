@@ -4,6 +4,7 @@ import {
   LayoutDashboard, Users, BookOpen, FileText,
   Bell, LogOut, Menu, X, UserCircle, GraduationCap,
   ClipboardList,
+  ClipboardClock,
 } from "lucide-react";
 import { AuthContext } from "../AuthContext/AuthContext";
 import NS1_logo from "../assets/NS1.png";
@@ -48,6 +49,9 @@ const NavLinks = ({ isOpen, isMobile = false, userRole, setMobileMenuOpen }) => 
       onClick={() => isMobile && setMobileMenuOpen(false)}
     />
 
+    
+
+
     {userRole === "admin" && (
       <>
         <SidebarLink to="/dashboard/manage-users" icon={<Users size={20} />} label="Manage Users" isOpen={isOpen} onClick={() => isMobile && setMobileMenuOpen(false)} />
@@ -65,6 +69,7 @@ const NavLinks = ({ isOpen, isMobile = false, userRole, setMobileMenuOpen }) => 
         <SidebarLink to="/dashboard/teachersh/AttendanceHistory" icon={<BookOpen size={20} />} label="Attendance History" isOpen={isOpen} onClick={() => isMobile && setMobileMenuOpen(false)} />
         <SidebarLink to="/dashboard/assignments" icon={<FileText size={20} />} label="Assignments" isOpen={isOpen} onClick={() => isMobile && setMobileMenuOpen(false)} />
         <SidebarLink to="/dashboard/manage-student" icon={<PiStudentFill size={20} />} label="Manage Student" isOpen={isOpen} onClick={() => isMobile && setMobileMenuOpen(false)} />
+        <SidebarLink to="/dashboard/exam-schedule" icon={<ImFileText size={20} />} label="Exam Schedule" isOpen={isOpen} onClick={() => isMobile && setMobileMenuOpen(false)} />
       </>
     )}
 
@@ -74,6 +79,7 @@ const NavLinks = ({ isOpen, isMobile = false, userRole, setMobileMenuOpen }) => 
         <SidebarLink to="/dashboard/student-result" icon={<BiSpreadsheet size={20} />} label="Exam Results" isOpen={isOpen} onClick={() => isMobile && setMobileMenuOpen(false)} />
         <SidebarLink to="/dashboard/my-assignments" icon={<FileText size={20} />} label="My Assignments" isOpen={isOpen} onClick={() => isMobile && setMobileMenuOpen(false)} />
         <SidebarLink to="/dashboard/class-routine" icon={<FaBookOpenReader size={20} />} label="Class Routine" isOpen={isOpen} onClick={() => isMobile && setMobileMenuOpen(false)} />
+        <SidebarLink to="/dashboard/my-exam-schedule" icon={<ClipboardClock size={20} />} label="My Exam Schedule" isOpen={isOpen} onClick={() => isMobile && setMobileMenuOpen(false)} />
       </>
     )}
 
