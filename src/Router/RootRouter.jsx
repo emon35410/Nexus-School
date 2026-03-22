@@ -29,6 +29,7 @@ import Contact from "../components/Home/Contact";
 import ResultSheet from "../Pages/PublishResultSheet/ResultSheet";
 import StudentResult from "../Pages/PublishResultSheet/StudentResult";
 import UpdateRoutine from "../Pages/DynamicRoutine/UpdateRoutine";
+import MyExamSchedule from "../Pages/StudentPages/MyExamSchedule";
 
 const router = createBrowserRouter([
   {
@@ -125,7 +126,7 @@ const router = createBrowserRouter([
         Component: ManageStudents,
       },
       {
-        path: '/dashboard/exam-shedule',
+        path: '/dashboard/exam-schedule',
         Component: ExamShedule,
       },
       {
@@ -148,7 +149,11 @@ const router = createBrowserRouter([
       {
         path: '/dashboard/check-routine',
         Component:UpdateRoutine
-     }
+     },
+      {
+        path: '/dashboard/my-exam-schedule',
+        Component: MyExamSchedule
+     },
     ],
   },
 ]);
