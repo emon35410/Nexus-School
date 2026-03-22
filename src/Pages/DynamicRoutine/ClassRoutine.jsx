@@ -1,26 +1,35 @@
 // import { useQuery } from '@tanstack/react-query';
-// import React, { useState } from 'react';
+// import React from 'react';
 // import useAxiosSecure from '../../Hooks/useAxiosSecure';
 // import NexusLoader from '../../components/Nexusloader/Nexusloader';
 // import useAuth from '../../Hooks/useAuth';
+// import {
+//   HiOutlineDownload,
+//   HiOutlineClock,
+//   HiOutlineUser,
+//   HiOutlineBookOpen,
+// } from 'react-icons/hi';
 
 // const ClassRoutine = () => {
 //   const axiosSecure = useAxiosSecure();
-//   const {user}=useAuth()
-//   const { data: studentData = [], } = useQuery({
-//       queryKey: ['students'],
-//       queryFn: async () => {
-//         const res = await axiosSecure.get(`/student`);
-//         return res.data.result;
-//       }
+//   const { user } = useAuth();
+
+//   const { data: studentData = [] } = useQuery({
+//     queryKey: ['students'],
+//     queryFn: async () => {
+//       const res = await axiosSecure.get(`/student`);
+//       return res.data.result;
+//     },
 //   });
 
 //   const findSingleStudent = studentData.find(s => s?.email === user?.email);
 
-//   const { data:routine=[], isLoading } = useQuery({
-//     queryKey: ['routine',findSingleStudent?.department],
+//   const { data: routine = [], isLoading } = useQuery({
+//     queryKey: ['routine', findSingleStudent?.department],
+//     enabled: !!findSingleStudent?.department,
 //     queryFn: async () => {
-//       const res = await axiosSecure.get(`/routine?className=${findSingleStudent?.department}`,
+//       const res = await axiosSecure.get(
+//         `/routine?className=${findSingleStudent?.department}`,
 //       );
 //       return res.data;
 //     },
@@ -36,71 +45,495 @@
 //     'Friday',
 //   ];
 //   const periods = [1, 2, 3];
-//     const getClass = (day, period) => {
-//       const item = routine.find(r => r.day == day && r.period == period);
 
-//       if (!item) {
-//         return ''
-//       }
-//       if (item) {
-//         return (
+//   const getClass = (day, period) => {
+//     const item = routine.filter(r => r.day === day && r.period == period);
+
+//     if (!item)
+//       return (
+//         <div >
+//           <span >No Class</span>
+//         </div>
+//       );
+
+//     return (
+//       <div >
+//         <div >
 //           <div>
-//             <div>
-//               <p className="font-semibold">{item.subject}</p>
-//               <p className="text-xs text-gray-500">{item.teacherName}</p>
+//             <div >
+//               <HiOutlineBookOpen  />
+//               <p >
+//                 {item.subject}
+//               </p>
 //             </div>
-//             <div>
-//               <span>
-//                 Time :
-//                 {new Date(item.time).toLocaleString()}
-//               </span>
+//             <div >
+//               <HiOutlineUser  />
+//               <p >
+//                 {item.teacherName}
+//               </p>
 //             </div>
 //           </div>
-//         );
-//       }
+
+//           <div className="flex items-center gap-2 py-1.5 px-3 bg-blue-500/10 rounded-xl border border-blue-500/20 w-fit">
+//             <HiOutlineClock className="text-blue-400 text-xs" />
+//             <span className="text-blue-300 text-[10px] font-bold font-mono">
+//               {item.time}
+//             </span>
+//           </div>
+//         </div>
+//       </div>
+//     );
 //   };
 
-//     const handleDownload = () => {
-//       window.print();
-//     };
+//   const handleDownload = () => {
+//     window.print();
+//   };
 
-//  if (isLoading) {
-//     return <NexusLoader></NexusLoader>;
-//   }
+//   if (isLoading)
+//     return (
+//       <div >
+//         <NexusLoader />
+//       </div>
+//     );
+
 //   return (
-//     <div className=" w-full bg-black  p-2 rounded-2xl">
-//       <div className="p-2 w-full   rounded-xl shadow-md">
-//         <div className="flex justify-between items-center mb-4">
-//           <h2 className="text-xl font-bold">Class Routine</h2>
+//     <div >
+//       <div >
+//         {/* Header Section */}
+//         <div >
+//           <div >
+//             <h2 >
+//               CLASS{' '}
+//               <span >
+//                 ROUTINE
+//               </span>
+//             </h2>
+//             <div >
+//               <span ></span>
+//               <p >
+//                 {findSingleStudent?.department || 'Academic'} Department
+//               </p>
+//             </div>
+//           </div>
 
 //           <button
 //             onClick={handleDownload}
-//             className=" text-white btn btn-info hover:bg-blue-700"
+//             className='btn'
 //           >
-//             Download
+//             <HiOutlineDownload className="text-lg transition-transform group-hover:-translate-y-1" />
+//             Download PDF
 //           </button>
 //         </div>
 
-//         <div className="overflow-x-auto  rounded-box border ">
-//           <table className="  text-center table ">
-//             <thead className="">
-//               <tr>
-//                 <th className="border p-2 text-white">Day</th>
+//         {/* Main Grid Container */}
+//         <div >
+//           <div >
+//             <table >
+//               <thead>
+//                 <tr>
+//                   <th >
+//                     Timeline
+//                   </th>
+//                   {periods.map(p => (
+//                     <th key={p} >
+//                       <div >
+//                         <span >
+//                           0{p}
+//                         </span>
+//                         <span >
+//                           Period
+//                         </span>
+//                       </div>
+//                     </th>
+//                   ))}
+//                 </tr>
+//               </thead>
+//               <tbody>
+//                 {days.map(day => (
+//                   <tr key={day}>
+//                     <td >
+//                       <div >
+//                         <span >
+//                           {day}
+//                         </span>
+//                       </div>
+//                     </td>
+
+//                     {periods.map(period => (
+//                       <td key={period} className="min-w-[240px]">
+//                         {getClass(day, period)}
+//                       </td>
+//                     ))}
+//                   </tr>
+//                 ))}
+//               </tbody>
+//             </table>
+//           </div>
+//         </div>
+//       </div>
+
+//     </div>
+//   );
+// };
+
+// export default ClassRoutine;
+
+// import { useQuery } from '@tanstack/react-query';
+// import React from 'react';
+// import useAxiosSecure from '../../Hooks/useAxiosSecure';
+// import NexusLoader from '../../components/Nexusloader/Nexusloader';
+// import useAuth from '../../Hooks/useAuth';
+// import {
+//   HiOutlineDownload,
+//   HiOutlineClock,
+//   HiOutlineUser,
+//   HiOutlineBookOpen,
+//   HiOutlineAcademicCap,
+// } from 'react-icons/hi';
+
+// const ClassRoutine = () => {
+//   const axiosSecure = useAxiosSecure();
+//   const { user } = useAuth();
+
+//   const { data: studentData = [] } = useQuery({
+//     queryKey: ['students'],
+//     queryFn: async () => {
+//       const res = await axiosSecure.get(`/student`);
+//       return res.data.result;
+//     },
+//   });
+
+//   const findSingleStudent = studentData.find(s => s?.email === user?.email);
+
+//   const { data: routine = [], isLoading } = useQuery({
+//     queryKey: ['routine', findSingleStudent?.department],
+//     enabled: !!findSingleStudent?.department,
+//     queryFn: async () => {
+//       const res = await axiosSecure.get(
+//         `/routine?className=${findSingleStudent?.department}`,
+//       );
+//       return res.data;
+//     },
+//   });
+
+//   const days = [
+//     'Saturday',
+//     'Sunday',
+//     'Monday',
+//     'Tuesday',
+//     'Wednesday',
+//     'Thursday',
+//     'Friday',
+//   ];
+//   const periods = [1, 2, 3];
+
+//   const getClass = (day, period) => {
+//     // Using .find() instead of .filter() since we want one specific class
+//     const item = routine.find(
+//       r => r.day === day && Number(r.period) === Number(period),
+//     );
+
+//     if (!item) {
+//       return (
+//         <div className="flex items-center justify-center py-8 bg-gray-50 rounded-lg border border-dashed border-gray-200">
+//           <span className="text-gray-400 text-sm italic font-medium">
+//             No Class Scheduled
+//           </span>
+//         </div>
+//       );
+//     }
+
+//     return (
+//       <div className="p-4 bg-white border border-blue-100 rounded-xl shadow-sm hover:border-blue-400 transition-colors duration-200">
+//         <div className="space-y-3">
+//           <div className="flex items-start gap-3">
+//             <div className="p-2 bg-blue-50 rounded-lg">
+//               <HiOutlineBookOpen className="text-blue-600 text-lg" />
+//             </div>
+//             <div>
+//               <p className="text-sm font-bold text-gray-800 leading-tight uppercase tracking-tight">
+//                 {item.subject}
+//               </p>
+//               <div className="flex items-center gap-1.5 mt-1 text-gray-500">
+//                 <HiOutlineUser className="text-xs" />
+//                 <p className="text-xs font-medium">{item.teacherName}</p>
+//               </div>
+//             </div>
+//           </div>
+
+//           <div className="flex items-center gap-2 py-1 px-3 bg-blue-600 rounded-md w-fit">
+//             <HiOutlineClock className="text-white text-xs" />
+//             <span className="text-white text-[11px] font-bold">
+//               {item.time}
+//             </span>
+//           </div>
+//         </div>
+//       </div>
+//     );
+//   };
+
+//   const handleDownload = () => {
+//     window.print();
+//   };
+
+//   if (isLoading)
+//     return (
+//       <div className="h-screen flex items-center justify-center bg-white">
+//         <NexusLoader />
+//       </div>
+//     );
+
+//   return (
+//     <div className="min-h-screen bg-white p-4 md:p-8">
+//       <div className="max-w-7xl mx-auto">
+//         {/* Header Section */}
+//         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10 pb-6 border-b border-gray-100">
+//           <div className="space-y-2">
+//             <div className="flex items-center gap-2 text-blue-600 font-bold tracking-widest text-sm uppercase">
+//               <HiOutlineAcademicCap className="text-xl" />
+//               <span>Academic Schedule</span>
+//             </div>
+//             <h2 className="text-4xl font-black text-gray-900">
+//               CLASS <span className="text-blue-600">ROUTINE</span>
+//             </h2>
+//             <p className="text-gray-500 font-medium bg-gray-100 px-3 py-1 rounded-full w-fit text-sm">
+//               {findSingleStudent?.department || 'General'} Department
+//             </p>
+//           </div>
+
+//           <button
+//             onClick={handleDownload}
+//             className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-bold transition-all shadow-lg shadow-blue-200 active:scale-95"
+//           >
+//             <HiOutlineDownload className="text-xl" />
+//             Download PDF
+//           </button>
+//         </div>
+
+//         {/* Routine Table */}
+//         <div className="overflow-x-auto rounded-2xl border border-gray-200 shadow-xl shadow-gray-100">
+//           <table className="w-full border-collapse bg-white">
+//             <thead>
+//               <tr className="bg-blue-600">
+//                 <th className="p-5 text-left text-white font-bold text-sm uppercase tracking-wider border-b border-blue-700">
+//                   Timeline
+//                 </th>
 //                 {periods.map(p => (
-//                   <th key={p} className="border p-2 text-white">
-//                     Period {p}
+//                   <th
+//                     key={p}
+//                     className="p-5 text-left text-white font-bold text-sm uppercase tracking-wider border-b border-blue-700"
+//                   >
+//                     <div className="flex flex-col">
+//                       <span className="text-blue-200 text-[10px]">
+//                         Slot 0{p}
+//                       </span>
+//                       <span>Period {p}</span>
+//                     </div>
 //                   </th>
 //                 ))}
 //               </tr>
 //             </thead>
-
-//             <tbody>
+//             <tbody className="divide-y divide-gray-100">
 //               {days.map(day => (
-//                 <tr key={day} className="hover:bg-blue-400">
-//                   <td className="border p-2 font-semibold">{day}</td>
+//                 <tr key={day} className="hover:bg-blue-50/30 transition-colors">
+//                   <td className="p-5 align-middle border-r border-gray-50 bg-gray-50/50">
+//                     <span className="text-gray-900 font-black text-sm uppercase tracking-tighter">
+//                       {day}
+//                     </span>
+//                   </td>
 
 //                   {periods.map(period => (
-//                     <td key={period} className="border p-3">
+//                     <td key={period} className="p-4 min-w-[280px]">
+//                       {getClass(day, period)}
+//                     </td>
+//                   ))}
+//                 </tr>
+//               ))}
+//             </tbody>
+//           </table>
+//         </div>
+
+//         {/* Footer info */}
+//         <div className="mt-6 flex justify-between items-center text-gray-400 text-xs font-medium px-2">
+//           <p>© {new Date().getFullYear()} Campus Nexus Management System</p>
+//           <p>Generated for: {user?.email}</p>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default ClassRoutine;
+
+// import { useQuery } from '@tanstack/react-query';
+// import React from 'react';
+// import useAxiosSecure from '../../Hooks/useAxiosSecure';
+// import NexusLoader from '../../components/Nexusloader/Nexusloader';
+// import useAuth from '../../Hooks/useAuth';
+// import {
+//   HiOutlineDownload,
+//   HiOutlineClock,
+//   HiOutlineUser,
+//   HiOutlineBookOpen,
+//   HiOutlineCalendar,
+// } from 'react-icons/hi';
+
+// const ClassRoutine = () => {
+//   const axiosSecure = useAxiosSecure();
+//   const { user } = useAuth();
+
+//   const { data: studentData = [] } = useQuery({
+//     queryKey: ['students'],
+//     queryFn: async () => {
+//       const res = await axiosSecure.get(`/student`);
+//       return res.data.result;
+//     },
+//   });
+
+//   const findSingleStudent = studentData.find(s => s?.email === user?.email);
+
+//   const { data: routine = [], isLoading } = useQuery({
+//     queryKey: ['routine', findSingleStudent?.department],
+//     enabled: !!findSingleStudent?.department,
+//     queryFn: async () => {
+//       const res = await axiosSecure.get(
+//         `/routine?className=${findSingleStudent?.department}`,
+//       );
+//       return res.data;
+//     },
+//   });
+
+//   const days = [
+//     'Saturday',
+//     'Sunday',
+//     'Monday',
+//     'Tuesday',
+//     'Wednesday',
+//     'Thursday',
+//     'Friday',
+//   ];
+//   const periods = [1, 2, 3];
+
+//   const getClass = (day, period) => {
+
+//     const items = routine.filter(
+//       r => r.day === day && Number(r.period) === Number(period),
+//     );
+
+//     if (items.length === 0) {
+//       return (
+//         <div className="py-4 bg-gray-50/50 rounded border border-dashed border-gray-200 flex items-center justify-center">
+//           <span className="text-gray-300 text-[10px] font-medium uppercase">
+//             No Class
+//           </span>
+//         </div>
+//       );
+//     }
+
+//     return (
+//       <div className="flex flex-col gap-2">
+//         {items.map((item, idx) => (
+//           <div
+//             key={idx}
+//             className="p-2 bg-white border-l-4 border-blue-600 shadow-sm border-t border-r border-b border-gray-100 rounded-r-md"
+//           >
+//             <div className="flex flex-col gap-1">
+//               <div className="flex items-center gap-1.5">
+//                 <HiOutlineBookOpen className="text-blue-600 text-xs shrink-0" />
+//                 <p className="text-[11px] font-bold text-gray-800 uppercase truncate">
+//                   {item.subject}
+//                 </p>
+//               </div>
+
+//               <div className="flex items-center gap-1.5">
+//                 <HiOutlineUser className="text-gray-400 text-[10px] shrink-0" />
+//                 <p className="text-[10px] text-gray-500 font-medium truncate">
+//                   {item.teacherName}
+//                 </p>
+//               </div>
+
+//               <div className="flex items-center gap-1 mt-1 px-1.5 py-0.5 bg-blue-50 rounded">
+//                 <HiOutlineClock className="text-blue-600 text-[10px]" />
+//                 <span className="text-blue-700 text-[9px] font-bold">
+//                   {item.time}
+//                 </span>
+//               </div>
+//             </div>
+//           </div>
+//         ))}
+//       </div>
+//     );
+//   };
+
+//   const handleDownload = () => {
+//     window.print();
+//   };
+
+//   if (isLoading)
+//     return (
+//       <div className="h-96 flex items-center justify-center">
+//         <NexusLoader />
+//       </div>
+//     );
+
+//   return (
+//     <div className="bg-white w-full mx-auto    p-2 md:p-6">
+//       <div className="w-full ">
+//         {/* Header - Compact */}
+//         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 border-b border-blue-100 pb-4">
+//           <div>
+//             <div className="flex items-center gap-2 mb-1">
+//               <HiOutlineCalendar className="text-blue-600" />
+//               <span className="text-blue-600 font-bold text-xs uppercase tracking-widest">
+//                 Schedule
+//               </span>
+//             </div>
+//             <h2 className="text-2xl font-black text-gray-900 leading-none">
+//               CLASS <span className="text-blue-600">ROUTINE</span>
+//             </h2>
+//             <p className="text-gray-500 text-xs mt-1 font-semibold">
+//               Dept: {findSingleStudent?.department || 'N/A'}
+//             </p>
+//           </div>
+
+//           <button
+//             onClick={handleDownload}
+//             className="flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-bold transition-all shadow-md active:scale-95"
+//           >
+//             <HiOutlineDownload />
+//             Download
+//           </button>
+//         </div>
+
+//         {/* Routine Table - Minimalist & Compact */}
+//         <div className="overflow-auto border border-gray-200 rounded-lg shadow-sm">
+//           <table className="max-w-[700px] border-collapse ">
+//             <thead>
+//               <tr className="bg-blue-600 text-white">
+//                 <th className=" p-1 md:p-3 text-left text-[11px] font-bold uppercase tracking-wider border-b border-blue-700 ">
+//                   Day
+//                 </th>
+//                 {periods.map(p => (
+//                   <th
+//                     key={p}
+//                     className="p-3 text-left text-[11px] font-bold uppercase tracking-wider border-b border-blue-700"
+//                   >
+//                     Period 0{p}
+//                   </th>
+//                 ))}
+//               </tr>
+//             </thead>
+//             <tbody className="divide-y divide-gray-100">
+//               {days.map(day => (
+//                 <tr key={day} className="hover:bg-blue-50/20 transition-colors">
+//                   <td className="p-3 bg-gray-50 border-r border-gray-100">
+//                     <span className="text-gray-700 font-bold text-[11px] uppercase tracking-tighter">
+//                       {day}
+//                     </span>
+//                   </td>
+
+//                   {periods.map(period => (
+//                     <td key={period} className="p-2 w-24 align-top">
 //                       {getClass(day, period)}
 //                     </td>
 //                   ))}
@@ -126,6 +559,8 @@ import {
   HiOutlineClock,
   HiOutlineUser,
   HiOutlineBookOpen,
+  HiOutlineCalendar,
+  HiAcademicCap,
 } from 'react-icons/hi';
 
 const ClassRoutine = () => {
@@ -165,40 +600,50 @@ const ClassRoutine = () => {
   const periods = [1, 2, 3];
 
   const getClass = (day, period) => {
-    const item = routine.find(r => r.day === day && r.period == period);
+    const items = routine.filter(
+      r => r.day === day && Number(r.period) === Number(period),
+    );
 
-    if (!item)
+    if (items.length === 0) {
       return (
-        <div className="h-full min-h-[80px] flex items-center justify-center border border-dashed border-slate-800 rounded-2xl opacity-20">
-          <span className="text-xs">No Class</span>
+        <div className="h-full min-h-[80px] bg-slate-50 border border-slate-100 rounded flex items-center justify-center">
+          <span className="text-slate-300 text-[9px] font-bold uppercase tracking-widest">
+           No Class
+          </span>
         </div>
       );
+    }
 
     return (
-      <div className="h-full p-4 rounded-2xl bg-gradient-to-br from-slate-800/80 to-slate-900/80 border border-slate-700/50 hover:border-blue-500/50 transition-all duration-300 group shadow-lg">
-        <div className="flex flex-col h-full justify-between gap-3">
-          <div>
-            <div className="flex items-center gap-2 mb-1">
-              <HiOutlineBookOpen className="text-blue-500 text-sm" />
-              <p className="text-blue-100 font-bold text-sm md:text-base tracking-tight leading-tight uppercase">
-                {item.subject}
-              </p>
-            </div>
-            <div className="flex items-center gap-1.5 text-slate-400">
-              <HiOutlineUser className="text-[10px]" />
-              <p className="text-[11px] md:text-xs font-medium italic">
-                {item.teacherName}
-              </p>
-            </div>
-          </div>
+      <div className="flex flex-col gap-2">
+        {items.map((item, idx) => (
+          <div
+            key={idx}
+            className="p-3 bg-white border border-blue-100 rounded shadow-sm hover:border-blue-400 transition-colors"
+          >
+            <div className="flex flex-col gap-2">
+              <div className="flex items-start gap-2">
+                <div className="mt-0.5 bg-blue-600 p-1 rounded">
+                  <HiOutlineBookOpen className="text-white text-[10px]" />
+                </div>
+                <p className="text-[11px] font-bold text-slate-800 uppercase leading-tight">
+                  {item.subject}
+                </p>
+              </div>
 
-          <div className="flex items-center gap-2 py-1.5 px-3 bg-blue-500/10 rounded-xl border border-blue-500/20 w-fit">
-            <HiOutlineClock className="text-blue-400 text-xs" />
-            <span className="text-blue-300 text-[10px] font-bold font-mono">
-              {item.time}
-            </span>
+              <div className="space-y-1">
+                <div className="flex items-center gap-1.5 text-slate-500">
+                  <HiOutlineUser className="text-[11px]" />
+                  <p className="text-[10px] font-medium">{item.teacherName}</p>
+                </div>
+                <div className="flex items-center gap-1.5 text-blue-600 font-bold">
+                  <HiOutlineClock className="text-[11px]" />
+                  <span className="text-[10px]">{item.time}</span>
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
+        ))}
       </div>
     );
   };
@@ -209,76 +654,88 @@ const ClassRoutine = () => {
 
   if (isLoading)
     return (
-      <div className="flex justify-center items-center h-screen bg-slate-950">
+      <div className="h-96 flex items-center justify-center">
         <NexusLoader />
       </div>
     );
 
   return (
-    <div className="min-h-screen bg-[#020617] text-slate-200 p-4 md:p-10 font-sans">
-      <div className="max-w-7xl mx-auto">
-        {/* Header Section */}
-        <div className="flex flex-col md:flex-row justify-between items-center gap-6 mb-12 print:hidden">
-          <div className="text-center md:text-left">
-            <h2 className="text-4xl md:text-5xl font-black text-white tracking-tighter">
-              CLASS{' '}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">
-                ROUTINE
-              </span>
-            </h2>
-            <div className="mt-2 flex items-center justify-center md:justify-start gap-2">
-              <span className="h-1 w-8 bg-blue-600 rounded-full"></span>
-              <p className="text-slate-500 text-xs md:text-sm font-bold uppercase tracking-[0.3em]">
-                {findSingleStudent?.department || 'Academic'} Department
-              </p>
+    <div className="bg-white min-h-screen p-4 md:p-8 rounded-xl ">
+      <div className="max-w-6xl mx-auto">
+        {/* Header Section - Blue & White High Contrast */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8 pb-6 border-b-2 border-blue-600">
+          <div className="flex items-center gap-4">
+            <div className="bg-blue-600 p-4 rounded-xl shadow-lg shadow-blue-100">
+              <HiAcademicCap className="text-white text-3xl" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2 mb-1">
+                <HiOutlineCalendar className="text-blue-600 text-sm" />
+                <span className="text-blue-600 font-bold text-[10px] uppercase tracking-[0.2em]">
+                  Academic Management
+                </span>
+              </div>
+              <h2 className="text-3xl font-black text-slate-900 leading-none uppercase">
+                Class <span className="text-blue-600">Routine</span>
+              </h2>
+              <div className="mt-2 flex items-center gap-2">
+                <span className="bg-blue-50 text-blue-700 px-2 py-0.5 rounded text-[10px] font-bold uppercase border border-blue-100">
+                  Dept: {findSingleStudent?.department || 'N/A'}
+                </span>
+              </div>
             </div>
           </div>
 
           <button
             onClick={handleDownload}
-            className="group cursor-pointer relative flex items-center gap-3 bg-white text-black px-8 py-3.5 rounded-full font-black text-sm uppercase transition-all hover:scale-105 active:scale-95 shadow-[0_0_20px_rgba(255,255,255,0.2)]"
+            className="flex items-center justify-center gap-2 bg-blue-600 hover:bg-slate-900 text-white cursor-pointer px-6 py-3 rounded-lg text-xs font-bold transition-all shadow-lg active:scale-95 uppercase tracking-wider"
           >
-            <HiOutlineDownload className="text-lg transition-transform group-hover:-translate-y-1" />
+            <HiOutlineDownload className="text-lg" />
             Download PDF
           </button>
         </div>
 
-        {/* Main Grid Container */}
-        <div className="bg-slate-900/20 rounded-[2rem] border border-slate-800/60 p-2 md:p-6 backdrop-blur-3xl">
-          <div className="overflow-x-auto pb-4 custom-scrollbar">
-            <table className="w-full border-separate border-spacing-3">
+        {/* Routine Table - Clean Grid */}
+        <div className="overflow-hidden border border-slate-200 rounded-xl shadow-xl shadow-slate-100">
+          <div className="overflow-x-auto">
+            <table className="w-full border-collapse">
               <thead>
-                <tr>
-                  <th className="p-4 text-slate-500 text-[10px] font-black uppercase tracking-widest text-left">
-                    Timeline
+                <tr className="bg-slate-900">
+                  <th className="p-4 text-left text-[11px] font-black text-white uppercase tracking-widest border-r border-slate-800 w-32">
+                    Weekday
                   </th>
                   {periods.map(p => (
-                    <th key={p} className="p-4 min-w-[220px]">
-                      <div className="flex items-center gap-3">
-                        <span className="flex items-center justify-center w-8 h-8 rounded-lg bg-blue-600 text-white font-black text-xs">
-                          0{p}
+                    <th
+                      key={p}
+                      className="p-4 text-left text-[11px] font-black text-white uppercase tracking-widest border-r border-slate-800"
+                    >
+                      <div className="flex items-center gap-2">
+                        <span className="bg-blue-600 px-2 py-0.5 rounded text-[9px]">
+                          Slot {p}
                         </span>
-                        <span className="text-slate-300 font-bold uppercase tracking-widest text-xs">
-                          Period
-                        </span>
+                        <span>Period 0{p}</span>
                       </div>
                     </th>
                   ))}
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="divide-y divide-slate-100">
                 {days.map(day => (
-                  <tr key={day} className="group">
-                    <td className="sticky left-0 z-10">
-                      <div className="w-24 md:w-32 py-8 px-4 rounded-3xl bg-slate-900 border border-slate-800 flex items-center justify-center shadow-xl transition-all group-hover:border-blue-500/50 group-hover:bg-slate-800">
-                        <span className="text-slate-200 font-black text-xs md:text-sm rotate-0 uppercase tracking-widest">
-                          {day}
-                        </span>
-                      </div>
+                  <tr
+                    key={day}
+                    className="group hover:bg-blue-50/30 transition-colors"
+                  >
+                    <td className="p-4 bg-slate-50 border-r border-slate-200 align-middle">
+                      <span className="text-slate-900 font-black text-xs uppercase tracking-tighter group-hover:text-blue-600 transition-colors">
+                        {day}
+                      </span>
                     </td>
 
                     {periods.map(period => (
-                      <td key={period} className="min-w-[240px]">
+                      <td
+                        key={period}
+                        className="p-3 min-w-[200px] align-top border-r border-slate-100 last:border-r-0"
+                      >
                         {getClass(day, period)}
                       </td>
                     ))}
@@ -288,28 +745,13 @@ const ClassRoutine = () => {
             </table>
           </div>
         </div>
-      </div>
 
-      {/* Print Styling Utilities */}
-      <style
-        dangerouslySetInnerHTML={{
-          __html: `
-        @media print {
-          .print\\:hidden { display: none !important; }
-          body { background: white !important; color: black !important; padding: 0 !important; }
-          .max-w-7xl { max-width: 100% !important; }
-          table { border-spacing: 5px !important; }
-          .bg-slate-900, .bg-slate-800, .bg-slate-900\\/20 { background: #f8fafc !important; border: 1px solid #e2e8f0 !important; }
-          .text-white, .text-blue-100, .text-blue-400, .text-slate-200 { color: #0f172a !important; }
-          .rounded-3xl, .rounded-2xl { border-radius: 8px !important; }
-          .shadow-lg, .shadow-xl { box-shadow: none !important; }
-        }
-        .custom-scrollbar::-webkit-scrollbar { height: 6px; }
-        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 10px; }
-      `,
-        }}
-      />
+        {/* Footer Info */}
+        <div className="mt-6 flex justify-between items-center text-slate-400 text-[10px] font-medium uppercase tracking-widest">
+          <p>© {new Date().getFullYear()} Nexus Academic System</p>
+          <p>User: {user?.displayName || 'Student'}</p>
+        </div>
+      </div>
     </div>
   );
 };

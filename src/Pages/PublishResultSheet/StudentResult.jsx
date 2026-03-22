@@ -1,0 +1,267 @@
+
+
+import React, { useState } from 'react';
+import useAuth from '../../Hooks/useAuth';
+import { useQuery } from '@tanstack/react-query';
+import useAxiosSecure from '../../Hooks/useAxiosSecure';
+import NexusLoader from '../../components/Nexusloader/Nexusloader';
+import { CiSaveDown1 } from 'react-icons/ci';
+
+const StudentResult = () => {
+  const { user } = useAuth();
+  const axiosSecure = useAxiosSecure();
+  const [examOptions, setExamOptions] = useState('');
+
+  const { data: student } = useQuery({
+    queryKey: ['one-student', user?.email],
+    queryFn: async () => {
+      const res = await axiosSecure.get(
+        `/result/one-student?email=${user?.email}`,
+      );
+      return res.data;
+    },
+  });
+
+  const { data: studentResult, isLoading } = useQuery({
+    queryKey: [
+      'studentResult',
+      student?.email,
+      student?.department,
+      examOptions,
+    ],
+    queryFn: async () => {
+      const res = await axiosSecure.get(
+        `/result/student-result?email=${student?.email}&className=${student?.department}&examOption=${examOptions}`,
+      );
+      return res.data;
+    },
+  });
+
+  if (isLoading) {
+    return <NexusLoader />;
+  }
+
+  if (!studentResult?.subjects) {
+    return (
+      <div className="flex flex-col items-center justify-center p-10 border-2 border-dashed border-blue-500/30 rounded-xl bg-slate-900/50">
+        <p className="text-blue-400 mb-4">
+          No result data found for this selection.
+        </p>
+        <select
+          value={examOptions}
+          onChange={e => setExamOptions(e.target.value)}
+          className="select select-bordered border-blue-600 bg-slate-800 text-blue-100 focus:ring-2 focus:ring-blue-500"
+        >
+          <option value="">Select Options</option>
+          <option value="test-1">Test 1</option>
+          <option value="test-2">Test 2</option>
+          <option value="final">Final</option>
+        </select>
+      </div>
+    );
+  }
+
+  const validSubjects = studentResult?.subjects.filter(
+    sub => sub.mark !== null,
+  );
+
+  const getSubjectGrad = mark => {
+    if (mark >= 80) return 'A+';
+    if (mark >= 70) return 'A';
+    if (mark >= 60) return 'A-';
+    if (mark >= 50) return 'B';
+    if (mark >= 40) return 'C';
+    if (mark >= 33) return 'D';
+    return 'F';
+  };
+
+  const getPointSubject = mark => {
+    if (mark >= 80) return 5;
+    if (mark >= 70) return 4;
+    if (mark >= 60) return 3.5;
+    if (mark >= 50) return 3;
+    if (mark >= 40) return 2;
+    if (mark >= 33) return 1;
+    return 0;
+  };
+
+  const totalPoint = validSubjects?.reduce(
+    (sum, sub) => sum + getPointSubject(sub.mark),
+    0,
+  );
+  const getGard = (totalPoint / (validSubjects.length || 1)).toFixed(2);
+
+  const handleClick = () => {
+    // Download logic
+  };
+
+  return (
+    <div className="rounded-xl border border-blue-500/30 bg-slate-900 shadow-xl overflow-hidden">
+      {/* Header Section */}
+      {/* <div className="bg-gradient-to-r from-blue-900 to-slate-900 p-6 border-b border-blue-500/20">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6 items-center">
+          <div className="space-y-1">
+            <h2 className="text-sm uppercase tracking-widest text-blue-400 font-bold">
+               Name
+            </h2>
+            <p className="text-xl font-semibold text-white">
+              {studentResult?.studentName}
+            </p>
+          </div>
+          <div className="space-y-1">
+            <h2 className="text-sm uppercase tracking-widest text-blue-400 font-bold">
+               Roll
+            </h2>
+            <p className="text-xl font-semibold text-white">
+              {studentResult?.studentRoll}
+            </p>
+          </div>
+          <div className="space-y-1">
+            <h2 className="text-sm uppercase tracking-widest text-blue-400 font-bold">
+               Class
+            </h2>
+            <p className="text-xl font-semibold text-white">
+              {studentResult?.className}
+            </p>
+          </div>
+
+          <div className="space-y-1">
+            <h2 className="text-sm uppercase tracking-widest text-blue-400 font-bold">
+              Current View
+            </h2>
+            <p className="text-lg text-blue-100 capitalize">
+              {studentResult?.examOption || 'General Overview'}
+            </p>
+          </div>
+
+          <div>
+            <select
+              value={examOptions}
+              onChange={e => setExamOptions(e.target.value)}
+              className="select w-full bg-slate-800 border-2 border-blue-600/50 text-blue-50 hover:border-blue-400 transition-all focus:outline-none"
+            >
+              <option value="">Switch Exam</option>
+              <option value="test-1">Test 1</option>
+              <option value="test-2">Test 2</option>
+              <option value="final">Final</option>
+            </select>
+          </div>
+        </div>
+      </div> */}
+
+      <div className="bg-gradient-to-br from-blue-600/10 via-slate-900 to-slate-900 p-8 border-b border-blue-500/20">
+        <div className="grid grid-cols-2 lg:grid-cols-5 gap-6 items-end">
+          <div className="space-y-1">
+            <h2 className="text-[10px] uppercase tracking-[0.2em] text-blue-400/80 font-black">
+              Student Name
+            </h2>
+            <p className="text-lg font-bold text-white truncate border-l-2 border-blue-500 pl-3 leading-tight">
+              {studentResult?.studentName}
+            </p>
+          </div>
+
+          <div className="space-y-1">
+            <h2 className="text-[10px] uppercase tracking-[0.2em] text-blue-400/80 font-black">
+              Roll No
+            </h2>
+            <p className="text-lg font-bold text-white border-l-2 border-blue-500/40 pl-3 leading-tight">
+              {studentResult?.studentRoll}
+            </p>
+          </div>
+
+          <div className="space-y-1">
+            <h2 className="text-[10px] uppercase tracking-[0.2em] text-blue-400/80 font-black">
+              Class
+            </h2>
+            <p className="text-lg font-bold text-white border-l-2 border-blue-500/40 pl-3 leading-tight">
+              {studentResult?.className}
+            </p>
+          </div>
+
+          <div className="space-y-1">
+            <h2 className="text-[10px] uppercase tracking-[0.2em] text-blue-400/80 font-black">
+              Current View
+            </h2>
+            <p className="text-sm font-medium text-blue-200 capitalize bg-blue-500/10 px-2 py-1 rounded w-fit">
+              {studentResult?.examOption || 'General Overview'}
+            </p>
+          </div>
+
+          <div className="col-span-2 lg:col-span-1">
+            <select
+              value={examOptions}
+              onChange={e => setExamOptions(e.target.value)}
+              className="select select-sm w-full bg-slate-800/80 border border-blue-500/30 text-blue-50 hover:border-blue-400 transition-all focus:outline-none focus:ring-2 focus:ring-blue-500/50 rounded-lg text-xs"
+            >
+              <option value="">Switch Exam</option>
+              <option value="test-1">Test 1</option>
+              <option value="test-2">Test 2</option>
+              <option value="final">Final</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      {/* Table Section */}
+      <div className="overflow-x-auto p-4">
+        <table className="table w-full">
+          <thead className="text-blue-400 border-b border-blue-800">
+            <tr className="border-none uppercase text-xs tracking-tighter">
+              <th className="bg-transparent">Subject Name</th>
+              <th className="bg-transparent text-center">Mark</th>
+              <th className="bg-transparent text-right">Grade</th>
+            </tr>
+          </thead>
+          <tbody className="text-slate-200">
+            {validSubjects.map((subj, idx) => (
+              <tr
+                key={subj?.name || idx}
+                className="border-blue-900/50 hover:bg-blue-900/20 transition-colors"
+              >
+                <td className="font-medium">{subj?.name}</td>
+                <td className="text-center font-mono">{subj?.mark}</td>
+                <td className="text-right">
+                  <span
+                    className={`px-3 py-1 rounded-full text-xs font-bold ${
+                      getSubjectGrad(subj?.mark) === 'F'
+                        ? 'bg-red-500/20 text-red-400'
+                        : 'bg-blue-500/20 text-blue-300'
+                    }`}
+                  >
+                    {getSubjectGrad(subj?.mark)}
+                  </span>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      {/* Footer / Summary Section */}
+      <div className="bg-blue-950/40 p-5 border-t border-blue-800/50 flex flex-col md:flex-row justify-between items-center gap-4">
+        <div className="flex items-center gap-3">
+          <div className="h-12 w-12 rounded-lg  flex items-center justify-center shadow-blue-900/50">
+            <span className="text-white font-bold text-xl">{getGard}</span>
+          </div>
+          <div>
+            <p className="text-xs text-blue-400 uppercase font-bold tracking-wider">
+              GPA
+            </p>
+          </div>
+        </div>
+
+        <button
+          onClick={handleClick}
+          className="btn bg-blue-600 hover:bg-blue-500 border-none text-white px-8 rounded-full shadow-lg shadow-blue-900/20 transition-all transform hover:scale-105 active:scale-95"
+        >
+          <CiSaveDown1 />
+          Download Report
+        </button>
+      </div>
+    </div>
+
+   
+  );
+};
+
+export default StudentResult;
