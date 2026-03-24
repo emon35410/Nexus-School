@@ -63,7 +63,7 @@ const AddExamSchedule = ({ refetch }) => {
         reset();
         if (refetch) refetch();
       }
-    } catch (error) {
+    } catch (err) {
       Swal.fire({
         title: "Error!",
         text: "Failed to save schedule.",
@@ -71,6 +71,7 @@ const AddExamSchedule = ({ refetch }) => {
         background: "#1E293B",
         color: "#fff",
       });
+      console.log(err)
     }
   };
 

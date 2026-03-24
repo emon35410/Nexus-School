@@ -16,7 +16,8 @@ const BookingModal = ({ teacher, id }) => {
       teacherName: teacher.name,
       teacherEmail: teacher.email,  // ফিল্টার করার জন্য ইমেইল জরুরি
       studentEmail: user?.email,
-      studentName: user?.displayName,
+      studentName: user?.displayName || "Anonymous Student",
+      studentImage: user?.photoURL || "https://i.ibb.co/L6v6pPx/user-placeholder.png",
       date: data.date,              // YYYY-MM-DD
       slot: data.time,              // আপনার ডাটাবেজ অনুযায়ী 'slot'
       agenda: data.reason,          // আপনার ব্যাকএন্ড অনুযায়ী 'agenda'
@@ -42,15 +43,15 @@ const BookingModal = ({ teacher, id }) => {
         <h3 className="text-xl font-black text-slate-800 mb-6 flex items-center gap-2">
           <Calendar className="text-primary" /> Book a Slot
         </h3>
-        
+
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           {/* Date */}
           <div>
             <label className="text-xs font-bold text-slate-400 uppercase ml-1">Date</label>
-            <input 
-              {...register("date", { required: "Required" })} 
-              type="date" 
-              className="w-full p-3 bg-slate-50 border border-slate-100 rounded-xl outline-none focus:border-primary" 
+            <input
+              {...register("date", { required: "Required" })}
+              type="date"
+              className="w-full p-3 bg-slate-50 border border-slate-100 rounded-xl outline-none focus:border-primary"
             />
           </div>
 
@@ -58,7 +59,7 @@ const BookingModal = ({ teacher, id }) => {
           <div>
             <label className="text-xs font-bold text-slate-400 uppercase ml-1">Available Slots</label>
             <div className="relative">
-              <select 
+              <select
                 {...register("time", { required: "Pick a slot" })}
                 className="w-full p-3 bg-slate-50 border border-slate-100 rounded-xl outline-none appearance-none focus:border-primary cursor-pointer"
               >
@@ -74,8 +75,8 @@ const BookingModal = ({ teacher, id }) => {
           {/* Agenda */}
           <div>
             <label className="text-xs font-bold text-slate-400 uppercase ml-1">Agenda</label>
-            <textarea 
-              {...register("reason", { required: "Add an agenda" })} 
+            <textarea
+              {...register("reason", { required: "Add an agenda" })}
               placeholder="Topic of discussion..."
               className="w-full p-3 bg-slate-50 border border-slate-100 rounded-xl outline-none min-h-20 focus:border-primary"
             />

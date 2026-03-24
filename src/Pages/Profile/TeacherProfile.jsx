@@ -1,8 +1,8 @@
 import React, { useContext, useState } from 'react';
 import { useForm } from 'react-hook-form'; // Import React Hook Form
-import { 
-  Shield, Mail, Phone, MapPin, GraduationCap, 
-  Edit3, Camera, Save, Clock, X, Loader2, User 
+import {
+  Shield, Mail, Phone, MapPin, GraduationCap,
+  Edit3, Camera, Save, Clock, X, Loader2, User
 } from 'lucide-react';
 import useAxiosSecure from '../../Hooks/useAxiosSecure';
 import Swal from 'sweetalert2';
@@ -13,7 +13,7 @@ const TeacherProfile = ({ dbUser, refetch }) => {
   const { user } = useContext(AuthContext);
   const [isModalOpen, setModalOpen] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
-  
+
   // React Hook Form Initialization
   const { register, handleSubmit, formState: { errors } } = useForm({
     defaultValues: {
@@ -24,15 +24,23 @@ const TeacherProfile = ({ dbUser, refetch }) => {
     }
   });
 
-  const slots = ["09:00 AM", "10:00 AM", "11:00 AM", "12:00 PM", "02:00 PM", "03:00 PM", "04:00 PM"];
+  const slots = [
+    "09:00 AM - 09:15 AM",
+    "10:00 AM - 10:15 AM",
+    "11:00 AM - 11:15 AM",
+    "12:00 PM - 12:15 PM",
+    "02:00 PM - 02:15 PM",
+    "03:00 PM - 03:15 PM",
+    "04:00 PM - 04:15 PM"
+  ];
 
   // --- Handle Slot Toggle ---
   const toggleSlot = async (slot) => {
     const currentSlots = dbUser?.availableSlots || [];
-    const newSlots = currentSlots.includes(slot) 
-      ? currentSlots.filter(s => s !== slot) 
+    const newSlots = currentSlots.includes(slot)
+      ? currentSlots.filter(s => s !== slot)
       : [...currentSlots, slot];
-    
+
     try {
       await axiosSecure.patch(`/users/${dbUser.email}`, { availableSlots: newSlots });
       refetch();
@@ -46,7 +54,7 @@ const TeacherProfile = ({ dbUser, refetch }) => {
     setIsUpdating(true);
     try {
       const res = await axiosSecure.patch(`/users/${dbUser?.email}`, data);
-      
+
       if (res.data.modifiedCount > 0 || res.data.matchedCount > 0) {
         await refetch();
         setModalOpen(false);
@@ -74,10 +82,10 @@ const TeacherProfile = ({ dbUser, refetch }) => {
         <div className="h-48 w-full bg-linear-to-r from-emerald-600 to-teal-800 rounded-[2.5rem] shadow-lg"></div>
         <div className="absolute -bottom-16 left-8 flex flex-col md:flex-row items-end gap-6">
           <div className="relative group">
-            <img 
-              src={user?.photoURL || "https://i.pravatar.cc/150?img=11"} 
-              className="w-36 h-36 rounded-4xl border-4 border-[#0F172A] object-cover shadow-2xl" 
-              alt="Teacher" 
+            <img
+              src={user?.photoURL || "https://i.pravatar.cc/150?img=11"}
+              className="w-36 h-36 rounded-4xl border-4 border-[#0F172A] object-cover shadow-2xl"
+              alt="Teacher"
             />
             <button className="absolute bottom-2 right-2 p-2 bg-emerald-600 rounded-xl border-2 border-[#0F172A] text-white">
               <Camera size={16} />
@@ -114,14 +122,13 @@ const TeacherProfile = ({ dbUser, refetch }) => {
             </h3>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
               {slots.map(s => (
-                <button 
+                <button
                   key={s}
                   onClick={() => toggleSlot(s)}
-                  className={`py-3 rounded-2xl text-[10px] font-black transition-all border ${
-                    dbUser?.availableSlots?.includes(s) 
-                    ? 'bg-emerald-600 border-transparent text-white shadow-lg' 
+                  className={`py-3 rounded-2xl text-[10px] font-black transition-all border ${dbUser?.availableSlots?.includes(s)
+                    ? 'bg-emerald-600 border-transparent text-white shadow-lg'
                     : 'bg-slate-800 border-slate-700 text-slate-400 hover:border-slate-500'
-                  }`}
+                    }`}
                 >
                   {s}
                 </button>
@@ -131,25 +138,25 @@ const TeacherProfile = ({ dbUser, refetch }) => {
 
           {/* Professional Details Display */}
           <section className="bg-[#1E293B] p-8 rounded-4xl border border-slate-700">
-             <h3 className="text-xl font-bold mb-6 text-white flex items-center gap-2">
-               <Shield size={20} className="text-emerald-500" /> Professional Info
-             </h3>
-             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                <InfoBox label="Full Name" value={dbUser?.name} icon={<User size={16}/>} />
-                <InfoBox label="Email" value={dbUser?.email} icon={<Mail size={16}/>} />
-                <InfoBox label="Department" value={dbUser?.department} icon={<GraduationCap size={16}/>} />
-                <InfoBox label="Contact Phone" value={dbUser?.phone} icon={<Phone size={16}/>} />
-             </div>
+            <h3 className="text-xl font-bold mb-6 text-white flex items-center gap-2">
+              <Shield size={20} className="text-emerald-500" /> Professional Info
+            </h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              <InfoBox label="Full Name" value={dbUser?.name} icon={<User size={16} />} />
+              <InfoBox label="Email" value={dbUser?.email} icon={<Mail size={16} />} />
+              <InfoBox label="Department" value={dbUser?.department} icon={<GraduationCap size={16} />} />
+              <InfoBox label="Contact Phone" value={dbUser?.phone} icon={<Phone size={16} />} />
+            </div>
           </section>
         </div>
-        
+
         {/* Sidebar Stats */}
         <div className="space-y-6">
-           <div className="bg-linear-to-br from-emerald-600/10 to-transparent p-8 rounded-4xl border border-emerald-500/20">
-              <h4 className="font-bold text-emerald-400 mb-4 uppercase text-xs tracking-widest">Activity</h4>
-              <StatItem label="Classes" value="5" />
-              <StatItem label="Requests" value="12" />
-           </div>
+          <div className="bg-linear-to-br from-emerald-600/10 to-transparent p-8 rounded-4xl border border-emerald-500/20">
+            <h4 className="font-bold text-emerald-400 mb-4 uppercase text-xs tracking-widest">Activity</h4>
+            <StatItem label="Classes" value="5" />
+            <StatItem label="Requests" value="12" />
+          </div>
         </div>
       </div>
 
@@ -164,32 +171,44 @@ const TeacherProfile = ({ dbUser, refetch }) => {
               </button>
             </div>
 
-            <form onSubmit={handleSubmit(onSubmit)} className="p-8 space-y-5">
+            <form onSubmit={handleSubmit(onSubmit)} className="p-8 space-y-4 max-h-[70vh] overflow-y-auto custom-scrollbar">
               {/* Name Field */}
-              <div className="space-y-2">
+              <div className="space-y-1">
                 <label className="text-[10px] font-bold text-slate-500 uppercase ml-1 tracking-widest">Full Name</label>
-                <input 
+                <input
                   {...register("name", { required: "Name is required" })}
                   className={`w-full bg-slate-900 border ${errors.name ? 'border-rose-500' : 'border-slate-700'} rounded-2xl p-4 text-white focus:border-emerald-500 outline-none text-sm transition-all`}
                 />
-                {errors.name && <span className="text-[10px] text-rose-500 ml-1">{errors.name.message}</span>}
               </div>
 
               {/* Phone Field */}
-              <div className="space-y-2">
+              <div className="space-y-1">
                 <label className="text-[10px] font-bold text-slate-500 uppercase ml-1 tracking-widest">Phone Number</label>
-                <input 
+                <input
                   {...register("phone", { required: "Phone is required" })}
                   className="w-full bg-slate-900 border border-slate-700 rounded-2xl p-4 text-white focus:border-emerald-500 outline-none text-sm"
                 />
               </div>
 
+              {/* --- লোকেশন আপডেট ফিল্ড (নতুন যোগ করা হয়েছে) --- */}
+              <div className="space-y-1">
+                <label className="text-[10px] font-bold text-slate-500 uppercase ml-1 tracking-widest">Location / Address</label>
+                <div className="relative">
+                  <input
+                    {...register("address")}
+                    placeholder="e.g. Sylhet, Bangladesh"
+                    className="w-full bg-slate-900 border border-slate-700 rounded-2xl p-4 pl-11 text-white focus:border-emerald-500 outline-none text-sm"
+                  />
+                  <MapPin size={16} className="absolute left-4 top-4.5 text-slate-500" />
+                </div>
+              </div>
+
               {/* Department Select */}
-              <div className="space-y-2">
+              <div className="space-y-1">
                 <label className="text-[10px] font-bold text-slate-500 uppercase ml-1 tracking-widest">Department</label>
-                <select 
+                <select
                   {...register("department")}
-                  className="w-full bg-slate-900 border border-slate-700 rounded-2xl p-4 text-white focus:border-emerald-500 outline-none text-sm"
+                  className="w-full bg-slate-900 border border-slate-100/10 rounded-2xl p-4 text-white focus:border-emerald-500 outline-none text-sm appearance-none"
                 >
                   <option value="Science">Science</option>
                   <option value="Mathematics">Mathematics</option>
@@ -198,10 +217,10 @@ const TeacherProfile = ({ dbUser, refetch }) => {
                 </select>
               </div>
 
-              <button 
-                disabled={isUpdating} 
+              <button
+                disabled={isUpdating}
                 type="submit"
-                className="w-full py-4 bg-emerald-600 hover:bg-emerald-500 disabled:bg-emerald-900 text-white rounded-2xl font-bold flex items-center justify-center gap-2 transition-all active:scale-[0.98]"
+                className="w-full py-4 bg-emerald-600 hover:bg-emerald-500 disabled:bg-emerald-900 text-white rounded-2xl font-bold flex items-center justify-center gap-2 transition-all active:scale-[0.98] mt-4"
               >
                 {isUpdating ? <><Loader2 size={18} className="animate-spin" /> Saving...</> : <><Save size={18} /> Save Changes</>}
               </button>

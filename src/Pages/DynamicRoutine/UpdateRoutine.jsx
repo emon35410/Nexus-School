@@ -1,16 +1,21 @@
+
+
 import React, { useEffect, useRef, useState } from 'react';
 import useAxiosSecure from '../../Hooks/useAxiosSecure';
 import { useQuery } from '@tanstack/react-query';
 import NexusLoader from '../../components/Nexusloader/Nexusloader';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
-import { MdDeleteForever } from 'react-icons/md';
+import { MdDeleteForever, MdOutlineClass } from 'react-icons/md';
 import { CiEdit } from 'react-icons/ci';
 import {
   HiOutlineCalendarDays,
   HiOutlineAdjustmentsHorizontal,
+  HiOutlineClock,
+  HiOutlineUser,
 } from 'react-icons/hi2';
 import Swal from 'sweetalert2';
+import { Link } from 'react-router';
 
 const UpdateRoutine = () => {
   const [isRoutine, setIsRoutine] = useState('');
@@ -20,11 +25,12 @@ const UpdateRoutine = () => {
   const { register, handleSubmit, reset } = useForm();
 
   useEffect(() => {
-    if (isUpdate) {
-      reset(isUpdate);
-    }
+   if (isUpdate && Object.keys(isUpdate).length > 0) {
+     reset(isUpdate);
+   }
   }, [isUpdate, reset]);
 
+  
   const {
     data: routine = [],
     isLoading,
@@ -72,13 +78,12 @@ const UpdateRoutine = () => {
   const handleDelete = id => {
     Swal.fire({
       title: 'Are you sure?',
+      text: "You won't be able to revert this!",
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonColor: '#3b82f6',
+      confirmButtonColor: '#2563eb', // Blue-600
       cancelButtonColor: '#ef4444',
       confirmButtonText: 'Yes, delete it!',
-      background: '#0f172a',
-      color: '#fff',
     }).then(result => {
       if (result.isConfirmed) {
         axiosSecure
@@ -105,89 +110,100 @@ const UpdateRoutine = () => {
 
   const getClass = (day, period) => {
     if (!Array.isArray(routine)) return null;
-    const item = routine.find(r => r.day === day && r.period == period);
+    const item = routine.filter(
+      r => r.day === day && Number(r.period) === Number(period),
+    );
 
-    if (!item)
+    if (item.length === 0)
       return (
-        <div className="h-12 flex items-center justify-center opacity-10">
-          —
+        <div className="h-20 flex items-center justify-center border-2 border-dashed border-gray-100 rounded-lg text-gray-300">
+          <span className="text-xs font-medium">No Class</span>
         </div>
       );
 
-    return (
-      <div>
-        <div className="bg-slate-800/40 border border-slate-700/50 p-2 md:p-3 rounded-xl group min-w-[140px]">
-          <div className="flex justify-between items-start gap-2">
-            <div className="overflow-hidden">
-              <p className="font-bold text-blue-400 text-[11px] md:text-xs uppercase truncate">
-                {item.subject}
-              </p>
-              <p className="text-[10px] md:text-xs text-slate-400 mt-0.5 truncate">
-                {item.teacherName}
-              </p>
-              <div className="mt-1 text-[9px] md:text-[10px] text-blue-300/80">
-                {item.time}
-              </div>
-            </div>
-            <div className="flex flex-col gap-1 shrink-0 opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition-opacity">
-              <button
-                onClick={() => handleUpdate(item._id)}
-                className="p-1 bg-slate-700 hover:bg-blue-600 rounded text-white"
-              >
-                <CiEdit size={14} />
-              </button>
-              <button
-                onClick={() => handleDelete(item._id)}
-                className="p-1 bg-slate-700 hover:bg-red-600 rounded text-white"
-              >
-                <MdDeleteForever size={14} />
-              </button>
-            </div>
+    return item.map(r => (
+      <div key={r._id} className="group relative bg-white border border-blue-100 p-3 rounded-xl shadow-sm hover:shadow-md hover:border-blue-300 transition-all duration-300  my-1">
+        <div className="flex flex-col gap-1 ">
+          <p className="font-bold text-blue-900 text-sm truncate uppercase tracking-wide">
+            {r.subject}
+          </p>
+          <div className="flex items-center gap-1 text-gray-500 text-[11px]">
+            <HiOutlineUser className="text-blue-500" />
+            <span className="truncate">{r.teacherName}</span>
+          </div>
+          <div className="flex items-center gap-1 text-gray-400 text-[10px] mt-1 font-semibold">
+            <HiOutlineClock className="text-blue-400" />
+            {r.time}
           </div>
         </div>
+
+        {/* Action Buttons Overlay */}
+        <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+          <button
+            onClick={() => handleUpdate(r._id)}
+            className="p-1.5 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-600 hover:text-white transition-colors"
+          >
+            <CiEdit size={16} />
+          </button>
+          <button
+            onClick={() => handleDelete(r._id)}
+            className="p-1.5 bg-red-50 text-red-600 rounded-lg hover:bg-red-600 hover:text-white transition-colors"
+          >
+            <MdDeleteForever size={16} />
+          </button>
+        </div>
       </div>
-    );
+    ));
   };
 
   if (isLoading)
     return (
-      <div className="h-96 flex items-center justify-center">
+      <div className="h-screen flex items-center justify-center bg-gray-50">
         <NexusLoader />
       </div>
     );
 
   return (
-    <div className="  p-3 md:p-8 text-slate-200">
-      <div className="max-w-7xl mx-auto">
-        {/* Responsive Header */}
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 mb-8 bg-slate-900/40 p-5 rounded-3xl border border-slate-800">
-          <div className="space-y-1">
-            <div className="flex items-center gap-2 text-blue-500">
-              <HiOutlineCalendarDays className="text-xl" />
-              <span className="uppercase tracking-widest text-[10px] font-bold">
+    <div className=" bg-gray-50 rounded-xl py-8 px-2 sm:px-2 lg:px-4 ">
+      <div className="">
+        {/* Header Section */}
+        <div className="bg-blue-600 rounded-3xl py-6 px-3  md:p-10 text-white shadow-xl mb-8 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+          <div>
+            <div className="flex items-center gap-2 mb-3">
+              <div className="p-2 bg-white/20 rounded-lg backdrop-blur-md">
+                <HiOutlineCalendarDays className="text-2xl text-white" />
+              </div>
+              <span className="text-blue-100 font-semibold tracking-widest text-xs uppercase">
                 Scheduler Pro
               </span>
             </div>
-            <h1 className="text-2xl md:text-3xl font-black text-white">
-              Class Routine
-            </h1>
-            <p className="text-slate-500 text-xs md:text-sm">
-              Manage and update school schedules across all grades.
-            </p>
+            <div>
+              <h1 className="text-3xl md:text-4xl font-black mb-2">
+                Manage Routine
+              </h1>
+              <p className="text-blue-100/80 text-sm md:text-base max-w-md">
+                Dynamic schedule management. Select a class to start editing the
+                weekly routine.
+              </p>
+
+              <Link to={'/dashboard/create-routine'} className=' btn mt-2 btn-info btn-outline text-white'>Create Routine</Link>
+            </div>
           </div>
 
-          <div className="flex items-center gap-3">
-            <HiOutlineAdjustmentsHorizontal className="text-slate-400 hidden sm:block" />
+          <div className="flex items-center gap-4 bg-white/10 p-4 rounded-2xl backdrop-blur-sm border border-white/20">
+            <HiOutlineAdjustmentsHorizontal className="text-white text-xl hidden sm:block" />
             <select
               value={isRoutine}
               onChange={e => setIsRoutine(e.target.value)}
-              className="select select-bordered w-full lg:w-56 bg-slate-800 border-slate-700 text-sm focus:ring-2 focus:ring-blue-500"
+              className="select select-ghost w-full lg:w-64 bg-white text-gray-800 focus:ring-4 focus:ring-blue-300 font-bold"
             >
-              <option value="">Choose Class</option>
+              <option value="" className="text-gray-400">
+                Choose Class Grade
+              </option>
               {['class-6', 'class-7', 'class-8', 'class-9', 'class-10'].map(
                 cls => (
-                  <option key={cls} value={cls}>
-                    {cls.replace('-', ' ')}
+                  <option key={cls} value={cls} className="text-gray-800">
+                    {cls.toUpperCase().replace('-', ' ')}
                   </option>
                 ),
               )}
@@ -195,36 +211,43 @@ const UpdateRoutine = () => {
           </div>
         </div>
 
-        {/* Table Container with Horizontal Scroll on Mobile */}
-        <div className="bg-slate-900/50 border border-slate-800 rounded-3xl shadow-2xl overflow-hidden">
-          <div className="overflow-x-auto scrollbar-thin scrollbar-thumb-slate-700">
-            <table className="table w-full border-collapse">
+        {/* Table Content */}
+        <div className="bg-white rounded-3xl shadow-sm border border-gray-100 overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="table w-full">
               <thead>
-                <tr className="border-b border-slate-800 bg-slate-900/80">
-                  <th className="py-4 px-6 text-slate-500 text-[10px] uppercase tracking-tighter">
+                <tr className="bg-gray-50/80 border-b border-gray-100">
+                  <th className="py-3 px-4 text-blue-600 font-black text-xs uppercase tracking-widest">
                     Day
                   </th>
                   {periods.map(p => (
                     <th
                       key={p}
-                      className="py-4 px-6 text-slate-500 text-[10px] uppercase tracking-tighter text-center"
+                      className="py-5 px-6 text-gray-500 font-bold text-xs uppercase tracking-widest text-center"
                     >
                       Period {p}
                     </th>
                   ))}
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-800/50">
+              <tbody className="divide-y divide-gray-50">
                 {days.map(day => (
                   <tr
                     key={day}
-                    className="hover:bg-slate-800/20 transition-colors"
+                    className="hover:bg-blue-50/30 transition-colors"
                   >
-                    <td className="font-bold text-slate-400 px-6 py-4 text-xs italic">
-                      {day.substring(0, 3)}
+                    <td className="font-black text-gray-700 px-3 py-2 md:px-6 md:py-4 text-sm">
+                      <div className="flex flex-col">
+                        <span className="text-blue-600">
+                          {day.substring(0, 3)}
+                        </span>
+                        <span className="text-[10px] text-gray-400 font-normal hidden md:block">
+                          {day}
+                        </span>
+                      </div>
                     </td>
                     {periods.map(period => (
-                      <td key={period} className="p-2 md:p-4 min-w-[160px]">
+                      <td key={period} className="p-3 ">
                         {getClass(day, period)}
                       </td>
                     ))}
@@ -235,101 +258,104 @@ const UpdateRoutine = () => {
           </div>
         </div>
 
-        {/* Responsive Modal */}
+        {/*  Modal */}
         <dialog
           ref={modalRef}
-          className="modal modal-bottom sm:modal-middle backdrop-blur-sm"
+          className="modal modal-bottom sm:modal-middle backdrop-blur-md"
         >
-          <div className="modal-box bg-slate-900 border border-slate-700 p-6 md:p-8 rounded-t-3xl sm:rounded-3xl max-w-lg">
-            <h3 className="text-xl font-black mb-6 text-white border-b border-slate-800 pb-4">
-              Edit Schedule
-            </h3>
+          <div className="modal-box bg-white p-0 rounded-3xl overflow-hidden max-w-xl border-none">
+            <div className="bg-blue-600 p-6 text-white">
+              <h3 className="text-2xl font-black">Edit Schedule</h3>
+              <p className="text-blue-100 text-xs mt-1">
+                Update class details for the selected period
+              </p>
+            </div>
 
             <form
               onSubmit={handleSubmit(handleUpdateRoutine)}
-              className="space-y-4"
+              className="p-8 space-y-5 text-black"
             >
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div className="form-control md:col-span-2">
-                  <label className="label text-[10px] uppercase font-bold text-slate-500">
-                    Subject
+                  <label className="label font-bold text-gray-600 text-xs uppercase">
+                    Subject Name
                   </label>
                   <input
                     type="text"
                     {...register('subject')}
-                    className="input input-sm md:input-md bg-slate-800 border-slate-700"
+                    className="input input-bordered bg-gray-50 border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
                   />
                 </div>
 
                 <div className="form-control">
-                  <label className="label text-[10px] uppercase font-bold text-slate-500">
+                  <label className="label font-bold text-gray-600 text-xs uppercase">
                     Department
                   </label>
                   <input
                     type="text"
                     {...register('department')}
-                    className="input input-sm md:input-md bg-slate-800 border-slate-700"
+                    className="input input-bordered bg-gray-50 border-gray-200"
                   />
                 </div>
 
                 <div className="form-control">
-                  <label className="label text-[10px] uppercase font-bold text-slate-500">
+                  <label className="label font-bold text-gray-600 text-xs uppercase">
                     Teacher
                   </label>
                   <input
                     type="text"
                     {...register('teacherName')}
-                    className="input input-sm md:input-md bg-slate-800 border-slate-700"
+                    className="input input-bordered bg-gray-50 border-gray-200"
                   />
                 </div>
 
                 <div className="form-control">
-                  <label className="label text-[10px] uppercase font-bold text-slate-500">
+                  <label className="label font-bold text-gray-600 text-xs uppercase">
                     Day
                   </label>
                   <input
                     type="text"
                     {...register('day')}
-                    className="input input-sm md:input-md bg-slate-800 border-slate-700"
+                    className="input input-bordered bg-gray-50 border-gray-200"
                   />
                 </div>
 
                 <div className="form-control">
-                  <label className="label text-[10px] uppercase font-bold text-slate-500">
-                    Period (1-3)
+                  <label className="label font-bold text-gray-600 text-xs uppercase">
+                    Period
                   </label>
                   <input
                     type="number"
                     {...register('period')}
                     max={3}
                     min={1}
-                    className="input input-sm md:input-md bg-slate-800 border-slate-700"
+                    className="input input-bordered bg-gray-50 border-gray-200"
                   />
                 </div>
 
                 <div className="form-control md:col-span-2">
-                  <label className="label text-[10px] uppercase font-bold text-slate-500">
-                    Time
+                  <label className="label font-bold text-gray-600 text-xs uppercase">
+                    Class Time
                   </label>
                   <input
                     type="time"
                     {...register('time')}
-                    className="input input-sm md:input-md bg-slate-800 border-slate-700 w-full"
+                    className="input input-bordered bg-gray-50 border-gray-200 w-full"
                   />
                 </div>
               </div>
 
-              <div className="modal-action flex flex-col sm:flex-row gap-2 mt-8">
+              <div className="modal-action gap-3 mt-10">
                 <button
                   type="button"
                   onClick={handleColse}
-                  className="btn btn-ghost order-2 sm:order-1 flex-1"
+                  className="btn btn-ghost text-gray-500 font-bold border-none flex-1"
                 >
-                  Close
+                  Discard
                 </button>
                 <button
                   type="submit"
-                  className="btn btn-primary order-1 sm:order-2 flex-[2] bg-blue-600 hover:bg-blue-700 border-none"
+                  className="btn bg-blue-600 hover:bg-blue-700 text-white border-none flex-[2] rounded-xl shadow-lg shadow-blue-200"
                 >
                   Save Changes
                 </button>
