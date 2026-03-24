@@ -70,3 +70,15 @@
   box-shadow: none !important;
   -webkit-print-color-adjust: exact;
 }
+
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+    cursor: pointer;
+    border-radius: 4px;
+    filter: invert(1); 
+    opacity: 0.5;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator:hover {
+    opacity: 1;
+}

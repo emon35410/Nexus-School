@@ -21,6 +21,7 @@ import ClassRoutine from "../Pages/DynamicRoutine/ClassRoutine";
 import AdmissionForm from "../Pages/Admission/AdmissionForm";
 import AdmissionApplication from "../Pages/AdminAdmissionCheck/AdmissionApplication";
 import UserInfoDownload from "../components/Shared/UserInfoDownload";
+import ExamShedule from "../Pages/TeacherPages/ExamShedule";
 import AllTeachers from "../Pages/BookingTeacher/AllTeachers";
 import ManageMeetings from "../Pages/ManageMeetings/ManageMeetings";
 
@@ -85,6 +86,11 @@ const router = createBrowserRouter([
       {
         path: "/dashboard/notices",
         Component: ViewNotice,
+      },
+      { path: "/dashboard/exam-schedule", Component: ExamShedule },
+      {
+        path: "/dashboard/create-routine",
+        Component: CreateRoutine,
       },
       {
         path: "/dashboard/teachersh/Attendance",
