@@ -16,6 +16,7 @@ import {
 } from 'react-icons/hi2';
 import Swal from 'sweetalert2';
 import { Link } from 'react-router';
+import SecendLoader from '../../components/Nexusloader/SecendLoader';
 
 const UpdateRoutine = () => {
   const [isRoutine, setIsRoutine] = useState('');
@@ -63,8 +64,7 @@ const UpdateRoutine = () => {
       department: updatedData?.department,
       teacherName: updatedData?.teacherName,
     };
-    axiosSecure
-      .patch(`routine/${isUpdate?._id}`, updateData)
+    axiosSecure.patch(`routine/${isUpdate?._id}`, updateData)
       .then(res => {
         toast.success('Routine updated!');
         modalRef.current.close();
@@ -159,7 +159,7 @@ const UpdateRoutine = () => {
   if (isLoading)
     return (
       <div className="h-screen flex items-center justify-center bg-gray-50">
-        <NexusLoader />
+      <SecendLoader></SecendLoader>
       </div>
     );
 

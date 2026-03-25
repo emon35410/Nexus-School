@@ -6,45 +6,7 @@ import { MdOutlineMessage } from 'react-icons/md';
 
 const FeedbackModal = ({ setIsFeedback,feedbacks }) => {
   return (
-    // <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm border-b-2  ">
-    //   {/* Modal Container */}
-    //   <div className="relative w-full max-w-md p-0.5 overflow-auto rounded-3xl bg-linear-to-br from-cyan-500 via-purple-500 to-pink-500 h-100 ">
-    //     <div className="relative bg-slate-900 rounded-[22px] p-8 text-white">
-    //       {/* Close Button */}
-    //       <button
-    //         onClick={() => setIsFeedback(false)}
-    //         className="absolute p-2 transition-colors top-4 right-4 text-slate-400 hover:text-white hover:bg-white/10 rounded-xl"
-    //       >
-    //         <FiX size={20} />
-    //       </button>
-
-    //       {/* Icon Header */}
-    //       <div className="flex items-center justify-center w-16 h-16 mb-6 rounded-2xl bg-linear-to-tr from-cyan-500/20 to-purple-500/20 border border-white/10">
-    //         <FiHexagon className="text-cyan-400 animate-pulse" size={32} />
-    //       </div>
-
-    //       {/* Text Content */}
-    //       {feedbacks.map(feedback => (
-    //         <div key={feedback._id} className="space-y-2 border-b mb-2 ">
-    //           <h2 className="text-3xl font-bold tracking-tight bg-clip-text text-transparent bg-linear-to-r from-white to-slate-400 flex items-center space-x-2">
-    //             <span>
-    //               <FaUserTie size={20} className=" text-white" />
-    //             </span>{' '}
-    //             <span>{feedback?.teacherName}</span>
-    //           </h2>
-
-    //           <p className="pt-2 leading-relaxed text-slate-400 mb-2">
-    //             <span>
-    //               <MdOutlineMessage size={20} className=" text-white" />
-    //             </span>
-    //             {feedback?.feedback}
-    //           </p>
-    //         </div>
-    //       ))}
-
-    //     </div>
-    //   </div>
-    // </div>
+    
 
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md">
       {/* Modal Container with Animated Border Wrapper */}
