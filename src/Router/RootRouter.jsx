@@ -30,6 +30,7 @@ import ResultSheet from "../Pages/PublishResultSheet/ResultSheet";
 import StudentResult from "../Pages/PublishResultSheet/StudentResult";
 import UpdateRoutine from "../Pages/DynamicRoutine/UpdateRoutine";
 import MyExamSchedule from "../Pages/StudentPages/MyExamSchedule";
+import MyCourse from "../Pages/MyCourse/MyCourse";
 
 const router = createBrowserRouter([
   {
@@ -154,6 +155,10 @@ const router = createBrowserRouter([
         path: '/dashboard/my-exam-schedule',
         Component: MyExamSchedule
      },
+     {
+      path: '/dashboard/my-courses',
+      Component: MyCourse
+     }
     ],
   },
 ]);
