@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { 
   Mail, Shield, MapPin, Edit3, Camera, 
-  GraduationCap, X, Save, Phone, User, Loader2 
+  GraduationCap, X, Save, Phone, User, Loader2, Award, Calendar, CheckCircle
 } from 'lucide-react';
 import { AuthContext } from '../../AuthContext/AuthContext';
 import useAxiosSecure from '../../Hooks/useAxiosSecure';
@@ -15,12 +15,10 @@ const StudentProfile = ({ dbUser, refetch }) => {
   const axiosSecure = useAxiosSecure();
   const [role] = useRole();
   
-  // States
   const [isModalOpen, setModalOpen] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
   const [isFeedback, setIsFeedback] = useState(false);
 
-  // Fetch feedback data inside component
   const { data: feedbacks = [] } = useQuery({
     queryKey: ['feedback', user?.email],
     queryFn: async () => {
@@ -31,14 +29,11 @@ const StudentProfile = ({ dbUser, refetch }) => {
   });
 
   const userImg = user?.photoURL || "https://i.pravatar.cc/150?img=11";
-  const userRole = dbUser?.role || "Student";
 
-  // --- Handle Update (PATCH) ---
   const handleUpdateProfile = async (e) => {
     e.preventDefault();
     setIsUpdating(true);
     const form = e.target;
-
     const updatedData = {
       name: form.name.value,
       phone: form.phone.value,
@@ -48,56 +43,54 @@ const StudentProfile = ({ dbUser, refetch }) => {
 
     try {
       const res = await axiosSecure.patch(`/users/${user?.email}`, updatedData);
-      
       if (res.data.modifiedCount > 0 || res.data.matchedCount > 0) {
         await refetch();
         setModalOpen(false);
         Swal.fire({
-          position: "top-end",
           icon: "success",
-          title: "Profile Updated",
-          showConfirmButton: false,
-          timer: 1500,
-          background: '#1E293B',
-          color: '#fff'
+          title: "Update Successful",
+          background: '#1e293b',
+          color: '#cbd5e1',
+          confirmButtonColor: '#475569',
         });
       }
-    } catch (err) {
-      console.error("Update failed:", err);
-    } finally {
-      setIsUpdating(false);
-    }
+    } catch (err) { console.error(err); } 
+    finally { setIsUpdating(false); }
   };
 
   return (
-    <div className="max-w-4xl mx-auto animate-in fade-in slide-in-from-top-4 duration-700 pb-10 px-4">
-      {/* --- COVER & AVATAR SECTION --- */}
-      <div className="relative mb-24">
-        <div className="h-48 w-full bg-linear-to-r from-blue-600 to-indigo-800 rounded-[2.5rem] shadow-lg"></div>
+    <div className="max-w-7xl mx-auto pb-10 px-4 sm:px-6 lg:px-8 text-slate-300">
+      
+      {/* ─── SOFT HERO SECTION ─── */}
+      <div className="relative mt-10">
+        <div className="h-48 sm:h-60 w-full bg-slate-900 rounded-[2.5rem] border border-slate-800 relative overflow-hidden shadow-inner">
+          {/* Subtle noise pattern for texture without glare */}
+          <div className="absolute inset-0 opacity-5 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')]"></div>
+          <div className="absolute inset-0 bg-linear-to-t from-slate-950/80 to-transparent"></div>
+        </div>
 
-        <div className="absolute -bottom-16 left-8 flex flex-col md:flex-row items-end gap-6">
-          <div className="relative group">
+        <div className="absolute -bottom-16 left-0 right-0 px-8 flex flex-col md:flex-row items-center md:items-end gap-6">
+          <div className="relative">
             <img
-              referrerPolicy="no-referrer"
               src={userImg}
+              className="w-32 h-32 sm:w-40 sm:h-40 rounded-4xl border-[6px] border-[#0f172a] object-cover shadow-xl"
               alt="Profile"
-              className="w-36 h-36 rounded-4xl border-4 border-[#0F172A] object-cover shadow-2xl transition-transform group-hover:scale-[1.02]"
             />
-            <button className="absolute bottom-2 right-2 p-2 bg-blue-600 rounded-xl border-2 border-[#0F172A] text-white hover:bg-blue-700 transition-colors">
+            <button className="absolute bottom-2 right-2 p-2.5 bg-slate-800 hover:bg-slate-700 rounded-xl border-2 border-slate-950 text-slate-400 shadow-lg transition-all">
               <Camera size={16} />
             </button>
           </div>
 
           <div className="pb-4 text-center md:text-left">
-            <h1 className="text-3xl font-black text-white">
+            <h1 className="text-2xl sm:text-3xl font-bold text-slate-100 tracking-tight">
               {dbUser?.name || user?.displayName}
             </h1>
-            <div className="flex items-center justify-center md:justify-start gap-2 mt-1">
-              <span className="px-3 py-1 bg-blue-500/20 text-blue-400 border border-blue-500/30 rounded-lg text-xs font-bold uppercase tracking-widest">
-                {userRole}
+            <div className="flex flex-wrap justify-center md:justify-start items-center gap-3 mt-2">
+              <span className="px-3 py-1 bg-slate-800 text-slate-400 border border-slate-700 rounded-lg text-[10px] font-bold uppercase tracking-widest">
+               {role}
               </span>
-              <span className="text-slate-400 text-sm flex items-center gap-1">
-                <MapPin size={14} /> {dbUser?.address || 'Sylhet, Bangladesh'}
+              <span className="text-slate-500 text-xs sm:text-sm font-medium flex items-center gap-1.5">
+                <MapPin size={14} className="text-slate-600" /> {dbUser?.address || 'Sylhet, BD'}
               </span>
             </div>
           </div>
@@ -105,126 +98,73 @@ const StudentProfile = ({ dbUser, refetch }) => {
 
         <button
           onClick={() => setModalOpen(true)}
-          className="absolute -bottom-12 right-8 flex items-center gap-2 px-6 py-3 bg-[#1E293B] hover:bg-slate-800 border border-slate-700 text-white rounded-2xl font-bold text-sm transition-all shadow-xl active:scale-95"
+          className="absolute -bottom-28 md:-bottom-10 right-1/2 translate-x-1/2 md:translate-x-0 md:right-10 flex items-center gap-2 px-6 py-3 bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 rounded-2xl font-bold text-xs uppercase tracking-widest transition-all active:scale-95 shadow-lg"
         >
-          <Edit3 size={16} /> Edit Profile
+          <Edit3 size={14} /> Update Profile
         </button>
       </div>
 
-      {/* --- DETAILS GRID --- */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-32">
-        <div className="md:col-span-2">
-          <section className="bg-[#1E293B] p-8 rounded-4xl border border-slate-700 shadow-sm h-full">
-            <h3 className="text-xl font-bold mb-6 text-white flex items-center gap-2">
-              <Shield size={20} className="text-blue-500" /> Account Information
+      {/* ─── SOFT CONTENT GRID ─── */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mt-40 md:mt-28">
+        
+        {/* Profile Details */}
+        <div className="lg:col-span-8 space-y-8 order-2 lg:order-1">
+          <section className="bg-slate-900/50 border border-slate-800/60 p-6 sm:p-10 rounded-[2.5rem]">
+            <h3 className="text-lg font-bold mb-8 text-slate-200 flex items-center gap-3">
+              <div className="p-2 bg-slate-800 rounded-lg text-slate-400"><User size={18}/></div>
+              Personal Records
             </h3>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
-              <InfoBox
-                label="Full Name"
-                value={dbUser?.name || user?.displayName}
-                icon={<User size={16} />}
-              />
-              <InfoBox
-                label="Email Address"
-                value={dbUser?.email}
-                icon={<Mail size={16} />}
-              />
-              <InfoBox
-                label="Phone"
-                value={dbUser?.phone || 'Not Set'}
-                icon={<Phone size={16} />}
-              />
-              <InfoBox
-                label="Department"
-                value={dbUser?.department ? dbUser.department.replace('-', ' ').toUpperCase() : 'Not Set'}
-                icon={<GraduationCap size={16} />}
-              />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
+              <InfoBox label="Full Name" value={dbUser?.name} icon={<User size={14} />} />
+              <InfoBox label="Official Email" value={dbUser?.email} icon={<Mail size={14} />} />
+              <InfoBox label="Contact" value={dbUser?.phone} icon={<Phone size={14} />} />
+              <InfoBox label="Department" value={dbUser?.department?.replace('-', ' ')} icon={<GraduationCap size={14} />} />
             </div>
           </section>
         </div>
 
-        <div className="space-y-6">
-          <div className="bg-linear-to-br from-blue-600/10 to-transparent p-8 rounded-4xl border border-blue-500/20">
-            <h4 className="font-bold text-blue-400 mb-4 uppercase text-xs tracking-widest">Performance</h4>
+        {/* Muted Stats */}
+        <div className="lg:col-span-4 space-y-6 order-1 lg:order-2">
+          <div className="bg-slate-900/80 p-6 sm:p-8 rounded-[2.5rem] border border-slate-800">
+            <h4 className="font-bold text-slate-500 mb-6 uppercase text-[10px] tracking-[0.2em] flex items-center gap-2">
+              <Award size={14} /> Academic Status
+            </h4>
             <div className="space-y-4">
-              <StatItem label="Attendance" value="99%" />
-              <StatItem label="Account" value="Active" />
-              <StatItem label="Joined" value="Jan 2026" />
+              <StatCard label="Attendance" value="99%" icon={<CheckCircle size={14}/>} />
+              <StatCard label="Reg. Date" value="Jan 2026" icon={<Calendar size={14}/>} />
               
-              {role === 'student' && feedbacks.length > 0 && (
-                <div className="pt-2">
-                  <button
-                    onClick={() => setIsFeedback(true)}
-                    className="w-full btn btn-info btn-xs capitalize text-white rounded-lg py-2"
-                  >
-                    View Feedback ({feedbacks.length})
-                  </button>
-                </div>
+              {feedbacks.length > 0 && (
+                <button
+                  onClick={() => setIsFeedback(true)}
+                  className="w-full py-3 bg-slate-800 hover:bg-slate-700 text-slate-400 border border-slate-700 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all mt-2"
+                >
+                  View Feedback ({feedbacks.length})
+                </button>
               )}
             </div>
           </div>
         </div>
       </div>
 
-      {/* Feedback Modal Rendering */}
-      {isFeedback && (
-        <FeedbackModal 
-          setIsFeedback={setIsFeedback} 
-          feedbacks={feedbacks} 
-        />
-      )}
-
-      {/* --- EDIT MODAL --- */}
+      {/* ─── MUTED MODAL ─── */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-100 flex items-center justify-center p-4 bg-black/60 backdrop-blur-md animate-in fade-in duration-300">
-          <div className="bg-[#1E293B] border border-slate-700 w-full max-w-lg rounded-[2.5rem] overflow-hidden shadow-2xl">
-            <div className="p-8 border-b border-slate-700 flex justify-between items-center bg-slate-800/50">
-              <h2 className="text-xl font-bold text-white">Update Profile</h2>
-              <button
-                onClick={() => setModalOpen(false)}
-                className="p-2 hover:bg-slate-700 rounded-xl text-slate-400 transition-colors"
-              >
+        <div className="fixed inset-0 z-100 flex items-center justify-center p-4 bg-slate-950/90 backdrop-blur-sm animate-in fade-in duration-300">
+          <div className="bg-slate-900 border border-slate-800 w-full max-w-lg rounded-[2.5rem] overflow-hidden shadow-2xl">
+            <div className="p-8 border-b border-slate-800 flex justify-between items-center">
+              <h2 className="text-xl font-bold text-slate-200">Update Profile</h2>
+              <button onClick={() => setModalOpen(false)} className="p-2 hover:bg-slate-800 rounded-xl text-slate-500 transition-colors">
                 <X size={20} />
               </button>
             </div>
 
             <form onSubmit={handleUpdateProfile} className="p-8 space-y-5">
+              <InputGroup label="Full Name" name="name" defaultValue={dbUser?.name} />
+              <InputGroup label="Phone" name="phone" defaultValue={dbUser?.phone} />
+              <InputGroup label="Address" name="address" defaultValue={dbUser?.address} />
+              
               <div className="space-y-2">
-                <label className="text-[10px] font-bold text-slate-500 uppercase ml-1 tracking-widest">Display Name</label>
-                <input 
-                  name="name" 
-                  defaultValue={dbUser?.name || user?.displayName} 
-                  className="w-full bg-slate-900 border border-slate-700 rounded-2xl p-4 text-white focus:border-blue-500 outline-none text-sm" 
-                />
-              </div>
-
-              <div className="space-y-2">
-                <label className="text-[10px] font-bold text-slate-500 uppercase ml-1 tracking-widest">Phone Number</label>
-                <input
-                  name="phone"
-                  defaultValue={dbUser?.phone}
-                  className="w-full bg-slate-900 border border-slate-700 rounded-2xl p-4 text-white focus:border-blue-500 outline-none text-sm"
-                />
-              </div>
-
-              <div className="space-y-2">
-                <label className="text-[10px] font-bold text-slate-500 uppercase ml-1 tracking-widest">Location / Address</label>
-                <input
-                  name="address"
-                  defaultValue={dbUser?.address}
-                  className="w-full bg-slate-900 border border-slate-700 rounded-2xl p-4 text-white focus:border-blue-500 outline-none text-sm"
-                />
-              </div>
-
-              <div className="space-y-2">
-                <label className="text-[10px] font-bold text-slate-500 uppercase ml-1 tracking-widest">Department</label>
-                <select
-                  name="department"
-                  defaultValue={dbUser?.department || "Not set"}
-                  className="w-full bg-slate-900 border border-slate-700 rounded-2xl p-4 text-white focus:border-blue-500 outline-none text-sm"
-                >
-                  <option value="Not set">Not Set</option>
+                <label className="text-[10px] font-bold text-slate-500 uppercase ml-2 tracking-widest">Department</label>
+                <select name="department" defaultValue={dbUser?.department} className="w-full bg-slate-950 border border-slate-800 rounded-xl p-4 text-slate-300 focus:border-slate-600 outline-none text-sm font-medium">
                   <option value="class-6">Class 6</option>
                   <option value="class-7">Class 7</option>
                   <option value="class-8">Class 8</option>
@@ -235,36 +175,47 @@ const StudentProfile = ({ dbUser, refetch }) => {
 
               <button
                 disabled={isUpdating}
-                className="w-full py-4 bg-blue-600 hover:bg-blue-500 disabled:bg-blue-800 text-white rounded-2xl font-bold transition-all flex items-center justify-center gap-2 active:scale-[0.98] mt-4"
+                className="w-full py-4 bg-slate-700 hover:bg-slate-600 disabled:bg-slate-800 text-slate-200 rounded-xl font-bold uppercase tracking-widest text-[10px] transition-all flex items-center justify-center gap-3 mt-4"
               >
-                {isUpdating ? (
-                  <><Loader2 size={18} className="animate-spin" /> Updating...</>
-                ) : (
-                  <><Save size={18} /> Save Changes</>
-                )}
+                {isUpdating ? <Loader2 size={16} className="animate-spin" /> : <Save size={16} />} 
+                {isUpdating ? 'Updating...' : 'Save Changes'}
               </button>
             </form>
           </div>
         </div>
       )}
+
+      {isFeedback && <FeedbackModal setIsFeedback={setIsFeedback} feedbacks={feedbacks} />}
     </div>
   );
 };
 
-// Sub-components
+// Low Contrast Helper Components
 const InfoBox = ({ label, value, icon }) => (
-  <div className="space-y-1.5">
-    <p className="text-[10px] font-bold text-slate-500 uppercase flex items-center gap-1.5">{icon} {label}</p>
-    <div className="text-slate-200 font-medium text-sm bg-slate-800/50 p-4 rounded-2xl border border-slate-700/50">
+  <div>
+    <p className="text-[10px] font-bold text-slate-500 uppercase flex items-center gap-2 mb-2 tracking-widest">
+      {icon} {label}
+    </p>
+    <div className="text-slate-300 font-medium text-sm bg-slate-950/40 p-4 rounded-2xl border border-slate-800/50">
       {value || "Not Set"}
     </div>
   </div>
 );
 
-const StatItem = ({ label, value }) => (
-  <div className="flex justify-between items-center border-b border-slate-700/50 pb-2 last:border-0">
-    <span className="text-sm text-slate-400">{label}</span>
-    <span className="text-sm font-black text-white">{value}</span>
+const StatCard = ({ label, value, icon }) => (
+  <div className="flex justify-between items-center bg-slate-950/30 p-4 rounded-xl border border-slate-800/50">
+    <div className="flex items-center gap-3 text-slate-500">
+       {icon}
+       <span className="text-[10px] font-bold uppercase tracking-tighter">{label}</span>
+    </div>
+    <span className="text-base font-bold text-slate-300">{value}</span>
+  </div>
+);
+
+const InputGroup = ({ label, name, defaultValue }) => (
+  <div className="space-y-2">
+    <label className="text-[10px] font-bold text-slate-500 uppercase ml-2 tracking-widest">{label}</label>
+    <input name={name} defaultValue={defaultValue} className="w-full bg-slate-950 border border-slate-800 rounded-xl p-4 text-slate-300 focus:border-slate-600 outline-none text-sm font-medium transition-all" />
   </div>
 );
 
