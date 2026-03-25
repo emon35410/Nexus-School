@@ -101,12 +101,13 @@ import React, { useState } from 'react';
 import useAxiosSecure from '../../Hooks/useAxiosSecure';
 
 import StudentCard from './StudentCard';
-import NexusLoader from '../../components/Nexusloader/Nexusloader';
+
 import { SlArrowLeft, SlArrowRight } from 'react-icons/sl';
 import {
   HiOutlineAdjustmentsHorizontal,
   HiOutlineUsers,
 } from 'react-icons/hi2';
+import SecendLoader from '../../components/Nexusloader/SecendLoader';
 
 const ManageStudents = () => {
   const axiosSecure = useAxiosSecure();
@@ -128,7 +129,7 @@ const ManageStudents = () => {
   });
 
   if (isLoading) {
-    return <NexusLoader />;
+    return <SecendLoader></SecendLoader>;
   }
 
   return (

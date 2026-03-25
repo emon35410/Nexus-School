@@ -1,128 +1,5 @@
-// import React from 'react';
-// import { useForm } from 'react-hook-form';
-// import Class6 from './Class6';
-// import Class7 from './Class7';
-// import Class8 from './Class8';
-// import Class910 from './Class910';
-// import useAxiosSecure from '../../Hooks/useAxiosSecure';
-// import { toast } from 'react-toastify';
 
-// const CreateResultSheet = () => {
-//   const { register, handleSubmit, watch } = useForm()
-//   const className = watch('className');
-//   const axiosSecure=useAxiosSecure()
-
-//   const handleSubmitResult = (resultData) => {
-//     if (!resultData?.studentRoll) {
-//       toast.info('add studentRoll')
-//       return
-//     }
-
-//     const ignoreFields = [
-//       'className',
-//       'examOption',
-//       'studentEmail',
-//       'studentName',
-//       'studentRoll',
-//     ];
-
-//     const subjects = Object.entries(resultData).filter(([key]) => !ignoreFields.includes(key)).map(([subject, mark]) => ({
-//       name: subject,
-//       mark:Number(mark)
-//     }))
-//     const newResultSheet = {
-//       ClassName: resultData.ClassName,
-//       examOption: resultData.examOption,
-//       studentEmail: resultData.studentEmail,
-//       studentName: resultData.studentName,
-//       studentRoll: resultData.studentRoll,
-//       subjects,
-//     };
-
-//     axiosSecure.post('/result', newResultSheet)
-//       .then(res => {
-//         console.log(res);
-//       })
-//       .catch(err => {
-//         console.log(err);
-//       });
-//   }
-
-//   return (
-//     <div>
-//       <form
-//         onSubmit={handleSubmit(handleSubmitResult)}
-//         className=" bg-blue-900  md:max-w-[700px] rounded-xl mx-auto p-4 w-full"
-//       >
-//         <fieldset className=" fieldset">
-//           {/* student name */}
-//           <label className="label">Student Name</label>
-//           <input
-//             type="text"
-//             {...register('studentName', { required: true })}
-//             className="input text-blue-600 w-full"
-//             placeholder="input student name"
-//           />
-//           {/* student class roll */}
-//           <label className="label">Class Roll</label>
-//           <input
-//             type="number"
-//             {...register('studentRoll', { required: true })}
-//             className="input text-blue-600 w-full"
-//             placeholder="input student class roll"
-//           />
-//           {/* student class Name */}
-//           <label className="label">Class Name</label>
-//           <select
-//             className="select text-blue-600 w-full"
-//             {...register('className', { required: true })}
-//           >
-//             <option value={''}>Select Class</option>
-//             <option value={'class-6'}>Class 6</option>
-//             <option value={'class-7'}>Class 7</option>
-//             <option value={'class-8'}>Class 8</option>
-//             <option value={'class-9'}>Class 9</option>
-//             <option value={'class-10'}>Class 10</option>
-//           </select>
-//           {/* student class Name */}
-//           <label className="label ">Select Exam</label>
-//           <select
-//             className="select text-blue-600 w-full"
-//             {...register('examOption', { required: true })}
-//           >
-//             <option value={''}>Select Exam Option</option>
-//             <option value={'test-1'}>Test 1</option>
-//             <option value={'test-2'}>Test 2</option>
-//             <option value={'final'}>Final Exam</option>
-//           </select>
-//           {/* student Student Email */}
-//           <label className="label">Student Email</label>
-//           <input
-//             type="email"
-//             {...register('studentEmail', { required: true })}
-//             className="input text-blue-600 w-full"
-//             placeholder="input student Email"
-//           />
-//         </fieldset>
-
-//         {/*  class base subject filed show */}
-//         <div>
-//           {className === 'class-6' && <Class6 register={register}></Class6>}
-//           {className === 'class-7' && <Class7 register={register}></Class7>}
-//           {className === 'class-8' && <Class8 register={register}></Class8>}
-//           {(className === 'class-9' || className === 'class-10') && (
-//             <Class910 register={register}></Class910>
-//           )}
-//         </div>
-
-//         <button className=' btn my-2 w-full'>Submit</button>
-//       </form>
-//     </div>
-//   );
-// };
-
-// export default CreateResultSheet;
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import Class6 from './Class6';
 import Class7 from './Class7';
@@ -130,11 +7,31 @@ import Class8 from './Class8';
 import Class910 from './Class910';
 import useAxiosSecure from '../../Hooks/useAxiosSecure';
 import { toast } from 'react-toastify';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 const CreateResultSheet = () => {
-  const { register, handleSubmit, watch } = useForm();
+  const { register, handleSubmit, watch ,reset} = useForm();
   const className = watch('className');
+  const studentEmail = watch('studentEmail');
   const axiosSecure = useAxiosSecure();
+  
+
+ 
+  
+  const { data } = useQuery({
+    queryKey: ['findStudent', studentEmail],
+    enabled: !!studentEmail,
+    queryFn: async () => {
+      const res = await axiosSecure.get(
+        `/result/one-student?email=${studentEmail}`,
+      );
+      return res.data;
+    },
+  });
+
+  
+
+ 
 
   const handleSubmitResult = resultData => {
     if (!resultData?.studentRoll) {
@@ -169,12 +66,25 @@ const CreateResultSheet = () => {
     axiosSecure.post('/result', newResultSheet)
       .then(res => {
         toast.success('Result submitted successfully!');
+        reset({
+          studentEmail: '',
+          studentName: '',
+          className: '',
+          studentRoll: '',
+          examOption: ''
+        });
+       
       })
       .catch(err => {
         console.error(err);
         toast.error('Failed to submit result.');
       });
   };
+   useEffect(() => {
+     if (data && studentEmail) {
+       reset({ studentName: data?.name, className: data?.department });
+     } 
+   }, [data, studentEmail,reset]);
 
   return (
     <div className="min-h-screen   mx-auto">
@@ -187,19 +97,6 @@ const CreateResultSheet = () => {
         </h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {/* Student Name */}
-          <div className="flex flex-col gap-1">
-            <label className="text-sm font-semibold ml-1 text-blue-300">
-              Student Name
-            </label>
-            <input
-              type="text"
-              {...register('studentName', { required: true })}
-              className="w-full bg-slate-800/50 border border-slate-700 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all placeholder:text-slate-500"
-              placeholder="e.g. John Doe"
-            />
-          </div>
-
           {/* Student Email */}
           <div className="flex flex-col gap-1">
             <label className="text-sm font-semibold ml-1 text-blue-300">
@@ -212,17 +109,16 @@ const CreateResultSheet = () => {
               placeholder="email@student.com"
             />
           </div>
-
-          {/* Class Roll */}
+          {/* Student Name */}
           <div className="flex flex-col gap-1">
             <label className="text-sm font-semibold ml-1 text-blue-300">
-              Class Roll
+              Student Name
             </label>
             <input
-              type="number"
-              {...register('studentRoll', { required: true })}
+              type="text"
+              {...register('studentName', { required: true })}
               className="w-full bg-slate-800/50 border border-slate-700 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all placeholder:text-slate-500"
-              placeholder="01"
+              placeholder="e.g. John Doe"
             />
           </div>
 
@@ -254,6 +150,19 @@ const CreateResultSheet = () => {
                 Class 10
               </option>
             </select>
+          </div>
+
+          {/* Class Roll */}
+          <div className="flex flex-col gap-1">
+            <label className="text-sm font-semibold ml-1 text-blue-300">
+              Class Roll
+            </label>
+            <input
+              type="number"
+              {...register('studentRoll', { required: true })}
+              className="w-full bg-slate-800/50 border border-slate-700 rounded-lg px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all placeholder:text-slate-500"
+              placeholder="01"
+            />
           </div>
 
           {/* Exam Selection */}
@@ -301,7 +210,7 @@ const CreateResultSheet = () => {
 
         <button
           type="submit"
-          className="mt-8 w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded-lg shadow-lg shadow-blue-600/30 transform transition-all active:scale-95 uppercase tracking-wider"
+          className="mt-8 w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded-lg shadow-lg shadow-blue-600/30 transform transition-all active:scale-95 uppercase tracking-wider cursor-pointer"
         >
           Submit Result Sheet
         </button>
