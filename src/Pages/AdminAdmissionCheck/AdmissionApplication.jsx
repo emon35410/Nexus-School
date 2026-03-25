@@ -2,40 +2,48 @@ import React, { useState, useMemo } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import useAxiosSecure from '../../Hooks/useAxiosSecure';
 import toast from 'react-hot-toast';
-import { Trash2, CheckCircle, XCircle, Mail, Phone, Calendar, Users, Search, ChevronDown } from 'lucide-react';
+import { 
+  Trash2, CheckCircle, XCircle, Mail, Phone, 
+  Calendar, Users, Search, ChevronDown, Filter,
+  UserCheck, Clock, AlertCircle, LayoutDashboard,
+  ArrowUpRight
+} from 'lucide-react';
 import NexusLoader from '../../components/Nexusloader/Nexusloader';
 
-/* ─── Config & Styles ───────────────────────────────────────────── */
+/* ─── Config ────────────────────────────────────────────────────── */
 const STATUS_THEME = {
-  pending:  { bg: 'bg-amber-50',  text: 'text-amber-600',  dot: 'bg-amber-400',  border: 'border-amber-100' },
-  approved: { bg: 'bg-emerald-50', text: 'text-emerald-600', dot: 'bg-emerald-400', border: 'border-emerald-100' },
-  rejected: { bg: 'bg-rose-50',    text: 'text-rose-600',    dot: 'bg-rose-400',    border: 'border-rose-100' },
+  pending:  { bg: 'bg-orange-500/10',  text: 'text-orange-400',  border: 'border-orange-500/20', icon: <Clock size={12}/> },
+  approved: { bg: 'bg-emerald-500/10', text: 'text-emerald-400', border: 'border-emerald-500/20', icon: <CheckCircle size={12}/> },
+  rejected: { bg: 'bg-rose-500/10',    text: 'text-rose-400',    border: 'border-rose-500/20', icon: <XCircle size={12}/> },
 };
 
 /* ─── Shared Components ─────────────────────────────────────────── */
 const StatusBadge = ({ status }) => {
   const s = STATUS_THEME[status] || STATUS_THEME.pending;
   return (
-    <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider border font-mono ${s.bg} ${s.text} ${s.border}`}>
-      <span className={`w-1.5 h-1.5 rounded-full ${s.dot}`} /> {status}
+    <span className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-wider border ${s.bg} ${s.text} ${s.border}`}>
+      {s.icon} {status}
     </span>
   );
 };
 
 const ActionButtons = ({ id, status, onAction, isMobile }) => (
-  <div className={`flex items-center gap-1.5 ${isMobile ? 'pt-1' : 'justify-end'}`}>
+  <div className={`flex items-center gap-2 ${isMobile ? 'w-full pt-4' : 'justify-end'}`}>
     {status === 'pending' && (
       <>
-        <button onClick={() => onAction(id, 'approved')} className={`flex-1 md:flex-none flex items-center justify-center gap-1 px-3 py-2 bg-emerald-50 text-emerald-600 rounded-xl md:rounded-lg text-xs font-bold hover:bg-emerald-100 transition-all active:scale-95`}>
-          <CheckCircle size={14} /> Approve
+        <button onClick={() => onAction(id, 'approved')} className="flex-1 md:flex-none flex items-center justify-center gap-1.5 px-4 py-2 bg-indigo-600 text-white rounded-xl text-xs font-bold hover:bg-indigo-500 transition-all active:scale-95 shadow-lg shadow-indigo-500/20">
+          Approve
         </button>
-        <button onClick={() => onAction(id, 'rejected')} className={`flex-1 md:flex-none flex items-center justify-center gap-1 px-3 py-2 bg-rose-50 text-rose-500 rounded-xl md:rounded-lg text-xs font-bold hover:bg-rose-100 transition-all active:scale-95`}>
-          <XCircle size={14} /> Reject
+        <button onClick={() => onAction(id, 'rejected')} className="flex-1 md:flex-none flex items-center justify-center gap-1.5 px-4 py-2 bg-slate-800 text-slate-300 border border-slate-700 rounded-xl text-xs font-bold hover:bg-slate-700 transition-all active:scale-95">
+          Reject
         </button>
       </>
     )}
-    <button onClick={() => window.confirm('Delete?') && onAction(id, null, true)} className={`p-2 bg-slate-50 md:bg-transparent text-slate-300 hover:text-rose-500 rounded-xl md:rounded-lg transition-all ${isMobile && status !== 'pending' ? 'flex-1 flex gap-2' : ''}`}>
-      <Trash2 size={16} /> {isMobile && status !== 'pending' && 'Delete'}
+    <button 
+      onClick={() => window.confirm('Delete this request?') && onAction(id, null, true)} 
+      className={`p-2.5 rounded-xl transition-all ${isMobile && status !== 'pending' ? 'w-full bg-rose-500/10 text-rose-400 flex justify-center gap-2 font-bold text-xs border border-rose-500/20' : 'text-slate-500 hover:text-rose-400 hover:bg-rose-500/10'}`}
+    >
+      <Trash2 size={16} /> {isMobile && status !== 'pending' && 'Remove Record'}
     </button>
   </div>
 );
@@ -58,7 +66,9 @@ const AdmissionApplication = () => {
       isDelete ? axiosSecure.delete(`/admission/${id}`) : axiosSecure.patch(`/admission/${id}`, { status }),
     onSuccess: (_, v) => {
       queryClient.invalidateQueries(['admissions']);
-      toast.success(v.isDelete ? 'Removed' : 'Status updated');
+      toast.success(v.isDelete ? 'Deleted' : `Status: ${v.status}`, {
+        style: { borderRadius: '12px', background: '#1E293B', color: '#fff', fontWeight: 'bold', border: '1px solid #334155' }
+      });
     },
   });
 
@@ -77,98 +87,169 @@ const AdmissionApplication = () => {
   if (isLoading) return <NexusLoader />;
 
   return (
-    <div className="min-h-screen bg-[#f7f7f9] p-4 sm:p-8 font-['DM_Sans']">
-      <div className="max-w-6xl mx-auto">
-        {/* Header & Stats Grid */}
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 mb-8">
-          <div>
-            <span className="text-[10px] font-bold text-indigo-400 tracking-[0.2em] uppercase font-mono">Admin Management</span>
-            <h1 className="text-3xl md:text-4xl font-black mt-1 text-slate-900 font-serif leading-tight">Admission Requests</h1>
+    <div className="min-h-screen bg-[#0F172A] p-4 md:p-8 lg:p-10 text-slate-300">
+      <div className="max-w-7xl mx-auto">
+        
+        {/* Header Section */}
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12">
+          <div className="space-y-2">
+            <div className="flex items-center gap-2 text-indigo-400">
+              <LayoutDashboard size={18} />
+              <span className="text-[10px] font-black uppercase tracking-[0.3em]">Nexus Admin Panel</span>
+            </div>
+            <h1 className="text-3xl md:text-5xl font-black text-white tracking-tight">Admission <span className="text-indigo-500">Queue</span></h1>
           </div>
-          <div className="bg-indigo-950 text-white px-4 py-2.5 rounded-xl text-xs font-bold flex items-center gap-2 shrink-0 shadow-lg shadow-indigo-100">
-            <Users size={14} /> {counts.total} Applications
+          
+          <div className="bg-slate-900/50 backdrop-blur-md border border-slate-800 p-4 rounded-2xl flex items-center gap-4">
+            <div className="w-12 h-12 rounded-xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center border border-indigo-500/20">
+              <Users size={24} />
+            </div>
+            <div>
+              <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1">Total Applied</p>
+              <div className="flex items-center gap-2">
+                <p className="text-2xl font-black text-white leading-none">{counts.total}</p>
+                <ArrowUpRight size={14} className="text-emerald-400" />
+              </div>
+            </div>
           </div>
         </div>
 
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
-          {[ ['Total', counts.total, '#1e1b4b'], ['Pending', counts.pending, '#d97706'], ['Approved', counts.approved, '#16a34a'], ['Rejected', counts.rejected, '#e11d48'] ].map(([l, v, c]) => (
-            <div key={l} className="bg-white border border-slate-100 rounded-2xl p-4 shadow-sm">
-              <span className="text-[9px] font-bold tracking-[0.15em] text-slate-400 uppercase font-mono">{l}</span>
-              <p className="text-3xl font-black font-serif" style={{ color: c }}>{v}</p>
+        {/* Stats Grid */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
+          {[
+            { label: 'Applications', val: counts.total, color: 'text-indigo-400', border: 'border-indigo-500/20' },
+            { label: 'Pending', val: counts.pending, color: 'text-orange-400', border: 'border-orange-500/20' },
+            { label: 'Approved', val: counts.approved, color: 'text-emerald-400', border: 'border-emerald-500/20' },
+            { label: 'Rejected', val: counts.rejected, color: 'text-rose-400', border: 'border-rose-500/20' }
+          ].map((s) => (
+            <div key={s.label} className={`bg-slate-900/40 border ${s.border} rounded-3xl p-6 transition-all hover:bg-slate-900/60 hover:-translate-y-1`}>
+              <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2">{s.label}</p>
+              <p className={`text-4xl font-black ${s.color}`}>{s.val}</p>
             </div>
           ))}
         </div>
 
-        {/* Toolbar */}
-        <div className="flex flex-col sm:flex-row gap-3 mb-5">
-          <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-300" size={15} />
-            <input onChange={e => setSearch(e.target.value)} placeholder="Search..." className="w-full pl-10 pr-4 py-3 bg-white border border-slate-200 rounded-xl outline-none text-sm transition-all focus:border-indigo-300" />
+        {/* Filter & Search Bar */}
+        <div className="bg-slate-900/60 border border-slate-800 rounded-4xl p-4 mb-8 flex flex-col lg:flex-row gap-4 items-center">
+          <div className="relative w-full lg:flex-1">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" size={18} />
+            <input 
+              onChange={e => setSearch(e.target.value)} 
+              placeholder="Quick search by student name or email..." 
+              className="w-full pl-12 pr-4 py-3.5 bg-slate-950/50 border border-slate-800 rounded-2xl outline-none text-sm font-bold text-white placeholder:text-slate-600 focus:border-indigo-500/50 transition-all" 
+            />
           </div>
-          <div className="flex gap-2 overflow-x-auto no-scrollbar sm:overflow-visible">
+          <div className="flex items-center gap-2 w-full lg:w-auto overflow-x-auto no-scrollbar">
             {['all', 'pending', 'approved', 'rejected'].map(s => (
-              <button key={s} onClick={() => setFilterStatus(s)} className={`shrink-0 px-4 py-2.5 rounded-xl text-[10px] font-bold uppercase tracking-wider font-mono border transition-all ${filterStatus === s ? 'bg-indigo-950 text-white shadow-md' : 'bg-white text-slate-400 border-slate-100'}`}>{s}</button>
+              <button 
+                key={s} 
+                onClick={() => setFilterStatus(s)} 
+                className={`px-6 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all whitespace-nowrap border ${filterStatus === s ? 'bg-indigo-600 border-indigo-500 text-white shadow-lg shadow-indigo-500/20' : 'bg-slate-900 border-slate-800 text-slate-500 hover:text-slate-300'}`}
+              >
+                {s}
+              </button>
             ))}
           </div>
         </div>
 
-        {/* List (Mobile) / Table (Desktop) */}
-        <div className="md:bg-white md:border md:border-slate-100 md:rounded-3xl md:shadow-sm md:overflow-hidden">
-          {filtered.length === 0 ? <div className="p-20 text-center text-slate-300 font-mono text-sm bg-white rounded-2xl md:rounded-none">No results</div> : (
-            <>
-              {/* Desktop Table View */}
-              <table className="hidden md:table w-full text-left">
-                <thead className="bg-slate-50/60 border-b border-slate-100 font-mono text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-                  <tr>{['Student', 'Class & Blood', 'Contact', 'Status', 'Actions'].map((h, i) => <th key={h} className={`p-5 ${i === 4 ? 'text-right' : ''}`}>{h}</th>)}</tr>
-                </thead>
-                <tbody className="divide-y divide-slate-50">
-                  {filtered.map(app => (
-                    <tr key={app._id} className="hover:bg-slate-50/60 transition-colors">
-                      <td className="p-5 flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-xl bg-linear-to-br from-indigo-900 to-indigo-500 text-white flex items-center justify-center font-serif font-black text-sm">{app.firstName[0]}{app.lastName[0]}</div>
-                        <div><p className="font-bold text-slate-700 font-serif">{app.firstName} {app.lastName}</p><p className="text-[10px] text-slate-400 flex items-center gap-1 font-mono"><Calendar size={9}/>{new Date(app.submittedAt).toLocaleDateString()}</p></div>
-                      </td>
-                      <td className="p-5">
-                        <span className="px-2.5 py-1 bg-indigo-50 text-indigo-600 rounded-lg text-[10px] font-bold font-mono mr-1.5">Class {app.class}</span>
-                        <span className="px-2.5 py-1 bg-rose-50 text-rose-600 rounded-lg text-[10px] font-bold font-mono">{app.bloodGroup}</span>
-                      </td>
-                      <td className="p-5 space-y-1 text-xs text-slate-500">
-                        <p className="flex items-center gap-2"><Mail size={11} className="text-indigo-200"/>{app.email}</p>
-                        <p className="flex items-center gap-2 font-mono"><Phone size={11} className="text-indigo-200"/>{app.phone}</p>
-                      </td>
-                      <td className="p-5"><StatusBadge status={app.status}/></td>
-                      <td className="p-5 text-right"><ActionButtons id={app._id} status={app.status} onAction={handleAction} /></td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-
-              {/* Mobile Card View */}
-              <div className="md:hidden space-y-3">
+        {/* List Container */}
+        <div className="bg-slate-900/40 border border-slate-800/60 rounded-[2.5rem] shadow-2xl overflow-hidden mb-12">
+          {/* Desktop Table */}
+          <div className="hidden md:block">
+            <table className="w-full text-left">
+              <thead>
+                <tr className="bg-slate-950/30 text-[10px] font-black text-slate-500 uppercase tracking-[0.25em] border-b border-slate-800">
+                  <th className="p-8">Student</th>
+                  <th className="p-8">Academic Info</th>
+                  <th className="p-8">Contact</th>
+                  <th className="p-8">Status</th>
+                  <th className="p-8 text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-800/50">
                 {filtered.map(app => (
-                  <div key={app._id} className="bg-white border border-slate-100 rounded-2xl shadow-sm overflow-hidden transition-all">
-                    <button onClick={() => setExpanded(p => ({...p, [app._id]: !p[app._id]}))} className="w-full flex items-center gap-3 p-4 text-left active:bg-slate-50">
-                      <div className="w-11 h-11 rounded-xl bg-linear-to-br from-indigo-900 to-indigo-500 text-white flex items-center justify-center font-serif font-black">{app.firstName[0]}{app.lastName[0]}</div>
-                      <div className="flex-1 truncate"><p className="font-bold text-slate-800 font-serif truncate">{app.firstName} {app.lastName}</p><p className="text-[10px] text-slate-400 font-mono">{new Date(app.submittedAt).toLocaleDateString()}</p></div>
-                      <StatusBadge status={app.status}/><ChevronDown size={14} className={`text-slate-300 transition-transform ${expanded[app._id] ? 'rotate-180' : ''}`}/>
-                    </button>
-                    {expanded[app._id] && (
-                      <div className="px-4 pb-4 space-y-3 border-t border-slate-50 pt-3">
-                        <div className="flex gap-2 font-mono text-[10px] font-bold">
-                          <span className="px-2.5 py-1 bg-indigo-50 text-indigo-600 rounded-lg">Class {app.class}</span>
-                          <span className="px-2.5 py-1 bg-rose-50 text-rose-600 rounded-lg">{app.bloodGroup}</span>
+                  <tr key={app._id} className="group hover:bg-slate-800/20 transition-all">
+                    <td className="p-8">
+                      <div className="flex items-center gap-4">
+                        <div className="w-12 h-12 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 flex items-center justify-center font-black text-base group-hover:bg-indigo-600 group-hover:text-white transition-all duration-300">
+                          {app.firstName[0]}{app.lastName[0]}
                         </div>
-                        <div className="text-xs text-slate-500 space-y-1">
-                          <p className="flex items-center gap-2 truncate"><Mail size={12} className="text-indigo-200 shrink-0"/>{app.email}</p>
-                          <p className="flex items-center gap-2 font-mono"><Phone size={12} className="text-indigo-200 shrink-0"/>{app.phone}</p>
+                        <div>
+                          <p className="font-bold text-white text-[16px] tracking-tight">{app.firstName} {app.lastName}</p>
+                          <p className="text-[10px] text-slate-500 font-bold uppercase mt-1 flex items-center gap-1.5">
+                            <Calendar size={12} className="text-slate-600"/> {new Date(app.submittedAt).toLocaleDateString()}
+                          </p>
                         </div>
-                        <ActionButtons id={app._id} status={app.status} onAction={handleAction} isMobile />
                       </div>
-                    )}
-                  </div>
+                    </td>
+                    <td className="p-8">
+                      <div className="flex flex-col gap-2">
+                        <span className="w-fit px-3 py-1 bg-slate-950 text-indigo-400 border border-slate-800 rounded-lg text-[10px] font-black uppercase tracking-tighter">Class {app.class}</span>
+                        <span className="w-fit px-3 py-1 bg-slate-950 text-rose-700 border border-slate-800 rounded-lg text-[10px] font-black uppercase tracking-tighter">Blood: {app.bloodGroup}</span>
+                      </div>
+                    </td>
+                    <td className="p-8">
+                      <div className="space-y-1.5">
+                        <p className="text-xs font-bold text-slate-400 flex items-center gap-2 hover:text-indigo-400 transition-colors cursor-pointer"><Mail size={13}/>{app.email}</p>
+                        <p className="text-xs font-bold text-slate-400 flex items-center gap-2"><Phone size={13}/>{app.phone}</p>
+                      </div>
+                    </td>
+                    <td className="p-8"><StatusBadge status={app.status}/></td>
+                    <td className="p-8"><ActionButtons id={app._id} status={app.status} onAction={handleAction} /></td>
+                  </tr>
                 ))}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Mobile Card Layout */}
+          <div className="md:hidden divide-y divide-slate-800/60">
+            {filtered.map(app => (
+              <div key={app._id} className="p-6">
+                <div 
+                  onClick={() => setExpanded(p => ({...p, [app._id]: !p[app._id]}))}
+                  className="flex items-center justify-between gap-4"
+                >
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 rounded-2xl bg-slate-800 border border-slate-700 text-white flex items-center justify-center font-black">
+                      {app.firstName[0]}{app.lastName[0]}
+                    </div>
+                    <div className="min-w-0">
+                      <p className="font-bold text-white text-sm truncate">{app.firstName} {app.lastName}</p>
+                      <p className="text-[10px] font-bold text-slate-500 uppercase tracking-tighter mt-0.5">{new Date(app.submittedAt).toLocaleDateString()}</p>
+                    </div>
+                  </div>
+                  <ChevronDown size={18} className={`text-slate-600 transition-transform duration-300 ${expanded[app._id] ? 'rotate-180 text-indigo-400' : ''}`}/>
+                </div>
+                
+                {expanded[app._id] && (
+                  <div className="mt-6 pt-6 border-t border-slate-800 space-y-5 animate-in slide-in-from-top-2">
+                    <div className="flex items-center justify-between">
+                      <StatusBadge status={app.status}/>
+                      <div className="flex gap-2">
+                         <span className="px-2 py-1 bg-slate-950 border border-slate-800 rounded-md text-[9px] font-black text-indigo-400 uppercase tracking-widest">CL-{app.class}</span>
+                         <span className="px-2 py-1 bg-slate-950 border border-slate-800 rounded-md text-[9px] font-black text-rose-400 uppercase tracking-widest">{app.bloodGroup}</span>
+                      </div>
+                    </div>
+                    <div className="bg-slate-950/50 rounded-2xl p-4 border border-slate-800 space-y-3">
+                       <p className="text-xs font-bold text-slate-400 flex items-center gap-3"><Mail size={14} className="text-indigo-500/50"/> {app.email}</p>
+                       <p className="text-xs font-bold text-slate-400 flex items-center gap-3"><Phone size={14} className="text-indigo-500/50"/> {app.phone}</p>
+                    </div>
+                    <ActionButtons id={app._id} status={app.status} onAction={handleAction} isMobile />
+                  </div>
+                )}
               </div>
-            </>
+            ))}
+          </div>
+
+          {filtered.length === 0 && (
+            <div className="py-32 text-center">
+              <div className="w-20 h-20 bg-slate-900 border border-slate-800 rounded-full flex items-center justify-center mx-auto mb-6">
+                <Search size={32} className="text-slate-700" />
+              </div>
+              <p className="text-slate-500 font-bold text-lg">No admission requests found</p>
+              <p className="text-slate-600 text-sm mt-1">Try changing your filters or search terms.</p>
+            </div>
           )}
         </div>
       </div>
