@@ -13,6 +13,7 @@ const ResultSheet = () => {
 
   const { data: resultSheet, isLoading } = useQuery({
     queryKey: ['resultSheet', className, studentRoll, examOption, studentEmail],
+    enabled: !!className && !! studentRoll && !! examOption && !! studentEmail,
     queryFn: async () => {
       const res = await axiosSecure.get(
         `/result?studentRoll=${studentRoll}&className=${className}&examOption=${examOption}&studentEmail=${studentEmail}`,
