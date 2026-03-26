@@ -4,9 +4,12 @@ import { useMutation } from "@tanstack/react-query";
 import useAxiosSecure from "../../Hooks/useAxiosSecure";
 import toast from "react-hot-toast";
 import { User, Mail, Phone, GraduationCap, MapPin, Calendar, Send, CheckCircle, Users, HeartPulse } from "lucide-react";
+import useAuth from "../../Hooks/useAuth";
+import { useNavigate } from "react-router";
+
 
 // ১. FormField Component
-const FormField = ({ label, icon: Icon, id, type = "text", placeholder, isTextArea, validation, register, errors }) => (
+const FormField = ({ label,defaultValue,readOnly, icon: Icon, id, type = "text", placeholder, isTextArea, validation, register, errors }) => (
   <div className="flex flex-col gap-1.5 group">
     <label className="text-[11px] font-bold text-slate-500 uppercase tracking-widest ml-1 group-focus-within:text-indigo-600 transition-colors">
       {label} <span className="text-rose-500">*</span>
@@ -16,7 +19,7 @@ const FormField = ({ label, icon: Icon, id, type = "text", placeholder, isTextAr
       {isTextArea ? (
         <textarea {...register(id, validation)} rows="3" placeholder={placeholder} className={`w-full bg-white border ${errors[id] ? 'border-rose-300 ring-rose-50' : 'border-slate-200 focus:border-indigo-500 ring-indigo-500/5'} text-slate-800 pl-11 pr-4 py-3 rounded-2xl outline-none focus:ring-4 transition-all resize-none placeholder:text-slate-300 shadow-sm`} />
       ) : (
-        <input {...register(id, validation)} type={type} placeholder={placeholder} className={`w-full bg-white border ${errors[id] ? 'border-rose-300 ring-rose-50' : 'border-slate-200 focus:border-indigo-500 ring-indigo-500/5'} text-slate-800 pl-11 pr-4 py-3 rounded-2xl outline-none focus:ring-4 transition-all placeholder:text-slate-300 shadow-sm`} />
+        <input {...register(id, validation)} defaultValue={defaultValue} readOnly={readOnly} type={type} placeholder={placeholder} className={`w-full bg-white border ${errors[id] ? 'border-rose-300 ring-rose-50' : 'border-slate-200 focus:border-indigo-500 ring-indigo-500/5'} text-slate-800 pl-11 pr-4 py-3 rounded-2xl outline-none focus:ring-4 transition-all placeholder:text-slate-300 shadow-sm`} />
       )}
     </div>
     {errors[id] && <span className="text-[10px] font-bold text-rose-500 ml-2 italic animate-pulse">⚠ {errors[id].message}</span>}
@@ -24,6 +27,8 @@ const FormField = ({ label, icon: Icon, id, type = "text", placeholder, isTextAr
 );
 
 const AdmissionForm = () => {
+  const { user } = useAuth();
+  const navigate = useNavigate(); // Navigation 
   const [submitted, setSubmitted] = useState(false);
   const axiosSecure = useAxiosSecure();
   const { register, handleSubmit, formState: { errors }, reset } = useForm();
@@ -54,6 +59,14 @@ const AdmissionForm = () => {
   });
 
   const onSubmit = (data) => {
+    // Jodi user na thake, login page ba home a niye jabe
+    if (!user) {
+      toast.error("Please login to submit application", {
+        icon: '🔒',
+        style: { borderRadius: '10px', background: '#1e293b', color: '#fff' }
+      });
+      return navigate("/login"); // login redirect 
+    }
     console.log(data, 'data form onsubmit')
     mutation.mutate(data);
   };
@@ -74,9 +87,9 @@ const AdmissionForm = () => {
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
-              <FormField id="firstName" label="First Name" icon={User} placeholder="John" register={register} errors={errors} validation={{ required: "Required" }} />
-              <FormField id="lastName" label="Last Name" icon={User} placeholder="Doe" register={register} errors={errors} validation={{ required: "Required" }} />
-              <FormField id="email" label="Email Address" icon={Mail} type="email" placeholder="john@example.com" register={register} errors={errors} validation={{ required: "Valid email required" }} />
+              <FormField id="firstName" defaultValue={user?.displayName ? user.displayName.split(" ")[0] : ""} label="First Name" icon={User} placeholder="John" register={register} errors={errors} validation={{ required: "Required" }} />
+              <FormField id="lastName" defaultValue={user?.displayName ? user.displayName.split(" ").slice(1).join(" ") : ""} label="Last Name" icon={User} placeholder="Doe" register={register} errors={errors} validation={{ required: "Required" }} />
+              <FormField id="email" defaultValue={user?.email || ""} readOnly={true} label="Email Address" icon={Mail} type="email" placeholder="john@example.com" register={register} errors={errors} validation={{ required: "Valid email required" }} />
               <FormField id="phone" label="Phone Number" icon={Phone} type="tel" placeholder="017XXXXXXXX" register={register} errors={errors} validation={{ required: "Required", minLength: 11 }} />
               <FormField id="dob" label="Date of Birth" icon={Calendar} type="date" register={register} errors={errors} validation={{ required: "Required" }} />
 
@@ -109,7 +122,9 @@ const AdmissionForm = () => {
 
             <FormField id="address" label="Residential Address" icon={MapPin} placeholder="Full address..." isTextArea register={register} errors={errors} validation={{ required: "Address is required" }} />
 
-            <button
+           
+            {/* protected if not user you must login */}
+                <button
               type="submit"
               disabled={mutation.isPending}
               className={`w-full bg-slate-900 hover:bg-indigo-600 text-white font-bold py-4 rounded-2xl shadow-xl shadow-slate-200 transition-all active:scale-[0.98] flex items-center justify-center gap-3 tracking-widest text-sm ${mutation.isPending ? 'opacity-50 cursor-not-allowed' : ''}`}
@@ -120,6 +135,8 @@ const AdmissionForm = () => {
                 <><Send size={18} /> SUBMIT APPLICATION</>
               )}
             </button>
+           
+            
           </form>
         </div>
       </div>
