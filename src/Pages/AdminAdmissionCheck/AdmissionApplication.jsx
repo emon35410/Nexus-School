@@ -6,9 +6,11 @@ import {
   Trash2, CheckCircle, XCircle, Mail, Phone, 
   Calendar, Users, Search, ChevronDown, Filter,
   UserCheck, Clock, AlertCircle, LayoutDashboard,
-  ArrowUpRight
+  ArrowUpRight,
+  UserPlus
 } from 'lucide-react';
 import NexusLoader from '../../components/Nexusloader/Nexusloader';
+import { Link } from 'react-router';
 
 /* ─── Config ────────────────────────────────────────────────────── */
 const STATUS_THEME = {
@@ -91,7 +93,7 @@ const AdmissionApplication = () => {
       <div className="max-w-7xl mx-auto">
         
         {/* Header Section */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-8">
           <div className="space-y-2">
             <div className="flex items-center gap-2 text-indigo-400">
               <LayoutDashboard size={18} />
@@ -113,6 +115,25 @@ const AdmissionApplication = () => {
             </div>
           </div>
         </div>
+
+        {/* Add student manually by admin */}
+<div className="mb-8 p-6 bg-slate-900/40 border border-slate-800/60 rounded-[2rem] flex flex-col sm:flex-row items-center justify-between gap-4 group">
+  <div className="flex items-center gap-4">
+    <div className="p-3 bg-indigo-500/10 rounded-2xl text-indigo-400 group-hover:scale-110 transition-transform duration-300">
+      <UserPlus size={20} />
+    </div>
+    <div>
+      <h4 className="text-[11px] font-bold text-slate-500 uppercase tracking-[0.2em]">Administrative Task</h4>
+      <p className="text-sm font-semibold text-slate-200">Manual Student Enrollment</p>
+    </div>
+  </div>
+
+  <Link to={'/admission'} className="w-full sm:w-auto">
+    <button className="w-full px-6 py-3 hover:bg-slate-800 bg-indigo-600 text-slate-300 hover:text-white border border-slate-700 hover:border-indigo-500 rounded-xl font-bold uppercase tracking-widest text-[10px] transition-all duration-300 flex items-center justify-center gap-2 shadow-lg active:scale-95 cursor-pointer">
+      Add New Student
+    </button>
+  </Link>
+</div>
 
         {/* Stats Grid */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
