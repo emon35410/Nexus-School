@@ -99,7 +99,7 @@ const AdmissionForm = () => {
                 <label className="text-[11px] font-bold text-slate-500 uppercase tracking-widest ml-1">Applying Class *</label>
                 <div className="relative">
                   <GraduationCap size={16} className={`absolute left-4 top-3.5 ${errors.class ? 'text-rose-400' : 'text-slate-400'}`} />
-                  <select {...register("class", { required: "Required" })} className={`w-full bg-white border ${errors.class ? 'border-rose-300' : 'border-slate-200 focus:border-indigo-500'} text-slate-800 pl-11 pr-4 py-3 rounded-2xl outline-none appearance-none cursor-pointer shadow-sm`}>
+                  <select {...register("class_name", { required: "Required" })} className={`w-full bg-white border ${errors.class ? 'border-rose-300' : 'border-slate-200 focus:border-indigo-500'} text-slate-800 pl-11 pr-4 py-3 rounded-2xl outline-none appearance-none cursor-pointer shadow-sm`}>
                     <option value="">Select Class</option>
                     {[6, 7, 8, 9, 10].map(c => <option key={c} value={c}>Class {c}</option>)}
                   </select>

@@ -1,7 +1,8 @@
 import React, { useContext, useState } from 'react';
 import { 
   Mail, Shield, MapPin, Edit3, Camera, 
-  GraduationCap, X, Save, Phone, User, Loader2, Award, Calendar, CheckCircle
+  GraduationCap, X, Save, Phone, User, Loader2, Award, Calendar, CheckCircle,
+ 
 } from 'lucide-react';
 import { AuthContext } from '../../AuthContext/AuthContext';
 import useAxiosSecure from '../../Hooks/useAxiosSecure';
@@ -9,8 +10,9 @@ import useRole from '../../Hooks/useRole';
 import Swal from 'sweetalert2';
 import FeedbackModal from './FeedbackModal';
 import { useQuery } from '@tanstack/react-query';
+import { Link } from 'react-router';
 
-const StudentProfile = ({ dbUser, refetch }) => {
+const UserProfile = ({ dbUser, refetch }) => {
   const { user } = useContext(AuthContext);
   const axiosSecure = useAxiosSecure();
   const [role] = useRole();
@@ -107,8 +109,8 @@ const StudentProfile = ({ dbUser, refetch }) => {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mt-40 md:mt-28">
         
         {/* Profile Details */}
-        <div className="lg:col-span-8 space-y-8 order-2 lg:order-1">
-          <section className="bg-slate-900/50 border border-slate-800/60 p-6 sm:p-10 rounded-[2.5rem]">
+        <div className="lg:col-span-8 space-y-8 order-2 lg:order-1 ">
+          <section className="bg-slate-900/50 border border-slate-800/60 p-6 sm:p-10 rounded-[2.5rem] h-full">
             <h3 className="text-lg font-bold mb-8 text-slate-200 flex items-center gap-3">
               <div className="p-2 bg-slate-800 rounded-lg text-slate-400"><User size={18}/></div>
               Personal Records
@@ -118,7 +120,32 @@ const StudentProfile = ({ dbUser, refetch }) => {
               <InfoBox label="Official Email" value={dbUser?.email} icon={<Mail size={14} />} />
               <InfoBox label="Contact" value={dbUser?.phone} icon={<Phone size={14} />} />
               <InfoBox label="Department" value={dbUser?.department?.replace('-', ' ')} icon={<GraduationCap size={14} />} />
-            </div>
+                      </div>
+                      
+                     {/* Professional Activity/Status Footer */}
+<div className="mt-auto pt-10">
+  <div className="bg-slate-950/40 border border-slate-800/60 rounded-2xl p-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+    
+    <div className="flex items-center gap-4">
+      <div className="h-10 w-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-500">
+        <Shield size={18} />
+      </div>
+      <div>
+        <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Account Security</p>
+        <p className="text-xs text-slate-300 font-medium">Your profile is fully protected</p>
+      </div>
+    </div>
+
+    <div className="flex items-center gap-2">
+       <div className="px-3 py-1.5 bg-slate-800/50 rounded-lg border border-slate-700 text-[10px] font-bold text-slate-400 uppercase tracking-tighter">
+         ID: {user?.uid?.slice(0, 8).toUpperCase() || "ST-9920"}
+       </div>
+       <div className="h-2 w-2 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.6)]"></div>
+       <span className="text-[10px] font-bold text-slate-500 uppercase">Online</span>
+    </div>
+
+  </div>
+</div>
           </section>
         </div>
 
@@ -128,21 +155,48 @@ const StudentProfile = ({ dbUser, refetch }) => {
             <h4 className="font-bold text-slate-500 mb-6 uppercase text-[10px] tracking-[0.2em] flex items-center gap-2">
               <Award size={14} /> Academic Status
             </h4>
-            <div className="space-y-4">
-              <StatCard label="Attendance" value="99%" icon={<CheckCircle size={14}/>} />
-              <StatCard label="Reg. Date" value="Jan 2026" icon={<Calendar size={14}/>} />
-              
-              {feedbacks.length > 0 && (
-                <button
-                  onClick={() => setIsFeedback(true)}
-                  className="w-full py-3 bg-slate-800 hover:bg-slate-700 text-slate-400 border border-slate-700 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all mt-2"
-                >
-                  View Feedback ({feedbacks.length})
+           <div className="space-y-4">
+  {/* Account Security/Status - General User-er jonno */}
+  <StatCard 
+    label="Account Status" 
+    value={user?.emailVerified ? "Verified" : "Pending"} 
+    icon={<Shield size={14} className={user?.emailVerified ? "text-emerald-500" : "text-amber-500"} />} 
+  />
+  
+
+
+  {/* Activity Date - User kobe join koreche seta jodi dbUser-e thake */}
+  <StatCard 
+    label="Member Since" 
+    value={dbUser?.createdAt ? new Date(dbUser.createdAt).toLocaleDateString('en-GB', { month: 'short', year: 'numeric' }) : "Jan 2026"} 
+    icon={<Calendar size={14}/>} 
+  />
+  
+  {/* General Notification/Action Button */}
+  <button
+    className="w-full py-3 bg-slate-800/50 hover:bg-slate-800 text-slate-400 border border-slate-700/50 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all mt-2 flex items-center justify-center gap-2"
+  >
+    <Shield size={12} /> Security Settings
+  </button>
+</div>
+                  </div>
+
+                            {/* apply btn */}
+            <div className="bg-slate-900/80 p-6 rounded-[2rem] border border-slate-800 shadow-xl group">
+            <Link to={'/admission'}>
+                <button className="w-full py-4 bg-indigo-600 hover:bg-indigo-500 text-white rounded-2xl font-bold uppercase tracking-[0.2em] text-[11px] transition-all duration-300 flex items-center justify-center gap-3 shadow-[0_0_20px_rgba(79,70,229,0.2)] hover:shadow-[0_0_25px_rgba(79,70,229,0.4)] active:scale-[0.98]">
+                <GraduationCap size={18} className="group-hover:rotate-12 transition-transform" />
+                Enroll Now
                 </button>
-              )}
+            </Link>
+            <p className="text-[9px] text-slate-500 text-center mt-3 uppercase tracking-widest font-medium">
+                Limited seats available for 2026
+            </p>
             </div>
-          </div>
-        </div>
+                  
+              </div>
+              
+              
       </div>
 
       {/* ─── MUTED MODAL ─── */}
@@ -160,7 +214,7 @@ const StudentProfile = ({ dbUser, refetch }) => {
               <InputGroup label="Full Name" name="name" defaultValue={dbUser?.name} />
               <InputGroup label="Phone" name="phone" defaultValue={dbUser?.phone} />
               <InputGroup label="Address" name="address" defaultValue={dbUser?.address} />
-
+              
               <button
                 disabled={isUpdating}
                 className="w-full py-4 bg-slate-700 hover:bg-slate-600 disabled:bg-slate-800 text-slate-200 rounded-xl font-bold uppercase tracking-widest text-[10px] transition-all flex items-center justify-center gap-3 mt-4"
@@ -207,4 +261,4 @@ const InputGroup = ({ label, name, defaultValue }) => (
   </div>
 );
 
-export default StudentProfile;
+export default UserProfile;
