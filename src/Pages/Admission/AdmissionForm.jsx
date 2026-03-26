@@ -54,6 +54,7 @@ const AdmissionForm = () => {
   });
 
   const onSubmit = (data) => {
+    console.log(data, 'data form onsubmit')
     mutation.mutate(data);
   };
 

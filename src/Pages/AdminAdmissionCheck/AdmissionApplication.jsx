@@ -77,7 +77,7 @@ const AdmissionApplication = () => {
     const list = admissions.filter(a => {
       if (stats[a.status] !== undefined) stats[a.status]++;
       const matchSearch = `${a.firstName} ${a.lastName} ${a.email}`.toLowerCase().includes(search.toLowerCase());
-      return (filterStatus === 'all' || a.status === filterStatus) && matchSearch;
+      return (filterStatus === 'all' || a.application_status === filterStatus) && matchSearch;
     });
     return { filtered: list, counts: stats };
   }, [admissions, search, filterStatus]);
@@ -194,8 +194,8 @@ const AdmissionApplication = () => {
                         <p className="text-xs font-bold text-slate-400 flex items-center gap-2"><Phone size={13}/>{app.phone}</p>
                       </div>
                     </td>
-                    <td className="p-8"><StatusBadge status={app.status}/></td>
-                    <td className="p-8"><ActionButtons id={app._id} status={app.status} onAction={handleAction} /></td>
+                    <td className="p-8"><StatusBadge status={app.application_status}/></td>
+                    <td className="p-8"><ActionButtons id={app._id} status={app.application_status} onAction={handleAction} /></td>
                   </tr>
                 ))}
               </tbody>
@@ -235,7 +235,7 @@ const AdmissionApplication = () => {
                        <p className="text-xs font-bold text-slate-400 flex items-center gap-3"><Mail size={14} className="text-indigo-500/50"/> {app.email}</p>
                        <p className="text-xs font-bold text-slate-400 flex items-center gap-3"><Phone size={14} className="text-indigo-500/50"/> {app.phone}</p>
                     </div>
-                    <ActionButtons id={app._id} status={app.status} onAction={handleAction} isMobile />
+                    <ActionButtons id={app._id} status={app.application_status} onAction={handleAction} isMobile />
                   </div>
                 )}
               </div>
