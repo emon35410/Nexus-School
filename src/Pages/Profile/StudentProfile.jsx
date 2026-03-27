@@ -28,6 +28,7 @@ const StudentProfile = ({ dbUser, refetch }) => {
     enabled: !!user?.email,
   });
 
+
   const userImg = user?.photoURL || "https://i.pravatar.cc/150?img=11";
 
   const handleUpdateProfile = async (e) => {
@@ -132,7 +133,7 @@ const StudentProfile = ({ dbUser, refetch }) => {
               <StatCard label="Attendance" value="99%" icon={<CheckCircle size={14}/>} />
               <StatCard label="Reg. Date" value="Jan 2026" icon={<Calendar size={14}/>} />
               
-              {feedbacks.length > 0 && (
+              {feedbacks.length >= 0 && (
                 <button
                   onClick={() => setIsFeedback(true)}
                   className="w-full py-3 bg-slate-800 hover:bg-slate-700 text-slate-400 border border-slate-700 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all mt-2"
