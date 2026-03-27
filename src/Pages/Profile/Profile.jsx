@@ -3,10 +3,12 @@ import { AuthContext } from "../../AuthContext/AuthContext";
 import useAxiosSecure from "../../Hooks/useAxiosSecure";
 import useRole from "../../Hooks/useRole";
 import { useQuery } from "@tanstack/react-query";
+import UserProfile from "./UserProfile";
 import AdminProfile from "./AdminProfile";
 import TeacherProfile from "./TeacherProfile";
 import StudentProfile from "./StudentProfile";
 import NexusLoader from "../../components/Nexusloader/Nexusloader";
+
 
 
 const Profile = () => {
@@ -28,8 +30,9 @@ const Profile = () => {
   // রোল অনুযায়ী কম্পোনেন্ট পাঠানো হচ্ছে
   if (role === 'admin') return <AdminProfile dbUser={dbUser} refetch={refetch} />;
   if (role === 'teacher') return <TeacherProfile dbUser={dbUser} refetch={refetch} />;
+  if (role === 'student') return <StudentProfile dbUser={dbUser} refetch={refetch} />;
   
-  return <StudentProfile dbUser={dbUser} refetch={refetch} />;
+  return <UserProfile dbUser={dbUser} refetch={refetch}/>;
 };
 
 export default Profile;
