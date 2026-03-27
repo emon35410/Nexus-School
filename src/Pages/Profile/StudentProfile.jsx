@@ -22,7 +22,7 @@ const StudentProfile = ({ dbUser, refetch }) => {
   const { data: feedbacks = [] } = useQuery({
     queryKey: ['feedback', user?.email],
     queryFn: async () => {
-      const res = await axiosSecure.get(`/student/feedback?email=${user?.email}`);
+      const res = await axiosSecure.get(`/studentFeedback/feedback?email=${user?.email}`);
       return res.data;
     },
     enabled: !!user?.email,

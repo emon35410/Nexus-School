@@ -31,6 +31,7 @@ import StudentResult from "../Pages/PublishResultSheet/StudentResult";
 import UpdateRoutine from "../Pages/DynamicRoutine/UpdateRoutine";
 import MyExamSchedule from "../Pages/StudentPages/MyExamSchedule";
 import MyCourse from "../Pages/MyCourse/MyCourse";
+import StudentGiveResult from "../Pages/PublishResultSheet/StudentGiveResult";
 
 const router = createBrowserRouter([
   {
@@ -68,13 +69,13 @@ const router = createBrowserRouter([
         Component: ResultSheet,
       },
       {
-        path:"about",
-        Component: About
+        path: 'about',
+        Component: About,
       },
       {
-        path:"contact",
-        Component: Contact
-      }
+        path: 'contact',
+        Component: Contact,
+      },
     ],
   },
   {
@@ -140,25 +141,29 @@ const router = createBrowserRouter([
       },
 
       {
-        path: '/dashboard/create-result-sheet',
+        path: '/dashboard/student-give-result',
+        Component: StudentGiveResult,
+      },
+      {
+        path: '/dashboard/student-give-result/:id',
         Component: CreateResultSheet,
       },
       {
         path: '/dashboard/student-result',
-        Component: StudentResult
-     },
+        Component: StudentResult,
+      },
       {
         path: '/dashboard/check-routine',
-        Component:UpdateRoutine
-     },
+        Component: UpdateRoutine,
+      },
       {
         path: '/dashboard/my-exam-schedule',
-        Component: MyExamSchedule
-     },
-     {
-      path: '/dashboard/my-courses',
-      Component: MyCourse
-     }
+        Component: MyExamSchedule,
+      },
+      {
+        path: '/dashboard/my-courses',
+        Component: MyCourse,
+      },
     ],
   },
 ]);

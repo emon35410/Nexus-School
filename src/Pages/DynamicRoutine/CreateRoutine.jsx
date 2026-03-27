@@ -55,15 +55,15 @@ const CreateRoutine = () => {
                     Class Name
                   </label>
                   <select
-                    {...register('department', { required: true })}
+                    {...register('class_name', { required: true })}
                     className="w-full bg-[#1e293b] text-white border border-blue-900/50 rounded-xl sm:rounded-2xl px-4 sm:px-5 py-3 sm:py-4 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all appearance-none cursor-pointer hover:bg-[#26334d] "
                   >
                     <option>Select Class</option>
-                    <option value={'class-6'}>Class 6</option>
-                    <option value={'class-7'}>Class 7</option>
-                    <option value={'class-8'}>Class 8</option>
-                    <option value={'class-9'}>Class 9</option>
-                    <option value={'class-10'}>Class 10</option>
+                    <option value={'6'}>Class 6</option>
+                    <option value={'7'}>Class 7</option>
+                    <option value={'8'}>Class 8</option>
+                    <option value={'9'}>Class 9</option>
+                    <option value={'10'}>Class 10</option>
                   </select>
                 </div>
 
