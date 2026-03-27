@@ -39,7 +39,7 @@ const UpdateRoutine = () => {
   } = useQuery({
     queryKey: ['routine', isRoutine],
     queryFn: async () => {
-      const res = await axiosSecure.get(`/routine?className=${isRoutine}`);
+      const res = await axiosSecure.get(`/routine?class_name=${isRoutine}`);
       return res.data;
     },
   });
@@ -61,7 +61,7 @@ const UpdateRoutine = () => {
       subject: updatedData?.subject,
       time: updatedData?.time,
       period: updatedData?.period,
-      department: updatedData?.department,
+      class_name: updatedData?.class_name,
       teacherName: updatedData?.teacherName,
     };
     axiosSecure.patch(`routine/${isUpdate?._id}`, updateData)
@@ -200,10 +200,10 @@ const UpdateRoutine = () => {
               <option value="" className="text-gray-400">
                 Choose Class Grade
               </option>
-              {['class-6', 'class-7', 'class-8', 'class-9', 'class-10'].map(
+              {['6', '7', '8', '9', '10'].map(
                 cls => (
                   <option key={cls} value={cls} className="text-gray-800">
-                    {cls.toUpperCase().replace('-', ' ')}
+                   class {cls}
                   </option>
                 ),
               )}
@@ -289,11 +289,11 @@ const UpdateRoutine = () => {
 
                 <div className="form-control">
                   <label className="label font-bold text-gray-600 text-xs uppercase">
-                    Department
+                    class name
                   </label>
                   <input
                     type="text"
-                    {...register('department')}
+                    {...register('class_name')}
                     className="input input-bordered bg-gray-50 border-gray-200"
                   />
                 </div>

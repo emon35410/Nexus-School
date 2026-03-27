@@ -13,10 +13,10 @@ const ResultSheet = () => {
 
   const { data: resultSheet, isLoading } = useQuery({
     queryKey: ['resultSheet', className, studentRoll, examOption, studentEmail],
-    enabled: !!className && !! studentRoll && !! examOption && !! studentEmail,
+    enabled: !!className && !! studentRoll && !! examOption ,
     queryFn: async () => {
       const res = await axiosSecure.get(
-        `/result?studentRoll=${studentRoll}&className=${className}&examOption=${examOption}&studentEmail=${studentEmail}`,
+        `/result?studentRoll=${studentRoll}&class_name=${className}&examOption=${examOption}&studentEmail=${studentEmail}`,
       );
       return res.data;
     },
@@ -67,11 +67,11 @@ const ResultSheet = () => {
                 onChange={e => setClassName(e.target.value)}
               >
                 <option value={''}>Select Class</option>
-                <option value={'class-6'}>Class 6</option>
-                <option value={'class-7'}>Class 7</option>
-                <option value={'class-8'}>Class 8</option>
-                <option value={'class-9'}>Class 9</option>
-                <option value={'class-10'}>Class 10</option>
+                <option value={'6'}>Class 6</option>
+                <option value={'7'}>Class 7</option>
+                <option value={'8'}>Class 8</option>
+                <option value={'9'}>Class 9</option>
+                <option value={'10'}>Class 10</option>
               </select>
             </div>
 

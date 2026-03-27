@@ -17,10 +17,10 @@ const StudentResult = () => {
   const [examOptions, setExamOptions] = useState('');
 
   const { data: student } = useQuery({
-    queryKey: ['one-student', user?.email],
+    queryKey: ['email-base-student', user?.email],
     queryFn: async () => {
       const res = await axiosSecure.get(
-        `/result/one-student?email=${user?.email}`,
+        `/students/single-student?email=${user?.email}`,
       );
       return res.data;
     },
@@ -30,12 +30,12 @@ const StudentResult = () => {
     queryKey: [
       'studentResult',
       student?.email,
-      student?.department,
+      student?.class_name,
       examOptions,
     ],
     queryFn: async () => {
       const res = await axiosSecure.get(
-        `/result/student-result?email=${student?.email}&className=${student?.department}&examOption=${examOptions}`,
+        `/result/student-result?email=${student?.email}&class_name=${student?.class_name}&examOption=${examOptions}`,
       );
       return res.data;
     },
@@ -195,7 +195,7 @@ const StudentResult = () => {
               Class
             </h2>
             <p className="text-lg font-bold text-white border-l-2 border-blue-500/40 pl-3 leading-tight">
-              {studentResult?.className}
+              {studentResult?.class_name}
             </p>
           </div>
 

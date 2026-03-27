@@ -573,19 +573,21 @@ const ClassRoutine = () => {
   const { data: studentData = [] } = useQuery({
     queryKey: ['students'],
     queryFn: async () => {
-      const res = await axiosSecure.get(`/student`);
+      const res = await axiosSecure.get(`/students`);
       return res.data.result;
     },
   });
 
-  const findSingleStudent = studentData.find(s => s?.email === user?.email);
+  const findSingleStudent = studentData.find(
+    s => s?.email === user?.email,
+  );
 
   const { data: routine = [], isLoading } = useQuery({
-    queryKey: ['routine', findSingleStudent?.department],
-    enabled: !!findSingleStudent?.department,
+    queryKey: ['routine', findSingleStudent?.class_name],
+    enabled: !!findSingleStudent?.class_name,
     queryFn: async () => {
       const res = await axiosSecure.get(
-        `/routine?className=${findSingleStudent?.department}`,
+        `/routine?class_name=${findSingleStudent?.class_name}`,
       );
       return res.data;
     },

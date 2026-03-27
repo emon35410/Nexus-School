@@ -120,7 +120,7 @@ const ManageStudents = () => {
     queryKey: ['all-students', isDepartment, limit, currentPage],
     queryFn: async () => {
       const res = await axiosSecure.get(
-        `/student?department=${isDepartment}&limit=${limit}&skip=${currentPage * limit}`,
+        `/students?class_name=${isDepartment}&limit=${limit}&skip=${currentPage * limit}`,
       );
       const totalStudent = (res?.data?.allStudent || 0) / limit;
       setIsAllPage(Math.ceil(totalStudent) || 1);
@@ -173,19 +173,19 @@ const ManageStudents = () => {
               <option className="bg-slate-900" value="">
                 All Academic Departments
               </option>
-              <option className="bg-slate-900" value="class-6">
+              <option className="bg-slate-900" value="6">
                 Standard VI (Class 6)
               </option>
-              <option className="bg-slate-900" value="class-7">
+              <option className="bg-slate-900" value="7">
                 Standard VII (Class 7)
               </option>
-              <option className="bg-slate-900" value="class-8">
+              <option className="bg-slate-900" value="8">
                 Standard VIII (Class 8)
               </option>
-              <option className="bg-slate-900" value="class-9">
+              <option className="bg-slate-900" value="9">
                 Standard IX (Class 9)
               </option>
-              <option className="bg-slate-900" value="class-10">
+              <option className="bg-slate-900" value="10">
                 Standard X (Class 10)
               </option>
             </select>
