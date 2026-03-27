@@ -89,7 +89,7 @@ const AdmissionForm = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
               <FormField id="firstName" defaultValue={user?.displayName ? user.displayName.split(" ")[0] : ""} label="First Name" icon={User} placeholder="John" register={register} errors={errors} validation={{ required: "Required" }} />
               <FormField id="lastName" defaultValue={user?.displayName ? user.displayName.split(" ").slice(1).join(" ") : ""} label="Last Name" icon={User} placeholder="Doe" register={register} errors={errors} validation={{ required: "Required" }} />
-              <FormField id="email" defaultValue={user?.email || ""} readOnly={true} label="Email Address" icon={Mail} type="email" placeholder="john@example.com" register={register} errors={errors} validation={{ required: "Valid email required" }} />
+              <FormField id="email" defaultValue={user?.email || ""} label="Email Address" icon={Mail} type="email" placeholder="john@example.com" register={register} errors={errors} validation={{ required: "Valid email required" }} />
               <FormField id="phone" label="Phone Number" icon={Phone} type="tel" placeholder="017XXXXXXXX" register={register} errors={errors} validation={{ required: "Required", minLength: 11 }} />
               <FormField id="dob" label="Date of Birth" icon={Calendar} type="date" register={register} errors={errors} validation={{ required: "Required" }} />
 
