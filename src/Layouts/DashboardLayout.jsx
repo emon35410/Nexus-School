@@ -54,7 +54,7 @@ const NavLinks = ({
       onClick={() => isMobile && setMobileMenuOpen(false)}
     />
 
-    {userRole === 'student' && (
+    {userRole === 'admin' && (
       <>
         <SidebarLink
           to="/dashboard/manage-users"
@@ -140,7 +140,7 @@ const NavLinks = ({
         />
       </>
     )}
-    {/* 
+    
     {userRole === "student" && (
       <>
         <SidebarLink to="/dashboard/my-courses" icon={<GraduationCap size={20} />} label="My Courses" isOpen={isOpen} onClick={() => isMobile && setMobileMenuOpen(false)} />
@@ -149,7 +149,7 @@ const NavLinks = ({
         <SidebarLink to="/dashboard/class-routine" icon={<FaBookOpenReader size={20} />} label="Class Routine" isOpen={isOpen} onClick={() => isMobile && setMobileMenuOpen(false)} />
         <SidebarLink to="/dashboard/my-exam-schedule" icon={<ClipboardClock size={20} />} label="My Exam Schedule" isOpen={isOpen} onClick={() => isMobile && setMobileMenuOpen(false)} />
       </>
-    )} */}
+    )}
 
     <div
       className={`my-4 border-t border-slate-700/50 ${isOpen ? 'pt-4' : 'pt-2'}`}
