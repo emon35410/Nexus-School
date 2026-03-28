@@ -321,8 +321,7 @@ const CreateResultSheet = () => {
       subjects,
     };
 
-    axiosSecure
-      .post('/result', newResultSheet)
+    axiosSecure.post('/result', newResultSheet)
       .then(res => {
         if (res?.data?.message) {
           toast.error(`${res?.data?.message}`);
@@ -339,7 +338,7 @@ const CreateResultSheet = () => {
           student_id: '',
         });
 
-        // ✅ MAIN FIX (URL সহ back)
+        
         navigate(
           `/dashboard/student-give-result?class=${selectedClass}&exam=${selectedExam}&page=${currentPage}`,
         );

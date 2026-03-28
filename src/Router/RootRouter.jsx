@@ -33,6 +33,7 @@ import MyExamSchedule from "../Pages/StudentPages/MyExamSchedule";
 import MyCourse from "../Pages/MyCourse/MyCourse";
 import StudentGiveResult from "../Pages/PublishResultSheet/StudentGiveResult";
 
+
 const router = createBrowserRouter([
   {
     path: '/',
@@ -152,6 +153,7 @@ const router = createBrowserRouter([
         path: '/dashboard/student-result',
         Component: StudentResult,
       },
+      
       {
         path: '/dashboard/check-routine',
         Component: UpdateRoutine,
