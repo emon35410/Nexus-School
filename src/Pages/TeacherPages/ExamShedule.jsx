@@ -20,6 +20,15 @@ const ExamShedule = () => {
 
   const role = useRole();
 
+  const handleDelete = (id) => {
+    alert("Deleted")
+    console.log(id)
+  }
+
+  const handleEdit = () => {
+    alert('edited')
+  }
+
   return (
     <>
       <div className=" md:p-10 min-h-screen space-y-8">
@@ -44,7 +53,7 @@ const ExamShedule = () => {
               key={i}
               className="bg-[#1E293B] border border-slate-800 rounded-[2.5rem] p-8 shadow-2xl relative overflow-hidden group hover:border-emerald-500/30 transition-all"
             >
-              <div className="absolute -top-10 -right-10 w-32 h-32 bg-emerald-500/5 rounded-full blur-3xl"></div>
+              <div className="absolute -top-10 -right-10 w-32 h-32 bg-emerald-500/5 rounded-full blur-3xl pointer-events-none"></div>
 
               <div className="flex justify-between items-center mb-6">
                 <div className="flex items-center justify-between w-full mb-6">
@@ -54,9 +63,9 @@ const ExamShedule = () => {
                       <BookOpen size={24} className="text-emerald-500" />
                     </div>
                     <h2 className="text-2xl font-bold text-white tracking-tight">
-                      Class -{" "}
+                      Class -{" "} 
                       <span className="text-emerald-500">
-                        {e.class.split("-")[1]}
+                       {e?.class_name}
                       </span>
                     </h2>
                   </div>
@@ -70,7 +79,7 @@ const ExamShedule = () => {
                       <Edit size={18} />
                     </button>
                     <button
-                      // onClick={() => handleDelete(e._id)}
+                      onClick={() => handleDelete(e._id)}
                       className="p-2 text-rose-500 hover:bg-rose-950/30 rounded-lg transition-all"
                     >
                       <Trash size={18} />

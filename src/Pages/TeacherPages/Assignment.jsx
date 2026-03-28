@@ -123,11 +123,11 @@ const Assignment = ({ refetch }) => {
               className="w-full bg-slate-900 border border-slate-800 rounded-xl p-3 text-sm text-slate-400 outline-none appearance-none focus:border-emerald-500"
             >
               <option value="">Select Target Class</option>
-              <option value="class-6">Class 6</option>
-              <option value="class-7">Class 7</option>
-              <option value="class-8">Class 8</option>
-              <option value="class-9">Class 9</option>
-              <option value="class-10">Class 10</option>
+              <option value="6">Class 6</option>
+              <option value="7">Class 7</option>
+              <option value="8">Class 8</option>
+              <option value="9">Class 9</option>
+              <option value="10">Class 10</option>
             </select>
             {errors.targetClass && (
               <p className="text-rose-500 text-[10px] mt-1 ml-2 font-bold">
@@ -178,7 +178,7 @@ const Assignment = ({ refetch }) => {
                   {a.title}
                 </h4>
                 <span className="inline-block bg-slate-900 text-emerald-500 text-[10px] px-3 py-1 rounded-full border border-emerald-500/20 mt-1 uppercase font-bold tracking-wider">
-                  {a.targetClass}
+                  Class - {a.targetClass}
                 </span>
               </div>
               <div className="text-right">

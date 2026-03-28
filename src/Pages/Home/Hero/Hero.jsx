@@ -46,7 +46,7 @@ const Hero = () => {
 
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-black text-slate-900 leading-[1.15]">
               Empowering Minds <br /> 
-              <span className="text-blue-600 italic">Digital Future.</span>
+              <span className="text-blue-600 ">Digital Future.</span>
             </h1>
 
             <p className="text-base md:text-lg text-slate-600 max-w-md mx-auto lg:mx-0 leading-relaxed">
