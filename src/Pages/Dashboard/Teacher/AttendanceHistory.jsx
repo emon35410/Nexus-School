@@ -9,7 +9,7 @@ const AttendanceHistory = () => {
   const [attendanceData, setAttendanceData] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  // 🔥 Fetch whenever class or date changes
+  
   useEffect(() => {
     if (!className || !selectedDate) return;
 
