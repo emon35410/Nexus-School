@@ -101,12 +101,13 @@ import React, { useState } from 'react';
 import useAxiosSecure from '../../Hooks/useAxiosSecure';
 
 import StudentCard from './StudentCard';
-import NexusLoader from '../../components/Nexusloader/Nexusloader';
+
 import { SlArrowLeft, SlArrowRight } from 'react-icons/sl';
 import {
   HiOutlineAdjustmentsHorizontal,
   HiOutlineUsers,
 } from 'react-icons/hi2';
+import SecendLoader from '../../components/Nexusloader/SecendLoader';
 
 const ManageStudents = () => {
   const axiosSecure = useAxiosSecure();
@@ -119,7 +120,7 @@ const ManageStudents = () => {
     queryKey: ['all-students', isDepartment, limit, currentPage],
     queryFn: async () => {
       const res = await axiosSecure.get(
-        `/student?department=${isDepartment}&limit=${limit}&skip=${currentPage * limit}`,
+        `/students?class_name=${isDepartment}&limit=${limit}&skip=${currentPage * limit}`,
       );
       const totalStudent = (res?.data?.allStudent || 0) / limit;
       setIsAllPage(Math.ceil(totalStudent) || 1);
@@ -128,7 +129,7 @@ const ManageStudents = () => {
   });
 
   if (isLoading) {
-    return <NexusLoader />;
+    return <SecendLoader></SecendLoader>;
   }
 
   return (
@@ -172,19 +173,19 @@ const ManageStudents = () => {
               <option className="bg-slate-900" value="">
                 All Academic Departments
               </option>
-              <option className="bg-slate-900" value="class-6">
+              <option className="bg-slate-900" value="6">
                 Standard VI (Class 6)
               </option>
-              <option className="bg-slate-900" value="class-7">
+              <option className="bg-slate-900" value="7">
                 Standard VII (Class 7)
               </option>
-              <option className="bg-slate-900" value="class-8">
+              <option className="bg-slate-900" value="8">
                 Standard VIII (Class 8)
               </option>
-              <option className="bg-slate-900" value="class-9">
+              <option className="bg-slate-900" value="9">
                 Standard IX (Class 9)
               </option>
-              <option className="bg-slate-900" value="class-10">
+              <option className="bg-slate-900" value="10">
                 Standard X (Class 10)
               </option>
             </select>

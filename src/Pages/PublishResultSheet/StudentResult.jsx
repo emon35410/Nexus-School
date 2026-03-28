@@ -6,6 +6,10 @@ import { useQuery } from '@tanstack/react-query';
 import useAxiosSecure from '../../Hooks/useAxiosSecure';
 import NexusLoader from '../../components/Nexusloader/Nexusloader';
 import { CiSaveDown1 } from 'react-icons/ci';
+import SecendLoader from '../../components/Nexusloader/SecendLoader';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
+
 
 const StudentResult = () => {
   const { user } = useAuth();
@@ -13,10 +17,10 @@ const StudentResult = () => {
   const [examOptions, setExamOptions] = useState('');
 
   const { data: student } = useQuery({
-    queryKey: ['one-student', user?.email],
+    queryKey: ['email-base-student', user?.email],
     queryFn: async () => {
       const res = await axiosSecure.get(
-        `/result/one-student?email=${user?.email}`,
+        `/students/single-student?email=${user?.email}`,
       );
       return res.data;
     },
@@ -26,19 +30,20 @@ const StudentResult = () => {
     queryKey: [
       'studentResult',
       student?.email,
-      student?.department,
+      student?.class_name,
       examOptions,
     ],
     queryFn: async () => {
       const res = await axiosSecure.get(
-        `/result/student-result?email=${student?.email}&className=${student?.department}&examOption=${examOptions}`,
+        `/result/student-result?email=${student?.email}&class_name=${student?.class_name}&examOption=${examOptions}`,
       );
       return res.data;
     },
   });
 
+  
   if (isLoading) {
-    return <NexusLoader />;
+    return <SecendLoader></SecendLoader>;
   }
 
   if (!studentResult?.subjects) {
@@ -91,63 +96,79 @@ const StudentResult = () => {
   );
   const getGard = (totalPoint / (validSubjects.length || 1)).toFixed(2);
 
-  const handleClick = () => {
-    // Download logic
-  };
+  const handleClick = result => {
+   const doc = new jsPDF();
+   const primaryBlue = [30, 64, 175]; // #1E40AF
+   const accentBlue = [219, 234, 254]; // Light blue for row stripes
+
+   // --- Header Section ---
+   // Blue Header Bar
+   doc.setFillColor(...primaryBlue);
+   doc.rect(0, 0, 210, 40, 'F');
+
+   // School Name (White)
+   doc.setTextColor(255, 255, 255);
+   doc.setFontSize(22);
+   doc.setFont('helvetica', 'bold');
+   doc.text('Nexus School Result Sheet', 20, 25);
+
+   // --- Info Section ---
+   doc.setTextColor(60, 60, 60);
+   doc.setFontSize(10);
+   doc.setFont('helvetica', 'normal');
+
+   // Student Details Grid
+   doc.text(`Exam: ${result?.examOption || 'N/A'}`, 20, 50);
+   doc.text(`Class: ${result?.className || 'N/A'}`, 20, 57);
+   doc.text(`Roll No: ${result?.studentRoll || 'N/A'}`, 20, 64);
+
+   // Decorative Divider Line
+   doc.setDrawColor(...primaryBlue);
+   doc.setLineWidth(0.5);
+   doc.line(20, 70, 190, 70);
+
+   // --- Subject Table ---
+   autoTable(doc, {
+     startY: 75,
+     head: [['Subject', 'Mark', 'Grade']],
+     body: result.subjects.map(sub => [
+       sub?.name.toUpperCase(),
+       sub?.mark,
+       getSubjectGrad(sub?.mark),
+     ]),
+     // Custom Blue & White Styling
+     headStyles: {
+       fillColor: primaryBlue,
+       textColor: [255, 255, 255],
+       fontSize: 12,
+       fontStyle: 'bold',
+       halign: 'center',
+     },
+     bodyStyles: {
+       textColor: [40, 40, 40],
+       halign: 'center',
+     },
+     alternateRowStyles: {
+       fillColor: accentBlue,
+     },
+     margin: { left: 20, right: 20 },
+     theme: 'grid',
+     styles: {
+       lineColor: [200, 200, 200],
+       lineWidth: 0.1,
+     },
+   });
+
+   // --- Footer ---
+   const finalY = doc.lastAutoTable.finalY || 150;
+   
+
+   doc.save(`Nexus-Result-${result?.classRoll}.pdf`);
+  };;
 
   return (
     <div className="rounded-xl border border-blue-500/30 bg-slate-900 shadow-xl overflow-hidden">
-      {/* Header Section */}
-      {/* <div className="bg-gradient-to-r from-blue-900 to-slate-900 p-6 border-b border-blue-500/20">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6 items-center">
-          <div className="space-y-1">
-            <h2 className="text-sm uppercase tracking-widest text-blue-400 font-bold">
-               Name
-            </h2>
-            <p className="text-xl font-semibold text-white">
-              {studentResult?.studentName}
-            </p>
-          </div>
-          <div className="space-y-1">
-            <h2 className="text-sm uppercase tracking-widest text-blue-400 font-bold">
-               Roll
-            </h2>
-            <p className="text-xl font-semibold text-white">
-              {studentResult?.studentRoll}
-            </p>
-          </div>
-          <div className="space-y-1">
-            <h2 className="text-sm uppercase tracking-widest text-blue-400 font-bold">
-               Class
-            </h2>
-            <p className="text-xl font-semibold text-white">
-              {studentResult?.className}
-            </p>
-          </div>
-
-          <div className="space-y-1">
-            <h2 className="text-sm uppercase tracking-widest text-blue-400 font-bold">
-              Current View
-            </h2>
-            <p className="text-lg text-blue-100 capitalize">
-              {studentResult?.examOption || 'General Overview'}
-            </p>
-          </div>
-
-          <div>
-            <select
-              value={examOptions}
-              onChange={e => setExamOptions(e.target.value)}
-              className="select w-full bg-slate-800 border-2 border-blue-600/50 text-blue-50 hover:border-blue-400 transition-all focus:outline-none"
-            >
-              <option value="">Switch Exam</option>
-              <option value="test-1">Test 1</option>
-              <option value="test-2">Test 2</option>
-              <option value="final">Final</option>
-            </select>
-          </div>
-        </div>
-      </div> */}
+     
 
       <div className="bg-gradient-to-br from-blue-600/10 via-slate-900 to-slate-900 p-8 border-b border-blue-500/20">
         <div className="grid grid-cols-2 lg:grid-cols-5 gap-6 items-end">
@@ -174,7 +195,7 @@ const StudentResult = () => {
               Class
             </h2>
             <p className="text-lg font-bold text-white border-l-2 border-blue-500/40 pl-3 leading-tight">
-              {studentResult?.className}
+              {studentResult?.class_name}
             </p>
           </div>
 
@@ -251,7 +272,7 @@ const StudentResult = () => {
         </div>
 
         <button
-          onClick={handleClick}
+          onClick={()=>handleClick(studentResult)}
           className="btn bg-blue-600 hover:bg-blue-500 border-none text-white px-8 rounded-full shadow-lg shadow-blue-900/20 transition-all transform hover:scale-105 active:scale-95"
         >
           <CiSaveDown1 />

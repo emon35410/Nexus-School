@@ -8,7 +8,7 @@ const Attendance = () => {
   const [date, setDate] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // 🔥 Fetch students by class
+  
   useEffect(() => {
     if (!className) return;
 
@@ -170,5 +170,6 @@ const Attendance = () => {
     </div>
   );
 };
+
 
 export default Attendance;

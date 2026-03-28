@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   FaTimes,
@@ -15,7 +15,11 @@ import { toast } from 'react-toastify';
 const FeedBack = ({ isOpen, setIsOpen, isStudent }) => {
   const { register, handleSubmit ,reset} = useForm();
   const { user } = useAuth();
-  const axiosSecure = useAxiosSecure()
+  const axiosSecure = useAxiosSecure();
+
+  useEffect(() => {
+    reset({ teacherName: user?.displayName });
+  }, [user, reset]);
   
   
   const handleFeedBack = (feedback) => {
@@ -30,20 +34,15 @@ const FeedBack = ({ isOpen, setIsOpen, isStudent }) => {
       
     };
 
-    axiosSecure.post('/student/feedback', studentFeedBack)
+    axiosSecure.post('/studentFeedback/feedback', studentFeedBack)
       .then(res => {
-        console.log(res.data)
+        
         if (res.data?.message) {
           toast.info(res.data?.message)
         } else {
           toast.info('success-feedback');
         }
-          
-        
-         
-          
-        
-        reset();
+          reset();
 
         setIsOpen(false)
 
@@ -83,6 +82,7 @@ const FeedBack = ({ isOpen, setIsOpen, isStudent }) => {
                 <div className="relative">
                   <input
                     type="text"
+                    readOnly
                     placeholder="teacher Name"
                     {...register('teacherName', { required: true })}
                     className="w-full bg-slate-800 border border-slate-700 rounded-xl py-3 pl-11 pr-4 text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all"
