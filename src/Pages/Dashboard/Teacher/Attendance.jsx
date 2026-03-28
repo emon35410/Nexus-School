@@ -99,7 +99,8 @@ const Attendance = () => {
           />
         </div>
 
-        {/* 🔥 Student Table */}
+        {/* Student Table */}
+        
         <div className="overflow-x-auto">
           <table className="w-full border">
 
@@ -155,7 +156,8 @@ const Attendance = () => {
           </table>
         </div>
 
-        {/* 🔥 Submit */}
+        {/*  Submit */}
+
         <div className="mt-6 text-center">
           <button
             onClick={handleSubmit}
