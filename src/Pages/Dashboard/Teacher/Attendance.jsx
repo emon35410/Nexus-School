@@ -25,7 +25,8 @@ const Attendance = () => {
       });
   }, [className]);
 
-  // 🔥 Change status
+  //  Change status update code
+
   const handleStatusChange = (index, status) => {
     const updated = [...students];
     updated[index].status = status;
@@ -100,7 +101,7 @@ const Attendance = () => {
         </div>
 
         {/* Student Table */}
-        
+        git add .
         <div className="overflow-x-auto">
           <table className="w-full border">
 
