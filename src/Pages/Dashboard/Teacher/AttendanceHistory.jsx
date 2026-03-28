@@ -1,30 +1,34 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 const AttendanceHistory = () => {
-
-  const [date, setDate] = useState("");
+  const [selectedDate, setSelectedDate] = useState(null); // Calendar date
   const [className, setClassName] = useState("");
   const [attendanceData, setAttendanceData] = useState([]);
+  const [loading, setLoading] = useState(false);
 
-  const handleSearch = async () => {
+  // 🔥 Fetch whenever class or date changes
+  useEffect(() => {
+    if (!className || !selectedDate) return;
 
-    if (!date) {
-      alert("Please select a date");
-      return;
-    }
+    setLoading(true);
 
-    try {
-      const res = await axios.get("http://localhost:5000/attendance", {
-        params: { date, className }
-      });
+    const dateStr = selectedDate.toISOString().split("T")[0]; // YYYY-MM-DD format
 
-      setAttendanceData(res.data);
-
-    } catch (error) {
-      alert("No attendance found ❌");
-    }
-  };
+    axios
+      .get("http://localhost:5000/attendance", {
+        params: { className, date: dateStr },
+      })
+      .then((res) => {
+        setAttendanceData(res.data);
+      })
+      .catch(() => {
+        setAttendanceData([]);
+      })
+      .finally(() => setLoading(false));
+  }, [className, selectedDate]);
 
   return (
     <div className="min-h-screen bg-gray-100 p-8 text-black">
@@ -34,48 +38,55 @@ const AttendanceHistory = () => {
           Attendance History
         </h2>
 
-        <div className="flex gap-4 mb-6">
+        {/* 🔥 Filter */}
+        <div className="flex gap-4 mb-6 flex-wrap items-center">
 
-          <input
-            type="text"
-            placeholder="Class Name"
+          {/* Class */}
+          <select
             value={className}
             onChange={(e) => setClassName(e.target.value)}
             className="border p-3 rounded-lg"
-          />
-
-          <input
-            type="date"
-            value={date}
-            onChange={(e) => setDate(e.target.value)}
-            className="border p-3 rounded-lg"
-          />
-
-          <button
-            onClick={handleSearch}
-            className="bg-black text-white px-6 rounded-lg"
           >
-            Search
-          </button>
+            <option value="">Select Class</option>
+            {[...Array(10)].map((_, i) => (
+              <option key={i} value={`class-${i + 1}`}>
+                Class {i + 1}
+              </option>
+            ))}
+          </select>
+
+          {/* Calendar */}
+          <DatePicker
+            selected={selectedDate}
+            onChange={(date) => setSelectedDate(date)}
+            className="border p-3 rounded-lg"
+            placeholderText="Select Date"
+            dateFormat="yyyy-MM-dd"
+          />
 
         </div>
 
-        {/* Result */}
-        {attendanceData.length === 0 && (
-          <p>No attendance found</p>
+        {/* Loading */}
+        {loading && <p className="text-center">Loading...</p>}
+
+        {/* No Data */}
+        {!loading && attendanceData.length === 0 && className && selectedDate && (
+          <p className="text-center text-red-500">No attendance found ❌</p>
         )}
 
+        {/* Result */}
         {attendanceData.map((item, index) => (
           <div key={index} className="mb-6 border p-4 rounded-lg">
 
             <h3 className="font-bold mb-2">
-              Class: {item.className} | Subject: {item.subject}
+              Class: {item.className} | Subject: {item.subject} | Date:{" "}
+              {new Date(item.date).toLocaleDateString()}
             </h3>
 
             <table className="w-full border-collapse">
               <thead>
                 <tr className="bg-gray-200">
-                  <th className="p-2">#</th>
+                  <th className="p-2">Roll</th>
                   <th className="p-2">Name</th>
                   <th className="p-2">Status</th>
                 </tr>
@@ -86,11 +97,13 @@ const AttendanceHistory = () => {
                   <tr key={i} className="border-b">
                     <td className="p-2">{i + 1}</td>
                     <td className="p-2">{student.name}</td>
-                    <td className={`p-2 font-semibold ${
-                      student.status === "present"
-                        ? "text-green-600"
-                        : "text-red-600"
-                    }`}>
+                    <td
+                      className={`p-2 font-semibold ${
+                        student.status === "present"
+                          ? "text-green-600"
+                          : "text-red-600"
+                      }`}
+                    >
                       {student.status}
                     </td>
                   </tr>
