@@ -1,19 +1,27 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import useAxiosSecure from '../../Hooks/useAxiosSecure';
-import { ShieldCheck, UserCog, Trash2, Mail, Calendar, User } from 'lucide-react';
+import { ShieldCheck, UserCog, Trash2, Mail, Calendar, User, ChevronLeft, ChevronRight } from 'lucide-react';
 import Swal from 'sweetalert2';
+
+const USERS_PER_PAGE = 10;
 
 const ManageUsers = () => {
     const axiosSecure = useAxiosSecure();
+    const [currentPage, setCurrentPage] = useState(1);
 
-    const { data: users = [], isLoading, refetch } = useQuery({
-        queryKey: ['all-users'],
+    const { data = {}, isLoading, refetch } = useQuery({
+        queryKey: ['all-users', currentPage],
         queryFn: async () => {
-            const res = await axiosSecure.get('/users');
+            const res = await axiosSecure.get(`/users?page=${currentPage}&limit=${USERS_PER_PAGE}`);
             return res.data;
-        }
+        },
+        keepPreviousData: true,
     });
+
+    const users = data.users || [];
+    const totalUsers = data.total || 0;
+    const totalPages = Math.ceil(totalUsers / USERS_PER_PAGE);
 
     const handleRoleChange = async (user, newRole) => {
         const result = await Swal.fire({
@@ -76,7 +84,12 @@ const ManageUsers = () => {
         try {
             const res = await axiosSecure.delete(`/users/${user.email}`);
             if (res.data.deletedCount > 0) {
-                refetch();
+                // If last item on page, go back one page
+                if (users.length === 1 && currentPage > 1) {
+                    setCurrentPage(p => p - 1);
+                } else {
+                    refetch();
+                }
                 Swal.fire({
                     title: "Deleted!",
                     text: `${user.name} has been removed.`,
@@ -99,15 +112,14 @@ const ManageUsers = () => {
         }
     };
 
-    if (isLoading) return <div className="flex items-center justify-center min-h-100 w-full">
-        <div className="relative">
-            {/* Outer Ring */}
-            <div className="w-12 h-12 border-4 border-blue-600/20 border-t-blue-600 rounded-full animate-spin"></div>
-
-            {/* Inner Pulse Dot */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2 h-2 bg-blue-600 rounded-full animate-pulse"></div>
+    if (isLoading) return (
+        <div className="flex items-center justify-center min-h-100 w-full">
+            <div className="relative">
+                <div className="w-12 h-12 border-4 border-blue-600/20 border-t-blue-600 rounded-full animate-spin"></div>
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2 h-2 bg-blue-600 rounded-full animate-pulse"></div>
+            </div>
         </div>
-    </div>;
+    );
 
     return (
         <div className="max-w-6xl mx-auto p-4 md:p-6 min-h-screen">
@@ -117,7 +129,7 @@ const ManageUsers = () => {
                 <div>
                     <h2 className="text-3xl font-black text-white italic">User Management</h2>
                     <p className="text-slate-400 text-sm mt-1">
-                        {users.length} registered accounts
+                        {totalUsers} registered accounts
                     </p>
                 </div>
                 <div className="text-right hidden md:block">
@@ -132,6 +144,7 @@ const ManageUsers = () => {
                     <table className="w-full text-left">
                         <thead>
                             <tr className="bg-slate-800/80 border-b border-slate-700/60">
+                                <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-[0.18em] text-slate-400">#</th>
                                 <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-[0.18em] text-slate-400">Member</th>
                                 <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-[0.18em] text-slate-400">Joined</th>
                                 <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-[0.18em] text-slate-400">Role</th>
@@ -139,8 +152,13 @@ const ManageUsers = () => {
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-slate-700/40">
-                            {users.map((user) => (
+                            {users.map((user, index) => (
                                 <tr key={user._id} className="group hover:bg-slate-700/20 transition-all duration-200">
+
+                                    {/* Row number */}
+                                    <td className="px-6 py-4 text-xs text-slate-500 font-mono">
+                                        {(currentPage - 1) * USERS_PER_PAGE + index + 1}
+                                    </td>
 
                                     {/* Member info */}
                                     <td className="px-6 py-4">
@@ -175,12 +193,13 @@ const ManageUsers = () => {
 
                                     {/* Role badge */}
                                     <td className="px-6 py-4">
-                                        <span className={`px-3 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest border ${user.role === 'admin'
+                                        <span className={`px-3 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest border ${
+                                            user.role === 'admin'
                                                 ? 'bg-rose-500/15 text-rose-400 border-rose-500/30'
                                                 : user.role === 'teacher'
                                                     ? 'bg-indigo-500/15 text-indigo-300 border-indigo-500/30'
                                                     : 'bg-blue-500/15 text-blue-300 border-blue-500/30'
-                                            }`}>
+                                        }`}>
                                             {user.role || 'student'}
                                         </span>
                                     </td>
@@ -188,50 +207,48 @@ const ManageUsers = () => {
                                     {/* Actions */}
                                     <td className="px-6 py-4">
                                         <div className="flex justify-center items-center gap-2 flex-wrap">
-
-                                            {/* Make Admin */}
                                             <button
                                                 onClick={() => handleRoleChange(user, 'admin')}
                                                 disabled={user.role === 'admin'}
                                                 title="Promote to Admin"
-                                                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[11px] font-bold border transition-all duration-200 active:scale-95 ${user.role === 'admin'
+                                                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[11px] font-bold border transition-all duration-200 active:scale-95 ${
+                                                    user.role === 'admin'
                                                         ? 'opacity-25 cursor-not-allowed border-slate-700 text-slate-500'
                                                         : 'border-rose-500/40 text-rose-400 hover:bg-rose-500 hover:text-white hover:border-transparent'
-                                                    }`}
+                                                }`}
                                             >
                                                 <ShieldCheck size={13} />
                                                 Make Admin
                                             </button>
 
-                                            {/* Make Teacher */}
                                             <button
                                                 onClick={() => handleRoleChange(user, 'teacher')}
                                                 disabled={user.role === 'teacher'}
                                                 title="Promote to Teacher"
-                                                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[11px] font-bold border transition-all duration-200 active:scale-95 ${user.role === 'teacher'
+                                                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[11px] font-bold border transition-all duration-200 active:scale-95 ${
+                                                    user.role === 'teacher'
                                                         ? 'opacity-25 cursor-not-allowed border-slate-700 text-slate-500'
                                                         : 'border-indigo-500/40 text-indigo-300 hover:bg-indigo-500 hover:text-white hover:border-transparent'
-                                                    }`}
+                                                }`}
                                             >
                                                 <UserCog size={13} />
                                                 Make Teacher
                                             </button>
 
-                                            {/* Make Student */}
                                             <button
                                                 onClick={() => handleRoleChange(user, 'student')}
                                                 disabled={user.role === 'student' || !user.role}
                                                 title="Demote to Student"
-                                                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[11px] font-bold border transition-all duration-200 active:scale-95 ${user.role === 'student' || !user.role
+                                                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[11px] font-bold border transition-all duration-200 active:scale-95 ${
+                                                    user.role === 'student' || !user.role
                                                         ? 'opacity-25 cursor-not-allowed border-slate-700 text-slate-500'
                                                         : 'border-blue-500/40 text-blue-300 hover:bg-blue-500 hover:text-white hover:border-transparent'
-                                                    }`}
+                                                }`}
                                             >
                                                 <User size={13} />
                                                 Make Student
                                             </button>
 
-                                            {/* Delete */}
                                             <button
                                                 onClick={() => handleDelete(user)}
                                                 title="Delete User"
@@ -240,7 +257,6 @@ const ManageUsers = () => {
                                                 <Trash2 size={13} />
                                                 Delete
                                             </button>
-
                                         </div>
                                     </td>
                                 </tr>
@@ -248,6 +264,69 @@ const ManageUsers = () => {
                         </tbody>
                     </table>
                 </div>
+
+                {/* Pagination */}
+                {totalPages > 1 && (
+                    <div className="flex items-center justify-between px-6 py-4 border-t border-slate-700/60 bg-slate-800/40">
+                        <p className="text-xs text-slate-400">
+                            Showing <span className="text-slate-200 font-bold">{(currentPage - 1) * USERS_PER_PAGE + 1}</span>
+                            {' '}–{' '}
+                            <span className="text-slate-200 font-bold">{Math.min(currentPage * USERS_PER_PAGE, totalUsers)}</span>
+                            {' '}of{' '}
+                            <span className="text-slate-200 font-bold">{totalUsers}</span> users
+                        </p>
+
+                        <div className="flex items-center gap-1">
+                            <button
+                                onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                                disabled={currentPage === 1}
+                                className="p-2 rounded-lg border border-slate-700 text-slate-400 hover:bg-slate-700 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+                            >
+                                <ChevronLeft size={15} />
+                            </button>
+
+                            {Array.from({ length: totalPages }, (_, i) => i + 1)
+                                .filter(page =>
+                                    page === 1 ||
+                                    page === totalPages ||
+                                    Math.abs(page - currentPage) <= 1
+                                )
+                                .reduce((acc, page, idx, arr) => {
+                                    if (idx > 0 && page - arr[idx - 1] > 1) {
+                                        acc.push('...');
+                                    }
+                                    acc.push(page);
+                                    return acc;
+                                }, [])
+                                .map((item, idx) =>
+                                    item === '...' ? (
+                                        <span key={`ellipsis-${idx}`} className="px-2 text-slate-500 text-xs">…</span>
+                                    ) : (
+                                        <button
+                                            key={item}
+                                            onClick={() => setCurrentPage(item)}
+                                            className={`w-8 h-8 rounded-lg text-xs font-bold border transition-all ${
+                                                currentPage === item
+                                                    ? 'bg-blue-600 border-blue-600 text-white'
+                                                    : 'border-slate-700 text-slate-400 hover:bg-slate-700 hover:text-white'
+                                            }`}
+                                        >
+                                            {item}
+                                        </button>
+                                    )
+                                )
+                            }
+
+                            <button
+                                onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                                disabled={currentPage === totalPages}
+                                className="p-2 rounded-lg border border-slate-700 text-slate-400 hover:bg-slate-700 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+                            >
+                                <ChevronRight size={15} />
+                            </button>
+                        </div>
+                    </div>
+                )}
             </div>
         </div>
     );

@@ -114,7 +114,7 @@ const SubjectCard = ({ subject }) => {
       </div>
 
       {/* Syllabus Details */}
-      <div className={`transition-all duration-500 ease-in-out overflow-hidden ${isOpen ? 'max-h-[1000px] border-t border-slate-800/30' : 'max-h-0'}`}>
+      <div className={`transition-all duration-500 ease-in-out overflow-hidden ${isOpen ? 'max-h-250 border-t border-slate-800/30' : 'max-h-0'}`}>
         <div className="p-8 bg-slate-950/20 space-y-6">
           {subject.syllabus.map((item, idx) => (
             <div key={idx} className="space-y-3">
