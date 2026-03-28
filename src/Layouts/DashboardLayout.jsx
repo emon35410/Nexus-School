@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { NavLink, Link, useNavigate, Outlet } from "react-router";
 import {
   LayoutDashboard, Users, BookOpen, FileText,
@@ -15,9 +15,14 @@ import { IoCreateOutline } from 'react-icons/io5';
 import { FaBookOpenReader } from "react-icons/fa6";
 import { ImFileText } from 'react-icons/im';
 import { BiSpreadsheet } from 'react-icons/bi';
+import { IoIosNotifications } from 'react-icons/io';
+import { useQuery } from "@tanstack/react-query";
+import useAxiosSecure from "../Hooks/useAxiosSecure";
 
 // --- SidebarLink Helper Component ---
 const SidebarLink = ({ to, icon, label, isOpen, end = false, onClick }) => (
+
+  
   <li>
     <NavLink
       to={to}
@@ -171,6 +176,14 @@ const DashboardLayout = () => {
   const [isSidebarOpen, setSidebarOpen] = useState(true);
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [userRole, roleLoading] = useRole();
+  const [isDropDown, setIsDorpDown] = useState(false);
+  const axiosSecure = useAxiosSecure();
+  
+
+
+  const handleClick = () => {
+    setIsDorpDown(!isDropDown)
+  }
 
   const handleLogout = async () => {
     try {
@@ -181,6 +194,30 @@ const DashboardLayout = () => {
     }
   };
 
+  const { data: notifications = [] } = useQuery({
+    queryKey: ['notifications', user?.email],
+    queryFn: async () => {
+      const res = await axiosSecure.get(
+        `/notifications?email=${user?.email}`,
+      );
+      return res.data;
+    },
+    enabled: !!user?.email,
+    refetchInterval: 6000,
+  });
+
+  const handleSeeAndUpdate =async (n) => {
+   try {
+     
+    await axiosSecure.patch(`/notifications/${n._id}`)
+    navigate(n?.link);
+       
+   } catch (error) {
+    console.log(error)
+   }
+  }
+ 
+  console.log(notifications)
   if (roleLoading) return <NexusLoader />;
 
   const userName = user?.displayName || "Nexus User";
@@ -188,44 +225,85 @@ const DashboardLayout = () => {
 
   return (
     <div className="min-h-screen flex bg-[#0F172A] text-[#E2E8F0] font-sans selection:bg-blue-500/30">
-      
       {/* --- MOBILE SIDEBAR --- */}
-      <div className={`fixed inset-0 z-50 md:hidden transition-all duration-300 ${isMobileMenuOpen ? "visible opacity-100" : "invisible opacity-0"}`}>
-        <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setMobileMenuOpen(false)}></div>
-        <aside className={`absolute left-0 top-0 h-full w-72 bg-[#1E293B] p-6 transition-transform duration-300 flex flex-col ${isMobileMenuOpen ? "translate-x-0" : "-translate-x-full"}`}>
+      <div
+        className={`fixed inset-0 z-50 md:hidden transition-all duration-300 ${isMobileMenuOpen ? 'visible opacity-100' : 'invisible opacity-0'}`}
+      >
+        <div
+          className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+          onClick={() => setMobileMenuOpen(false)}
+        ></div>
+        <aside
+          className={`absolute left-0 top-0 h-full w-72 bg-[#1E293B] p-6 transition-transform duration-300 flex flex-col ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}
+        >
           <div className="flex justify-between items-center mb-10">
             <div className="flex items-center gap-3">
-              <img src={NS1_logo} alt="Logo" className="h-10 w-10 rounded-full" />
-              <span className="font-bold text-white tracking-tight">NEXUS-SCHOOL</span>
+              <img
+                src={NS1_logo}
+                alt="Logo"
+                className="h-10 w-10 rounded-full"
+              />
+              <span className="font-bold text-white tracking-tight">
+                NEXUS-SCHOOL
+              </span>
             </div>
-            <button onClick={() => setMobileMenuOpen(false)} className="p-2 bg-slate-800 rounded-lg text-slate-400">
+            <button
+              onClick={() => setMobileMenuOpen(false)}
+              className="p-2 bg-slate-800 rounded-lg text-slate-400"
+            >
               <X size={20} />
             </button>
           </div>
           <nav className="flex-1 overflow-y-auto">
-            <NavLinks isOpen={true} isMobile={true} userRole={userRole} setMobileMenuOpen={setMobileMenuOpen} />
+            <NavLinks
+              isOpen={true}
+              isMobile={true}
+              userRole={userRole}
+              setMobileMenuOpen={setMobileMenuOpen}
+            />
           </nav>
         </aside>
       </div>
 
       {/* --- DESKTOP SIDEBAR --- */}
-      <aside className={`${isSidebarOpen ? "w-64" : "w-24"} bg-[#1E293B] p-6 hidden md:flex flex-col border-r border-slate-700 shadow-2xl transition-all duration-300 h-screen sticky top-0`}>
+      <aside
+        className={`${isSidebarOpen ? 'w-64' : 'w-24'} bg-[#1E293B] p-6 hidden md:flex flex-col border-r border-slate-700 shadow-2xl transition-all duration-300 h-screen sticky top-0`}
+      >
         <div className="mb-10 flex items-center gap-3 overflow-hidden">
           <Link to="/" className="flex items-center gap-3 group">
-            <img src={NS1_logo} alt="Logo" className="h-10 w-10 rounded-full shrink-0 shadow-lg" />
-            {isSidebarOpen && <span className="text-xl font-bold text-white whitespace-nowrap">NEXUS-<span className="text-blue-500">SCHOOL</span></span>}
+            <img
+              src={NS1_logo}
+              alt="Logo"
+              className="h-10 w-10 rounded-full shrink-0 shadow-lg"
+            />
+            {isSidebarOpen && (
+              <span className="text-xl font-bold text-white whitespace-nowrap">
+                NEXUS-<span className="text-blue-500">SCHOOL</span>
+              </span>
+            )}
           </Link>
         </div>
         <nav className="flex-1 overflow-y-auto custom-scrollbar">
           <NavLinks isOpen={isSidebarOpen} userRole={userRole} />
         </nav>
         <div className="mt-auto pt-6 border-t border-slate-700">
-          <Link to="/dashboard/profile" className="flex items-center gap-3 p-2 hover:bg-slate-800 transition-colors rounded-2xl group">
-            <img src={userImg} alt="profile" className="w-10 h-10 rounded-full border-2 border-blue-500 object-cover shrink-0" />
+          <Link
+            to="/dashboard/profile"
+            className="flex items-center gap-3 p-2 hover:bg-slate-800 transition-colors rounded-2xl group"
+          >
+            <img
+              src={userImg}
+              alt="profile"
+              className="w-10 h-10 rounded-full border-2 border-blue-500 object-cover shrink-0"
+            />
             {isSidebarOpen && (
               <div className="truncate">
-                <p className="text-sm font-bold truncate text-white">{userName}</p>
-                <p className="text-[10px] text-blue-400 font-bold uppercase tracking-wider">{userRole}</p>
+                <p className="text-sm font-bold truncate text-white">
+                  {userName}
+                </p>
+                <p className="text-[10px] text-blue-400 font-bold uppercase tracking-wider">
+                  {userRole}
+                </p>
               </div>
             )}
           </Link>
@@ -236,17 +314,94 @@ const DashboardLayout = () => {
       <div className="flex-1 flex flex-col min-h-screen">
         <header className="h-20 bg-[#1E293B]/80 backdrop-blur-md flex justify-between items-center px-4 md:px-8 border-b border-slate-700 sticky top-0 z-40">
           <div className="flex items-center gap-4">
-            <button onClick={() => setMobileMenuOpen(true)} className="p-2 hover:bg-slate-800 rounded-lg md:hidden text-slate-400">
+            <button
+              onClick={() => setMobileMenuOpen(true)}
+              className="p-2 hover:bg-slate-800 rounded-lg md:hidden text-slate-400"
+            >
               <Menu size={24} />
             </button>
-            <button onClick={() => setSidebarOpen(!isSidebarOpen)} className="p-2 hover:bg-slate-800 rounded-lg hidden md:block text-slate-400">
+            <button
+              onClick={() => setSidebarOpen(!isSidebarOpen)}
+              className="p-2 hover:bg-slate-800 rounded-lg hidden md:block text-slate-400"
+            >
               {isSidebarOpen ? <X size={20} /> : <Menu size={20} />}
             </button>
-            <h1 className="text-sm md:text-lg font-medium text-slate-300">System <span className="text-white font-bold">Portal</span></h1>
+            <h1 className="text-sm md:text-lg font-medium text-slate-300">
+              System <span className="text-white font-bold">Portal</span>
+            </h1>
           </div>
-          <button onClick={handleLogout} className="px-3 py-2 bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white rounded-xl transition-all font-bold text-xs flex items-center gap-2">
-            <LogOut size={16} /> <span className="hidden sm:inline">Logout</span>
-          </button>
+
+          {/* logout and notification div */}
+          <div className="flex items-center gap-3  ">
+            {/* logout button */}
+            <button
+              onClick={handleLogout}
+              className="px-3  py-2 bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white rounded-xl transition-all font-bold text-xs flex items-center gap-2"
+            >
+              <LogOut size={16} />{' '}
+              <span className="hidden sm:inline">Logout</span>
+            </button>
+
+            
+
+            {/* notification dropdown */}
+            <div className="relative">
+              <button
+                onClick={handleClick}
+                tabIndex={0}
+                role="button"
+                className="p-2.5 rounded-xl bg-slate-800/50 hover:bg-slate-700 text-slate-300 transition-all border border-slate-700 relative group"
+              >
+                <IoIosNotifications
+                  size={22}
+                  className="group-hover:scale-110 transition-transform"
+                />
+
+                {notifications.length > 0 && (
+                  <div className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 bg-blue-600 text-white text-[10px] font-bold rounded-full flex items-center justify-center border-2 border-[#1E293B]">
+                    {notifications.length}
+                  </div>
+                )}
+              </button>
+
+              {isDropDown && (
+                <div className="absolute w-[300px] bg-[#1E293B] border border-slate-700 rounded-2xl shadow-2xl right-0 mt-3 overflow-hidden z-50">
+                  {/* Header */}
+                  <div className="p-4 border-b border-slate-700 bg-slate-800/50">
+                    <h3 className="text-white font-semibold text-sm">
+                      Notifications
+                    </h3>
+                  </div>
+
+                  {/* List */}
+                  <div className="h-[400px] overflow-y-auto custom-scrollbar">
+                    {notifications.length > 0 ? (
+                      notifications.map((n, index) => (
+                        <div
+                          key={index}
+                          onClick={() => handleSeeAndUpdate(n)}
+                          className="p-4 border-b border-slate-800/50 hover:bg-black   cursor-pointer transition-colors last:border-0"
+                        >
+                          <p className="text-slate-300 text-sm leading-relaxed">
+                            {n?.notifications}
+                          </p>
+                          <span className="text-[10px] text-slate-300 mt-1 block">
+                            {new Date(n?.createAt).toDateString()}
+                          </span>
+                        </div>
+                      ))
+                    ) : (
+                      <div className="p-8 text-center text-slate-500 text-sm">
+                        No new notifications
+                      </div>
+                    )}
+                  </div>
+
+                  
+                </div>
+              )}
+            </div>
+          </div>
         </header>
 
         <main className="p-4 md:p-8 w-full max-w-7xl mx-auto">
