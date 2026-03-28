@@ -1,18 +1,28 @@
 import React, { useContext, useState } from 'react';
-import { 
-  Shield, Users, Settings, 
+import {
+  Shield, Users, Settings,
   Activity, Bell, UserPlus, Database,
   Edit3, Camera, X, Save, Loader2, Mail, Phone, MapPin,
-  Zap, Crown, Globe, Fingerprint
+  BookOpen, BarChart2, PlusCircle, Eye, Tag, DollarSign,
+  FileText, MessageSquare, Clipboard, CreditCard, Percent,
+  TrendingUp, Sliders, Lock, Cpu, Trash2
 } from 'lucide-react';
 import { AuthContext } from '../../AuthContext/AuthContext';
 import useAxiosSecure from '../../Hooks/useAxiosSecure';
 import Swal from 'sweetalert2';
 
+const colorMap = {
+  purple: { bg: "bg-purple-500/10", text: "text-purple-400", border: "border-purple-500/20" },
+  teal:   { bg: "bg-teal-500/10",   text: "text-teal-400",   border: "border-teal-500/20" },
+  amber:  { bg: "bg-amber-500/10",  text: "text-amber-400",  border: "border-amber-500/20" },
+  coral:  { bg: "bg-red-500/10",    text: "text-red-400",    border: "border-red-500/20" },
+  green:  { bg: "bg-emerald-500/10",text: "text-emerald-400",border: "border-emerald-500/20" },
+};
+
 const AdminProfile = ({ dbUser, refetch }) => {
   const { user } = useContext(AuthContext);
   const axiosSecure = useAxiosSecure();
-  
+
   const [isModalOpen, setModalOpen] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
 
@@ -53,7 +63,6 @@ const AdminProfile = ({ dbUser, refetch }) => {
 
       {/* ── Header Section ─────────────────────────────────────── */}
       <div className="relative overflow-hidden bg-slate-900 rounded-[2.5rem] border border-slate-700 p-8 md:p-10 mb-8 shadow-2xl">
-        
         <div className="relative flex flex-col md:flex-row items-center justify-between gap-8">
           <div className="flex flex-col md:flex-row items-center gap-8 text-center md:text-left">
             <div className="relative group">
@@ -72,8 +81,8 @@ const AdminProfile = ({ dbUser, refetch }) => {
                 {dbUser?.name || user?.displayName}
               </h1>
               <div className="flex items-center justify-center md:justify-start gap-2 text-slate-300">
-                 <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                 <span className="text-xs font-black uppercase tracking-widest opacity-80">Admin</span>
+                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                <span className="text-xs font-black uppercase tracking-widest opacity-80">Admin</span>
               </div>
             </div>
           </div>
@@ -98,12 +107,9 @@ const AdminProfile = ({ dbUser, refetch }) => {
             </h3>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {/* Updated Email Card */}
               <InfoCard icon={<Mail />} label="Admin Email" value={dbUser?.email || user?.email} isEmail={true} />
-              
-              <InfoCard icon={<Phone />} label="Primary Phone" value={dbUser?.phone || " Not Provided"} />
-              
-              <InfoCard icon={<MapPin />} label="Admin Location" value={dbUser?.address || " Not Provided"} />
+              <InfoCard icon={<Phone />} label="Primary Phone" value={dbUser?.phone || "Not Provided"} />
+              <InfoCard icon={<MapPin />} label="Admin Location" value={dbUser?.address || "Not Provided"} />
             </div>
           </section>
         </div>
@@ -122,6 +128,84 @@ const AdminProfile = ({ dbUser, refetch }) => {
         </div>
       </div>
 
+      {/* ── Admin Capabilities ──────────────────────────────────── */}
+      <div className="mt-5">
+        <section className="bg-slate-900 rounded-4xl border border-slate-700 p-10 shadow-xl">
+          <h3 className="text-xs font-black text-slate-400 uppercase tracking-[0.3em] mb-8 flex items-center gap-3">
+            <div className="h-0.5 w-8 bg-amber-500" /> Admin Capabilities
+          </h3>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5">
+            <CapabilityCard
+              icon={<Users />}
+              title="User Management"
+              color="purple"
+              items={[
+                { icon: <UserPlus size={12} />, text: "Add new teacher accounts" },
+                { icon: <Users size={12} />, text: "View & edit student profiles" },
+                { icon: <Trash2 size={12} />, text: "Remove any user account", danger: true },
+                { icon: <Shield size={12} />, text: "Assign & change user roles" },
+              ]}
+            />
+            <CapabilityCard
+              icon={<BookOpen />}
+              title="Course Management"
+              color="teal"
+              items={[
+                { icon: <PlusCircle size={12} />, text: "Create & publish new courses" },
+                { icon: <Edit3 size={12} />, text: "Edit & update course content" },
+                { icon: <Eye size={12} />, text: "Approve & manage enrollments" },
+                { icon: <Tag size={12} />, text: "Manage categories & tags" },
+              ]}
+            />
+            <CapabilityCard
+              icon={<BarChart2 />}
+              title="Analytics & Reports"
+              color="amber"
+              items={[
+                { icon: <Users size={12} />, text: "View total student & teacher count" },
+                { icon: <DollarSign size={12} />, text: "Revenue & payment reports" },
+                { icon: <Activity size={12} />, text: "Monitor course performance" },
+                { icon: <FileText size={12} />, text: "Export reports (CSV / PDF)" },
+              ]}
+            />
+            <CapabilityCard
+              icon={<Bell />}
+              title="Notice & Communication"
+              color="coral"
+              items={[
+                { icon: <Mail size={12} />, text: "Send email notices to all users" },
+                { icon: <Bell size={12} />, text: "Post platform-wide announcements" },
+                { icon: <MessageSquare size={12} />, text: "View & reply to support tickets" },
+                { icon: <Clipboard size={12} />, text: "Create noticeboard posts" },
+              ]}
+            />
+            <CapabilityCard
+              icon={<CreditCard />}
+              title="Payment & Finance"
+              color="green"
+              items={[
+                { icon: <CreditCard size={12} />, text: "View all payment transactions" },
+                { icon: <Percent size={12} />, text: "Create coupons & discounts" },
+                { icon: <TrendingUp size={12} />, text: "Manage teacher salaries" },
+                { icon: <FileText size={12} />, text: "Generate invoices" },
+              ]}
+            />
+            <CapabilityCard
+              icon={<Settings />}
+              title="System Settings"
+              color="purple"
+              items={[
+                { icon: <Sliders size={12} />, text: "Modify site configuration" },
+                { icon: <Database size={12} />, text: "Take database backups" },
+                { icon: <Lock size={12} />, text: "Security & access control" },
+                { icon: <Cpu size={12} />, text: "Manage API keys & integrations" },
+              ]}
+            />
+          </div>
+        </section>
+      </div>
+
       {/* ── Update Modal ────────────────────────────────────────── */}
       {isModalOpen && (
         <div className="fixed inset-0 z-100 flex items-center justify-center p-6 bg-slate-950/90 backdrop-blur-sm animate-in fade-in duration-300">
@@ -136,15 +220,15 @@ const AdminProfile = ({ dbUser, refetch }) => {
             <form onSubmit={handleUpdateProfile} className="p-10 space-y-6">
               <InputGroup label="Full Name" name="name" defaultValue={dbUser?.name || user?.displayName} />
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <InputGroup label="Phone" name="phone" defaultValue={dbUser?.phone || "01877270194"} />
-                <InputGroup label="Address" name="address" defaultValue={dbUser?.address || "Sylhet, Bangladesh"} />
+                <InputGroup label="Phone" name="phone" defaultValue={dbUser?.phone || ""} />
+                <InputGroup label="Address" name="address" defaultValue={dbUser?.address || ""} />
               </div>
 
               <button
                 disabled={isUpdating}
                 className="w-full py-5 bg-amber-500 hover:bg-amber-400 text-slate-950 rounded-2xl font-black uppercase tracking-[0.2em] text-[11px] transition-all flex items-center justify-center gap-3 shadow-lg active:scale-95"
               >
-                {isUpdating ? <Loader2 className="animate-spin" size={20} /> : <><Save size={20} /> Update</>}
+                {isUpdating ? <Loader2 className="animate-spin" size={20} /> : <><Save size={20} /> Save Changes</>}
               </button>
             </form>
           </div>
@@ -169,7 +253,7 @@ const InfoCard = ({ icon, label, value, isEmail }) => (
 );
 
 const ActionBtn = ({ icon, label }) => (
-  <button className="w-full flex items-center gap-4 p-4.5 bg-slate-800/40 border border-slate-700 rounded-2xl text-slate-100 text-[11px] font-black uppercase tracking-widest transition-all hover:bg-slate-700 hover:border-amber-500/30 active:scale-95 group">
+  <button className="w-full flex items-center gap-4 p-4 bg-slate-800/40 border border-slate-700 rounded-2xl text-slate-100 text-[11px] font-black uppercase tracking-widest transition-all hover:bg-slate-700 hover:border-amber-500/30 active:scale-95 group">
     <span className="text-amber-500 group-hover:scale-110 transition-transform">{React.cloneElement(icon, { size: 18 })}</span>
     {label}
   </button>
@@ -185,5 +269,30 @@ const InputGroup = ({ label, name, defaultValue }) => (
     />
   </div>
 );
+
+const CapabilityCard = ({ icon, title, color, items }) => {
+  const c = colorMap[color] || colorMap.purple;
+  return (
+    <div className="p-6 rounded-3xl bg-slate-800/40 border border-slate-700 hover:border-amber-500/30 transition-all group">
+      <div className="flex items-center gap-3 mb-5">
+        <div className={`w-10 h-10 rounded-2xl ${c.bg} border ${c.border} flex items-center justify-center ${c.text}`}>
+          {React.cloneElement(icon, { size: 18 })}
+        </div>
+        <h4 className="text-[11px] font-black text-slate-300 uppercase tracking-widest">{title}</h4>
+      </div>
+      <div className="space-y-2">
+        {items.map((item, i) => (
+          <div
+            key={i}
+            className={`flex items-center gap-3 px-3 py-2.5 rounded-xl bg-slate-900/60 text-[12px] font-semibold ${item.danger ? "text-red-400" : "text-slate-400"}`}
+          >
+            <span className={item.danger ? "text-red-500" : c.text}>{item.icon}</span>
+            {item.text}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
 
 export default AdminProfile;
