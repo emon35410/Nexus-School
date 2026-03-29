@@ -12,11 +12,11 @@ const MyExamSchedule = () => {
 
   const { data: myExamSchedule, isLoading: isQueryLoading } = useQuery({
     // Include the department in the key so it refetches if the student changes
-    queryKey: ["exam-schedule", student?.department],
-    enabled: !!student?.department,
+    queryKey: ["exam-schedule", student?.class_name],
+    enabled: !!student?.class_name,
     queryFn: async () => {
       const res = await axiosSecure.get(
-        `/exam-routine?className=${student?.department}`,
+        `/exam-routine?className=${student?.class_name}`,
       );
       return res.data;
     },
@@ -83,19 +83,12 @@ const MyExamSchedule = () => {
                 <h2 className="text-2xl font-bold text-white tracking-tight">
                   Class -{" "}
                   <span className="text-emerald-500">
-                    {e.class?.split("-")[1]}
+                    {e?.class_name}
                   </span>
                 </h2>
               </div>
 
-              <div className="flex items-center gap-2">
-                <button className="p-2 text-slate-500 hover:text-emerald-400 hover:bg-emerald-950/30 rounded-lg transition-all">
-                  <Edit size={18} />
-                </button>
-                <button className="p-2 text-rose-500 hover:bg-rose-950/30 rounded-lg transition-all">
-                  <Trash size={18} />
-                </button>
-              </div>
+             
             </div>
 
             <div className="space-y-3 mb-8">
