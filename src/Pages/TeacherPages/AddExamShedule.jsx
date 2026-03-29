@@ -20,7 +20,7 @@ const AddExamSchedule = ({ refetch }) => {
 
   const { register, control, handleSubmit, reset } = useForm({
     defaultValues: {
-      class: "",
+      class_name: "",
       exam: "Third Semester",
       startDate: new Date(),
       endDate: new Date(),
@@ -103,12 +103,12 @@ const AddExamSchedule = ({ refetch }) => {
                 Select Class
               </label>
               <select
-                {...register("class", { required: true })}
+                {...register("class_name", { required: true })}
                 className="w-full bg-slate-900 border border-slate-700 rounded-sm p-3 text-slate-200 outline-none focus:border-blue-500"
               >
                 <option value="">-- Class --</option>
                 {classOptions.map((c) => (
-                  <option key={c} value={`class-${c}`}>
+                  <option key={c} value={c}>
                     Class {c}
                   </option>
                 ))}

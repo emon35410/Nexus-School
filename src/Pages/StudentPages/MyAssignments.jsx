@@ -12,10 +12,12 @@ import {
   X,
 } from "lucide-react";
 import useAuth from "../../Hooks/useAuth";
+import useStudent from "../../Hooks/useStudent";
 
 const MyAssignments = () => {
   const axiosSecure = useAxiosSecure();
   const { user } = useAuth();
+  const { student, studentLoading } = useStudent(); // Destructuring for cleaner code
   const [uploadingId, setUploadingId] = useState(null);
   const fileInputRef = useRef();
   const [selectedFile, setSelectedFile] = useState(null);
@@ -24,11 +26,11 @@ const MyAssignments = () => {
     queryKey: ["my-assignments", user?.email],
     queryFn: async () => {
       const res = await axiosSecure.get(
-        `/assignments/my-assignment?email=${user?.email}`,
+        `/assignments/my-assignment?className=${student.class_name}`,
       );
       return res.data;
     },
-    enabled: !!user?.email,
+    enabled: !!user?.email && !studentLoading && !!student?.class_name,
   });
 
   // upload logic
