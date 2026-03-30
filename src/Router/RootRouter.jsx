@@ -32,6 +32,8 @@ import UpdateRoutine from "../Pages/DynamicRoutine/UpdateRoutine";
 import MyExamSchedule from "../Pages/StudentPages/MyExamSchedule";
 import MyCourse from "../Pages/MyCourse/MyCourse";
 import StudentGiveResult from "../Pages/PublishResultSheet/StudentGiveResult";
+import Payments from "../Pages/AdminPages/Payments";
+import ComponentsChecker from "../Pages/ComponentsChecker";
 
 
 const router = createBrowserRouter([
@@ -166,6 +168,14 @@ const router = createBrowserRouter([
         path: '/dashboard/my-courses',
         Component: MyCourse,
       },
+      {
+        path: '/dashboard/payments',
+        Component: Payments
+      },
+      {
+        path: '/dashboard/check',
+        Component: ComponentsChecker
+      }
     ],
   },
 ]);
