@@ -14,7 +14,6 @@ const useStudent = () => {
         enabled: !loading && !!user?.email, 
         queryFn: async () => {
             const res = await axiosSecure.get(`/students/single-student?email=${user.email}`);
-            console.log('Student Info:', res.data);
             return res.data;
         }
     })

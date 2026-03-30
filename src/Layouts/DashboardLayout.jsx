@@ -5,6 +5,7 @@ import {
   Bell, LogOut, Menu, X, UserCircle, GraduationCap,
   ClipboardList,
   ClipboardClock,
+  CircleDollarSign,
 } from "lucide-react";
 import { AuthContext } from "../AuthContext/AuthContext";
 import NS1_logo from "../assets/NS1.png";
@@ -96,6 +97,13 @@ const NavLinks = ({
           isOpen={isOpen}
           onClick={() => isMobile && setMobileMenuOpen(false)}
         />
+        <SidebarLink
+          to="/dashboard/payments"
+          icon={<CircleDollarSign size={20} />}
+          label="Payments"
+          isOpen={isOpen}
+          onClick={() => isMobile && setMobileMenuOpen(false)}
+        />
       </>
     )}
 
@@ -153,6 +161,7 @@ const NavLinks = ({
         <SidebarLink to="/dashboard/my-assignments" icon={<FileText size={20} />} label="My Assignments" isOpen={isOpen} onClick={() => isMobile && setMobileMenuOpen(false)} />
         <SidebarLink to="/dashboard/class-routine" icon={<FaBookOpenReader size={20} />} label="Class Routine" isOpen={isOpen} onClick={() => isMobile && setMobileMenuOpen(false)} />
         <SidebarLink to="/dashboard/my-exam-schedule" icon={<ClipboardClock size={20} />} label="My Exam Schedule" isOpen={isOpen} onClick={() => isMobile && setMobileMenuOpen(false)} />
+        <SidebarLink to="/dashboard/my-payments" icon={<CircleDollarSign size={20} />} label="My Payments" isOpen={isOpen} onClick={() => isMobile && setMobileMenuOpen(false)} />
       </>
     )}
 

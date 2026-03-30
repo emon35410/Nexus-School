@@ -34,6 +34,9 @@ import MyCourse from "../Pages/MyCourse/MyCourse";
 import StudentGiveResult from "../Pages/PublishResultSheet/StudentGiveResult";
 import Payments from "../Pages/AdminPages/Payments";
 import ComponentsChecker from "../Pages/ComponentsChecker";
+import MyPayments from "../Pages/StudentPages/MyPayments";
+import PaymentSuccess from "../Pages/AdminPages/PaymentSuccess";
+import PaymentCancel from "../Pages/AdminPages/PaymentCancel";
 
 
 const router = createBrowserRouter([
@@ -173,8 +176,16 @@ const router = createBrowserRouter([
         Component: Payments
       },
       {
-        path: '/dashboard/check',
-        Component: ComponentsChecker
+        path: '/dashboard/my-payments',
+        Component: MyPayments
+      },
+      {
+        path: '/dashboard/payment-success',
+        Component: PaymentSuccess
+      },
+      {
+        path: '/dashboard/payment-cancel',
+        Component: PaymentCancel
       }
     ],
   },
