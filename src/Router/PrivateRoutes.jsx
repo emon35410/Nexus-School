@@ -1,19 +1,23 @@
 import React from 'react';
 
 import { Navigate, useLocation } from 'react-router';
-import useAuth from '../Hooks/useAuth';
+
 import NexusLoader from '../components/Nexusloader/Nexusloader';
+import useAuth from '../Hooks/useAuth';
 
 
 
 const PrivateRoutes = ({children}) => {
-    const {user,loading} = useAuth();
+    const { user, isLoading } = useAuth();
+    
     const location =useLocation()
-    if(loading){
+    if(isLoading){
         return <NexusLoader></NexusLoader>
     }
     if(!user){
-        return <Navigate state={{ from: location }} replace to="/login"></Navigate>
+        return (
+          <Navigate to="/login" state={location?.pathname} ></Navigate>
+        );
     }
     return children
 };

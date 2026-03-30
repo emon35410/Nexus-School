@@ -577,14 +577,14 @@ const ClassRoutine = () => {
       return res.data.result;
     },
   });
-
+ 
   const findSingleStudent = studentData.find(
     s => s?.email === user?.email,
   );
 
   const { data: routine = [], isLoading } = useQuery({
     queryKey: ['routine', findSingleStudent?.class_name],
-    enabled: !!findSingleStudent?.class_name,
+    // enabled: !!findSingleStudent?.class_name,
     queryFn: async () => {
       const res = await axiosSecure.get(
         `/routine?class_name=${findSingleStudent?.class_name}`,
@@ -592,7 +592,7 @@ const ClassRoutine = () => {
       return res.data;
     },
   });
-
+console.log(routine, 'is routine');
   const days = [
     'Saturday',
     'Sunday',

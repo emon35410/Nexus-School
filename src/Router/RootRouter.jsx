@@ -32,6 +32,7 @@ import UpdateRoutine from "../Pages/DynamicRoutine/UpdateRoutine";
 import MyExamSchedule from "../Pages/StudentPages/MyExamSchedule";
 import MyCourse from "../Pages/MyCourse/MyCourse";
 import StudentGiveResult from "../Pages/PublishResultSheet/StudentGiveResult";
+import PrivateRoutes from "./PrivateRoutes";
 
 
 const router = createBrowserRouter([
@@ -98,7 +99,9 @@ const router = createBrowserRouter([
       },
       {
         path: '/dashboard/manage-users',
-        Component: ManageUsers,
+        element: <PrivateRoutes>
+          <ManageUsers></ManageUsers>
+        </PrivateRoutes>,
       },
       {
         path: '/dashboard/admissions',
@@ -126,7 +129,9 @@ const router = createBrowserRouter([
       },
       {
         path: '/dashboard/manage-student',
-        Component: ManageStudents,
+        element: <PrivateRoutes>
+          <ManageStudents></ManageStudents>
+        </PrivateRoutes>,
       },
       {
         path: '/dashboard/exam-schedule',
@@ -134,11 +139,15 @@ const router = createBrowserRouter([
       },
       {
         path: '/dashboard/create-routine',
-        Component: CreateRoutine,
+        element: <PrivateRoutes>
+          <CreateRoutine></CreateRoutine>
+        </PrivateRoutes>,
       },
       {
         path: '/dashboard/class-routine',
-        Component: ClassRoutine,
+        element: <PrivateRoutes>
+          <ClassRoutine></ClassRoutine>
+        </PrivateRoutes>,
       },
 
       {
