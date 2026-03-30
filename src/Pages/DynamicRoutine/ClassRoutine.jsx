@@ -584,7 +584,7 @@ const ClassRoutine = () => {
 
   const { data: routine = [], isLoading } = useQuery({
     queryKey: ['routine', findSingleStudent?.class_name],
-    // enabled: !!findSingleStudent?.class_name,
+    enabled: !!findSingleStudent?.class_name,
     queryFn: async () => {
       const res = await axiosSecure.get(
         `/routine?class_name=${findSingleStudent?.class_name}`,

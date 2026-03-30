@@ -1,39 +1,41 @@
-import { createBrowserRouter } from "react-router";
-import MainLayout from "../Layouts/MainLayout";
-import Home from "../Pages/Home/Home";
-import Login from "../Pages/AuthPage/Login";
-import Register from "../Pages/AuthPage/Register";
-import Dashboard from "../Pages/Dashboard/Dashboard";
-import DashboardLayout from "../Layouts/DashboardLayout";
-import Notice from "../Pages/Notice/Notice";
-import Profile from "../Pages/Profile/Profile";
-import NotFound from "../components/NotFound/NotFound";
-import NexusLoader from "../components/Nexusloader/Nexusloader";
-import ManageUsers from "../Pages/ManageUsers/ManageUsers";
-import ViewNotice from "../Pages/Notice/ViewNotice";
-import Attendance from "../Pages/Dashboard/Teacher/Attendance";
-import AttendanceHistory from "../Pages/Dashboard/Teacher/AttendanceHistory";
-import Assignment from "../Pages/TeacherPages/Assignment";
-import MyAssignments from "../Pages/StudentPages/MyAssignments";
-import ManageStudents from "../Pages/mangeStudent/ManageStudents";
-import CreateRoutine from "../Pages/DynamicRoutine/CreateRoutine";
-import ClassRoutine from "../Pages/DynamicRoutine/ClassRoutine";
-import AdmissionForm from "../Pages/Admission/AdmissionForm";
-import AdmissionApplication from "../Pages/AdminAdmissionCheck/AdmissionApplication";
-import CreateResultSheet from "../Pages/PublishResultSheet/CreateResultSheet";
-import ExamShedule from "../Pages/TeacherPages/ExamShedule";
-import AllTeachers from "../Pages/BookingTeacher/AllTeachers";
-import ManageMeetings from "../Pages/ManageMeetings/ManageMeetings";
-import About from "../Pages/Home/About/About";
-import Contact from "../components/Home/Contact";
-import ResultSheet from "../Pages/PublishResultSheet/ResultSheet";
-import StudentResult from "../Pages/PublishResultSheet/StudentResult";
-import UpdateRoutine from "../Pages/DynamicRoutine/UpdateRoutine";
-import MyExamSchedule from "../Pages/StudentPages/MyExamSchedule";
-import MyCourse from "../Pages/MyCourse/MyCourse";
-import StudentGiveResult from "../Pages/PublishResultSheet/StudentGiveResult";
-import PrivateRoutes from "./PrivateRoutes";
-
+import { createBrowserRouter } from 'react-router';
+import MainLayout from '../Layouts/MainLayout';
+import Home from '../Pages/Home/Home';
+import Login from '../Pages/AuthPage/Login';
+import Register from '../Pages/AuthPage/Register';
+import Dashboard from '../Pages/Dashboard/Dashboard';
+import DashboardLayout from '../Layouts/DashboardLayout';
+import Notice from '../Pages/Notice/Notice';
+import Profile from '../Pages/Profile/Profile';
+import NotFound from '../components/NotFound/NotFound';
+import NexusLoader from '../components/Nexusloader/Nexusloader';
+import ManageUsers from '../Pages/ManageUsers/ManageUsers';
+import ViewNotice from '../Pages/Notice/ViewNotice';
+import Attendance from '../Pages/Dashboard/Teacher/Attendance';
+import AttendanceHistory from '../Pages/Dashboard/Teacher/AttendanceHistory';
+import Assignment from '../Pages/TeacherPages/Assignment';
+import MyAssignments from '../Pages/StudentPages/MyAssignments';
+import ManageStudents from '../Pages/mangeStudent/ManageStudents';
+import CreateRoutine from '../Pages/DynamicRoutine/CreateRoutine';
+import ClassRoutine from '../Pages/DynamicRoutine/ClassRoutine';
+import AdmissionForm from '../Pages/Admission/AdmissionForm';
+import AdmissionApplication from '../Pages/AdminAdmissionCheck/AdmissionApplication';
+import CreateResultSheet from '../Pages/PublishResultSheet/CreateResultSheet';
+import ExamShedule from '../Pages/TeacherPages/ExamShedule';
+import AllTeachers from '../Pages/BookingTeacher/AllTeachers';
+import ManageMeetings from '../Pages/ManageMeetings/ManageMeetings';
+import About from '../Pages/Home/About/About';
+import Contact from '../components/Home/Contact';
+import ResultSheet from '../Pages/PublishResultSheet/ResultSheet';
+import StudentResult from '../Pages/PublishResultSheet/StudentResult';
+import UpdateRoutine from '../Pages/DynamicRoutine/UpdateRoutine';
+import MyExamSchedule from '../Pages/StudentPages/MyExamSchedule';
+import MyCourse from '../Pages/MyCourse/MyCourse';
+import StudentGiveResult from '../Pages/PublishResultSheet/StudentGiveResult';
+import PrivateRoutes from './PrivetRoute/PrivateRoutes';
+import AdminPrivetRoute from './PrivetRoute/AdminPrivetRoute';
+import TeacherPrivRoute from './PrivetRoute/TeacherPrivRoute';
+import StudentPrivRoute from './PrivetRoute/StudentPrivRoute';
 
 const router = createBrowserRouter([
   {
@@ -87,7 +89,11 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        Component: Dashboard,
+        element: (
+          <PrivateRoutes>
+            <Dashboard></Dashboard>
+          </PrivateRoutes>
+        ),
       },
       {
         path: '/dashboard/noticepost',
@@ -99,9 +105,11 @@ const router = createBrowserRouter([
       },
       {
         path: '/dashboard/manage-users',
-        element: <PrivateRoutes>
-          <ManageUsers></ManageUsers>
-        </PrivateRoutes>,
+        element: (
+          <PrivateRoutes>
+            <ManageUsers></ManageUsers>
+          </PrivateRoutes>
+        ),
       },
       {
         path: '/dashboard/admissions',
@@ -129,9 +137,12 @@ const router = createBrowserRouter([
       },
       {
         path: '/dashboard/manage-student',
-        element: <PrivateRoutes>
-          <ManageStudents></ManageStudents>
-        </PrivateRoutes>,
+        element: (
+         <TeacherPrivRoute>
+              <ManageStudents></ManageStudents>
+            </TeacherPrivRoute>
+          
+        ),
       },
       {
         path: '/dashboard/exam-schedule',
@@ -139,15 +150,20 @@ const router = createBrowserRouter([
       },
       {
         path: '/dashboard/create-routine',
-        element: <PrivateRoutes>
-          <CreateRoutine></CreateRoutine>
-        </PrivateRoutes>,
+        element: (
+         <AdminPrivetRoute>
+              <CreateRoutine></CreateRoutine>
+            </AdminPrivetRoute>
+         
+        ),
       },
       {
         path: '/dashboard/class-routine',
-        element: <PrivateRoutes>
-          <ClassRoutine></ClassRoutine>
-        </PrivateRoutes>,
+        element: (<StudentPrivRoute>
+              <ClassRoutine></ClassRoutine>
+            </StudentPrivRoute>
+          
+        ),
       },
 
       {
@@ -162,7 +178,7 @@ const router = createBrowserRouter([
         path: '/dashboard/student-result',
         Component: StudentResult,
       },
-      
+
       {
         path: '/dashboard/check-routine',
         Component: UpdateRoutine,
