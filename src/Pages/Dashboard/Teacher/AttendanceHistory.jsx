@@ -9,13 +9,14 @@ const AttendanceHistory = () => {
   const [attendanceData, setAttendanceData] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  
+
   useEffect(() => {
     if (!className || !selectedDate) return;
 
     setLoading(true);
 
-    const dateStr = selectedDate.toISOString().split("T")[0]; // YYYY-MM-DD format
+    // সঠিক লোকাল ডেট ফরম্যাট (YYYY-MM-DD)
+    const dateStr = selectedDate.toLocaleDateString('en-CA');
 
     axios
       .get("http://localhost:5000/attendance", {
@@ -49,7 +50,8 @@ const AttendanceHistory = () => {
           >
             <option value="">Select Class</option>
             {[...Array(10)].map((_, i) => (
-              <option key={i} value={`class-${i + 1}`}>
+              // value হিসেবে শুধু সংখ্যা পাঠান: "1", "2" ইত্যাদি
+              <option key={i} value={`${i + 1}`}>
                 Class {i + 1}
               </option>
             ))}
@@ -98,11 +100,10 @@ const AttendanceHistory = () => {
                     <td className="p-2">{i + 1}</td>
                     <td className="p-2">{student.name}</td>
                     <td
-                      className={`p-2 font-semibold ${
-                        student.status === "present"
-                          ? "text-green-600"
-                          : "text-red-600"
-                      }`}
+                      className={`p-2 font-semibold ${student.status === "present"
+                        ? "text-green-600"
+                        : "text-red-600"
+                        }`}
                     >
                       {student.status}
                     </td>

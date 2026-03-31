@@ -8,21 +8,23 @@ const Attendance = () => {
   const [date, setDate] = useState("");
   const [loading, setLoading] = useState(false);
 
-  
+
   useEffect(() => {
     if (!className) return;
 
     axios
-      .get(`http://localhost:5000/students?className=${className}`)
+      .get(`http://localhost:5000/students?class_name=${className}`)
       .then((res) => {
-        const formatted = res.data.map((student) => ({
-          studentId: student._id,
-          name: student.name,
-          status: "present",
-        }));
-
-        setStudents(formatted);
-      });
+        if (res.data && res.data.result) {
+          const formatted = res.data.result.map((student) => ({
+            studentId: student._id,
+            name: student.name,
+            status: "present",
+          }));
+          setStudents(formatted);
+        }
+      })
+      .catch(err => console.log("Fetch error:", err));
   }, [className]);
 
   //  Change status update code
@@ -78,7 +80,8 @@ const Attendance = () => {
           >
             <option value="">Select Class</option>
             {[...Array(10)].map((_, i) => (
-              <option key={i} value={`class-${i + 1}`}>
+              // এখানে value হবে শুধু সংখ্যা (যেমন: "1", "2"...)
+              <option key={i} value={`${i + 1}`}>
                 Class {i + 1}
               </option>
             ))}
@@ -101,7 +104,7 @@ const Attendance = () => {
         </div>
 
         {/* Student Table */}
-        git add .
+
         <div className="overflow-x-auto">
           <table className="w-full border">
 
@@ -127,11 +130,10 @@ const Attendance = () => {
                       onClick={() =>
                         handleStatusChange(index, "present")
                       }
-                      className={`px-4 py-1 rounded-full text-white ${
-                        student.status === "present"
-                          ? "bg-green-500"
-                          : "bg-gray-400"
-                      }`}
+                      className={`px-4 py-1 rounded-full text-white ${student.status === "present"
+                        ? "bg-green-500"
+                        : "bg-gray-400"
+                        }`}
                     >
                       Present
                     </button>
@@ -140,11 +142,10 @@ const Attendance = () => {
                       onClick={() =>
                         handleStatusChange(index, "absent")
                       }
-                      className={`px-4 py-1 rounded-full text-white ${
-                        student.status === "absent"
-                          ? "bg-red-500"
-                          : "bg-gray-400"
-                      }`}
+                      className={`px-4 py-1 rounded-full text-white ${student.status === "absent"
+                        ? "bg-red-500"
+                        : "bg-gray-400"
+                        }`}
                     >
                       Absent
                     </button>
