@@ -30,8 +30,7 @@ const MyPayments = () => {
     enabled: !!student?.class_name,
   });
 
-  console.log(myPayments);
-
+ 
   if (isLoading) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] gap-4">
