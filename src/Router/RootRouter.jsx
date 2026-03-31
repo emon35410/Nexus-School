@@ -36,6 +36,10 @@ import PrivateRoutes from './PrivetRoute/PrivateRoutes';
 import AdminPrivetRoute from './PrivetRoute/AdminPrivetRoute';
 import TeacherPrivRoute from './PrivetRoute/TeacherPrivRoute';
 import StudentPrivRoute from './PrivetRoute/StudentPrivRoute';
+import MyPayments from '../Pages/StudentPages/MyPayments';
+import PaymentSuccess from '../Pages/AdminPages/PaymentSuccess';
+import PaymentCancel from '../Pages/AdminPages/PaymentCancel';
+import CreatePayment from '../Pages/AdminPages/Payments';
 
 const router = createBrowserRouter([
   {
@@ -191,6 +195,22 @@ const router = createBrowserRouter([
         path: '/dashboard/my-courses',
         Component: MyCourse,
       },
+      {
+        path: '/dashboard/payments',
+        Component: CreatePayment
+      },
+      {
+        path: '/dashboard/my-payments',
+        Component: MyPayments
+      },
+      {
+        path: '/dashboard/payment-success',
+        Component: PaymentSuccess
+      },
+      {
+        path: '/dashboard/payment-cancel',
+        Component: PaymentCancel
+      }
     ],
   },
 ]);
