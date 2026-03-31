@@ -174,7 +174,7 @@ const Navbar = () => {
       </div>
 
       {/* --- Mobile Sidebar (Drawer) --- */}
-      <nav className={`md:hidden fixed inset-0 z-1000 transition-all duration-300 ${activeRes ? "visible opacity-100" : "invisible opacity-0"}`}>
+      <nav className={`md:hidden fixed inset-0 bg-white z-1000 transition-all duration-300 ${activeRes ? "visible opacity-100" : "invisible opacity-0"}`}>
         <div onClick={() => setActiveRes(false)} className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm" />
         <div className={`absolute top-0 left-0 w-[80%] max-w-75 h-full bg-white shadow-2xl transition-transform duration-500 ease-out flex flex-col ${activeRes ? "translate-x-0" : "-translate-x-full"}`}>
           
@@ -186,7 +186,7 @@ const Navbar = () => {
              <button onClick={() => setActiveRes(false)} className="p-2 bg-white rounded-lg border border-slate-100 text-slate-400"><X size={20} /></button>
           </div>
 
-          <ul onClick={() => setActiveRes(false)} className="p-6 flex flex-col gap-2 font-bold text-slate-600">
+          <ul onClick={() => setActiveRes(false)} className="p-6 bg-white flex flex-col gap-2 font-bold text-slate-600">
             {links}
           </ul>
 

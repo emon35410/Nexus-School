@@ -16,7 +16,7 @@ const StudentPrivRoute = ({children}) => {
     return <Navigate to="/login" state={location?.pathname} replace></Navigate>;
   }
   
-  if (!role !== 'student') {
+  if (role !== 'student') {
     return <Navigate to="/"  replace></Navigate>;
   }
   return children
