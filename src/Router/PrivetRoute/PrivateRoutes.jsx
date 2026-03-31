@@ -12,6 +12,8 @@ const PrivateRoutes = ({ children }) => {
   if (isLoading) {
     return <NexusLoader></NexusLoader>;
   }
+
+  console.log(user)
   if (!user) {
     return <Navigate to="/login" state={location?.pathname}></Navigate>;
   }
