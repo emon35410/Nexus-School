@@ -577,7 +577,7 @@ const ClassRoutine = () => {
       return res.data.result;
     },
   });
-
+ 
   const findSingleStudent = studentData.find(
     s => s?.email === user?.email,
   );
@@ -592,7 +592,7 @@ const ClassRoutine = () => {
       return res.data;
     },
   });
-
+console.log(routine, 'is routine');
   const days = [
     'Saturday',
     'Sunday',

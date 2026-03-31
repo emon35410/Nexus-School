@@ -5,6 +5,10 @@ import StudentDashboard from '../DashboardHomepage/StudentDashboard';
 import AdminDashboard from '../DashboardHomepage/AdminDashboard';
 import TeacherDashboard from '../DashboardHomepage/TeacherDashboard';
 
+import AdminPrivetRoute from '../../Router/PrivetRoute/AdminPrivetRoute';
+import TeacherPrivRoute from '../../Router/PrivetRoute/TeacherPrivRoute';
+import StudentPrivRoute from '../../Router/PrivetRoute/StudentPrivRoute';
+
 
 const Dashboard = () => {
     const [role, roleLoading] = useRole();
@@ -16,10 +20,24 @@ const Dashboard = () => {
     }
    
     // role based rendering
-    if (role === 'admin') return <AdminDashboard />;
-    if (role === 'teacher') return <TeacherDashboard />;
+    if (role === 'admin') return (
+        <AdminPrivetRoute>
+          <AdminDashboard />
+        </AdminPrivetRoute>);
+    if (role === 'teacher') return (
+        <TeacherPrivRoute>
+          <TeacherDashboard />
+        </TeacherPrivRoute>
+      
+    );
   
-    return <StudentDashboard />;
+    return (
+      
+        <StudentPrivRoute>
+          <StudentDashboard />
+        </StudentPrivRoute>
+      
+    );
 };
 
 export default Dashboard;

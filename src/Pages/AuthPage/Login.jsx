@@ -2,10 +2,13 @@ import React, { use, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router";
 import { AuthContext } from "../../AuthContext/AuthContext";
-import { toast } from 'react-toastify';
+import { toast } from 'react-hot-toast';
 import SocialLogin from "../../components/Shared/SocialLogin";
-import { doc, getDoc, updateDoc } from 'firebase/firestore';
-import { db } from '../../auth/authInit';
+import useAxiosInstance from "../../Hooks/useAxiosInstance";
+
+
+
+
 
 
 const Login = () => {
@@ -13,68 +16,41 @@ const Login = () => {
   const { loginUser,userPassRest } = use(AuthContext);
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const axisoNormal=useAxiosInstance()
   
 
   const handleLogin = async userInfo => {
      setLoading(true);
     if (!userInfo?.email) {
+      setLoading(false);
       toast.error('Please enter a valid email');
       return;
     }
-
-    const docRef = doc(db, 'users', userInfo.email);
-    const docSnap = await getDoc(docRef);
-
-    if (!docSnap.exists()) {
-      toast.info('User not found');
-      setLoading(false)
-      return;
-    }
-
-    const userData = docSnap.data();
-
-    if (userData.lockUntil && Date.now() < userData.lockUntil) {
-      toast.info('Account is locked. Try again later ❌');
-      setLoading(false)
-      return;
-    }
-
     try {
+      const user = await axisoNormal.get(`/temp/check-locke?email=${userInfo?.email}`);
+      if (user?.data?.locked) {
+         setLoading(false);
+        return toast.error(
+          `your account is locked for 2 minutes`,
+        );
+      }
      
-
-      // ✅ login try
+    // ✅ login try
       const res = await loginUser(userInfo.email, userInfo.password);
-
-      // ✅ success  then reset
-      await updateDoc(docRef, {
-        wrongAttempts: 0,
-        lockUntil: null,
-      });
-
       toast.success('Login successful!');
       navigate('/');
+
+      await axisoNormal.patch('/temp/success',{email:userInfo?.email});
+
     } catch (err) {
       toast.error(err.message);
-
-      const freshSnap = await getDoc(docRef);
-      const freshData = freshSnap.data();
-
-      const attempts = (freshData.wrongAttempts || 0) + 1;
-
-      if (attempts >= 3) {
-        await updateDoc(docRef, {
-          wrongAttempts: 0,
-          lockUntil: Date.now() + 30 * 1000, // 30 sec
-        });
-
-        toast.info('Account locked for 30 seconds 🔒');
-      } else {
-        await updateDoc(docRef, {
-          wrongAttempts: attempts,
-        });
-
-        toast.info(`Wrong attempts: ${attempts}`);
+      const updateTempCount = await axisoNormal.patch('/temp/login-failed', {
+        email: userInfo?.email,
+      });
+      if (updateTempCount?.data?.message) {
+        toast.error(updateTempCount?.data?.message);
       }
+
     } finally {
       setLoading(false);
     }
