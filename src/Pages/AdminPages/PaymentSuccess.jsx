@@ -15,7 +15,6 @@ const PaymentSuccess = () => {
       axiosSecure
         .post(`/payments/payment-success?session_id=${sessionId}`)
         .then((res) => {
-          console.log(res);
             setStatus("success");
             SetResInfo(res)
         })
@@ -25,6 +24,8 @@ const PaymentSuccess = () => {
         });
     }
   }, [axiosSecure, sessionId]);
+    
+    console.log(resInfo)
 
   // --- LOADING STATE ---
   if (status === "verifying") {
@@ -72,7 +73,7 @@ const PaymentSuccess = () => {
           <div className="space-y-3 mb-10">
             <div className="flex justify-between items-center p-4 bg-slate-900/50 rounded-2xl border border-slate-800">
               <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Session ID</span>
-              <span className="text-xs font-mono text-blue-400">{resInfo?.data.transition_id?.slice(0, 15)}...</span>
+              <span className="text-xs font-mono text-blue-400">{resInfo?.data.transition_id}...</span>
             </div>
             <div className="flex justify-between items-center p-4 bg-slate-900/50 rounded-2xl border border-slate-800">
               <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Status</span>
