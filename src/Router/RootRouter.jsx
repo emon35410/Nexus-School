@@ -45,7 +45,7 @@ const router = createBrowserRouter([
   {
     path: '/',
     Component: MainLayout,
-    errorElement: <NotFound></NotFound>,
+    // errorElement: <NotFound></NotFound>,
     hydrateFallbackElement: <NexusLoader></NexusLoader>,
     children: [
       {

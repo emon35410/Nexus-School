@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router"; // react-router-dom ও হতে পারে আপনার ভার্সন অনুযায়ী
 import { Facebook, Instagram, Linkedin, Mail, Phone, MapPin, Twitter, ArrowRight } from "lucide-react";
 import logoimg from '../../assets/NS1.png';
+import Logo from "../UI/Logo";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -30,14 +31,7 @@ const Footer = () => {
           
           {/* 1. School Branding & Socials */}
           <div className="space-y-6">
-            <Link to="/" className="flex items-center gap-3 group">
-              <div className="h-10 w-10 rounded-xl overflow-hidden shadow-md group-hover:scale-110 transition-transform">
-                <img className="w-full h-full object-cover" src={logoimg} alt="Nexus School Logo" />
-              </div>
-              <span className="text-2xl font-extrabold bg-gradient-to-r from-indigo-600 to-violet-600 bg-clip-text text-transparent">
-                Nexus School
-              </span>
-            </Link>
+            <Logo />
             <p className="text-slate-500 text-sm leading-relaxed">
               Empowering the next generation with modern education and digital management. 
               Bridging the gap between students, teachers, and parents through innovation.

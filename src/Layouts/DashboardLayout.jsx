@@ -19,6 +19,7 @@ import { BiSpreadsheet } from 'react-icons/bi';
 import { IoIosNotifications } from 'react-icons/io';
 import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../Hooks/useAxiosSecure";
+import Logo from "../components/UI/Logo";
 
 // --- SidebarLink Helper Component ---
 const SidebarLink = ({ to, icon, label, isOpen, end = false, onClick }) => (
@@ -246,16 +247,7 @@ const DashboardLayout = () => {
           className={`absolute left-0 top-0 h-full w-72 bg-[#1E293B] p-6 transition-transform duration-300 flex flex-col ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}
         >
           <div className="flex justify-between items-center mb-10">
-            <div className="flex items-center gap-3">
-              <img
-                src={NS1_logo}
-                alt="Logo"
-                className="h-10 w-10 rounded-full"
-              />
-              <span className="font-bold text-white tracking-tight">
-                NEXUS-SCHOOL
-              </span>
-            </div>
+            <Logo />
             <button
               onClick={() => setMobileMenuOpen(false)}
               className="p-2 bg-slate-800 rounded-lg text-slate-400"
