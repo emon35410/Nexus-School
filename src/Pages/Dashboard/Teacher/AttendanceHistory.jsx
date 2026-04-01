@@ -14,7 +14,8 @@ import {
 } from 'lucide-react';
 
 const AttendanceHistory = () => {
-  const [selectedDate, setSelectedDate] = useState(null);
+  // আজ পর্যন্ত ডেট সিলেক্ট করা যাবে এমন লিমিট রাখা ভালো
+  const [selectedDate, setSelectedDate] = useState(new Date()); 
   const [className, setClassName] = useState("");
   const [attendanceData, setAttendanceData] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -23,7 +24,11 @@ const AttendanceHistory = () => {
     if (!className || !selectedDate) return;
     setLoading(true);
 
-    const dateStr = selectedDate.toLocaleDateString('en-CA');
+    // Date formatting logic (ISO format YYYY-MM-DD)
+    const year = selectedDate.getFullYear();
+    const month = String(selectedDate.getMonth() + 1).padStart(2, '0');
+    const day = String(selectedDate.getDate()).padStart(2, '0');
+    const dateStr = `${year}-${month}-${day}`;
 
     axios
       .get("http://localhost:5000/attendance", {
@@ -61,10 +66,10 @@ const AttendanceHistory = () => {
         </div>
 
         {/* Filters Section */}
-        <div className="bg-[#0F172A] border border-slate-800 rounded-[1.5rem] md:rounded-[2.5rem] p-6 md:p-8 shadow-2xl relative overflow-hidden mb-10">
+        <div className="bg-[#0F172A] border border-slate-800 rounded-3xl p-6 md:p-8 shadow-2xl relative mb-10">
           <div className="absolute top-0 right-0 w-64 h-64 bg-blue-600/5 blur-[100px] pointer-events-none"></div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-end">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-end relative z-20">
             {/* Class Dropdown */}
             <div className="w-full">
               <label className="text-[10px] font-black uppercase tracking-[0.18em] text-slate-400 mb-2 flex items-center gap-2 ml-1">
@@ -88,26 +93,62 @@ const AttendanceHistory = () => {
               </div>
             </div>
 
-            {/* Date Picker */}
+            {/* Date Picker - FIXED WRAPPER */}
             <div className="w-full">
               <label className="text-[10px] font-black uppercase tracking-[0.18em] text-slate-400 mb-2 flex items-center gap-2 ml-1">
                 Reference Date
               </label>
               <div className="relative group">
-                <div className="flex items-center bg-[#111827] border-2 border-slate-800 rounded-xl overflow-hidden transition-all group-focus-within:border-blue-600">
+                <div className="flex items-center bg-[#111827] border-2 border-slate-800 rounded-xl transition-all group-focus-within:border-blue-600">
                   <div className="pl-4 text-slate-500"><Calendar size={18} /></div>
                   <DatePicker
                     selected={selectedDate}
                     onChange={(date) => setSelectedDate(date)}
-                    className="w-full bg-transparent p-4 text-slate-200 placeholder:text-slate-700 outline-none text-sm font-medium"
+                    dateFormat="dd/MM/yyyy"
+                    maxDate={new Date()} // ভবিষ্যতে ডেট সিলেক্ট করা বন্ধ
                     placeholderText="Select Date"
-                    dateFormat="yyyy-MM-dd"
+                    className="w-full bg-transparent p-4 text-slate-200 placeholder:text-slate-700 outline-none text-sm font-medium cursor-pointer"
+                    wrapperClassName="w-full" // ফিক্সড ক্যালেন্ডার পজিশন
+                    popperPlacement="bottom-start"
                   />
                 </div>
               </div>
             </div>
           </div>
         </div>
+
+        {/* CSS for DatePicker - এটি আপনার Global CSS ফাইলে যোগ করতে পারেন */}
+        <style>{`
+          .react-datepicker {
+            background-color: #1e293b !important;
+            border: 1px solid #334155 !important;
+            font-family: inherit !important;
+            border-radius: 12px !important;
+            overflow: hidden;
+          }
+          .react-datepicker__header {
+            background-color: #0f172a !important;
+            border-bottom: 1px solid #334155 !important;
+          }
+          .react-datepicker__current-month, .react-datepicker__day-name {
+            color: #f8fafc !important;
+          }
+          .react-datepicker__day {
+            color: #cbd5e1 !important;
+          }
+          .react-datepicker__day:hover {
+            background-color: #3b82f6 !important;
+            color: white !important;
+          }
+          .react-datepicker__day--selected {
+            background-color: #2563eb !important;
+            color: white !important;
+            border-radius: 8px !important;
+          }
+          .react-datepicker__day--disabled {
+            color: #475569 !important;
+          }
+        `}</style>
 
         {/* Content Area */}
         <div className="space-y-8">
@@ -121,7 +162,7 @@ const AttendanceHistory = () => {
           {!loading && attendanceData.length === 0 && className && selectedDate && (
             <div className="bg-rose-500/5 border border-rose-500/20 rounded-2xl p-12 text-center">
               <History size={48} className="mx-auto text-rose-500/30 mb-4" />
-              <p className="text-rose-500 font-bold uppercase tracking-widest text-xs">No records found for this criteria</p>
+              <p className="text-rose-500 font-bold uppercase tracking-widest text-xs">No records found for Class {className}</p>
             </div>
           )}
 
