@@ -63,7 +63,7 @@ const Testimonials = () => {
         </div>
 
         {/* Carousel implementation */}
-        <div className="relative px-4 md:px-10">
+        <div className="relative px-4 md:px-10 overflow-hidden">
           <Swiper
             modules={[Autoplay, Pagination, Navigation]}
             spaceBetween={30}
