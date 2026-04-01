@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router";
 import { AuthContext } from "../../AuthContext/AuthContext";
 import { toast } from 'react-hot-toast';
 import SocialLogin from "../../components/Shared/SocialLogin";
-import useAxiosInstance from "../../Hooks/useAxiosInstance";
+import useAxiosSecure from "../../Hooks/useAxiosSecure";
 
 
 
@@ -16,7 +16,7 @@ const Login = () => {
   const { loginUser,userPassRest } = use(AuthContext);
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const axisoNormal=useAxiosInstance()
+  const axisoNormal=useAxiosSecure()
   
 
   const handleLogin = async userInfo => {
