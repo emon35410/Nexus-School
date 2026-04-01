@@ -11,7 +11,7 @@ const StudentDashboard = ({ userData }) => {
   const section = userData?.section || "A";
 
   return (
-    <div className="space-y-8 animate-in fade-in duration-700">
+    <div className="space-y-8 animate-in fade-in duration-700 ">
       
       {/* 1. Welcome & Class Info Card */}
       <div className="relative overflow-hidden bg-linear-to-br from-indigo-600 to-blue-700 p-8 rounded-4xl text-white shadow-2xl shadow-blue-900/20">

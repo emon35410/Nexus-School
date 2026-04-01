@@ -7,8 +7,6 @@ import SocialLogin from "../../components/Shared/SocialLogin";
 import toast from "react-hot-toast";
 import axios from "axios";
 import useAxiosSecure from "../../Hooks/useAxiosSecure";
-import { db } from '../../auth/authInit';
-import { doc, setDoc } from 'firebase/firestore';
 
 const Register = () => {
   const {
@@ -33,12 +31,7 @@ const Register = () => {
        toast.success('Success');
         navigate('/');
 
-      // save user action on fireStore
-      const docRef = await setDoc(doc(db, 'users', userInfo.email), {
-        email: userInfo.email,
-        wrongAttempts: 0,
-        lockUntil: null,
-      });
+      
 
       // form image for profile
       const profilePhoto = userInfo.photo[0];
@@ -76,6 +69,8 @@ const Register = () => {
         image: res.user.photoURL
       };
 
+      console.log(userInfoDb, 'tis is form db problem')
+
       const dbRes = await axiosSecure.post('/users', userInfoDb);
       console.log(dbRes)
         
@@ -83,13 +78,14 @@ const Register = () => {
       
     } catch (err) {
       toast.error(err.message);
+      console.log(err)
     } finally {
       setLoading(false);
     }
   };
 
 
-  console.log(user)
+  
 
 
   return (

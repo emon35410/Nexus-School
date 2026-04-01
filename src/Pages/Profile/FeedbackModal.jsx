@@ -1,53 +1,92 @@
 import React from 'react';
 import { FiHexagon, FiX, FiArrowRight } from 'react-icons/fi';
-import { FaBook } from 'react-icons/fa';
-import { HiHomeModern } from 'react-icons/hi2';
+import { FaBook, FaUserTie } from 'react-icons/fa';
+
+import { MdOutlineMessage } from 'react-icons/md';
 
 const FeedbackModal = ({ setIsFeedback,feedbacks }) => {
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm border-b-2  ">
-      {/* Modal Container */}
-      <div className="relative w-full max-w-md p-[2px] overflow-auto rounded-3xl bg-gradient-to-br from-cyan-500 via-purple-500 to-pink-500 h-[400px] ">
-        <div className="relative bg-slate-900 rounded-[22px] p-8 text-white">
-          {/* Close Button */}
-          <button
-            onClick={() => setIsFeedback(false)}
-            className="absolute p-2 transition-colors top-4 right-4 text-slate-400 hover:text-white hover:bg-white/10 rounded-xl"
-          >
-            <FiX size={20} />
-          </button>
+    
 
-          {/* Icon Header */}
-          <div className="flex items-center justify-center w-16 h-16 mb-6 rounded-2xl bg-gradient-to-tr from-cyan-500/20 to-purple-500/20 border border-white/10">
-            <FiHexagon className="text-cyan-400 animate-pulse" size={32} />
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md">
+      {/* Modal Container with Animated Border Wrapper */}
+      <div className="relative w-full max-w-md group">
+        {/* The Neon Glow Border */}
+        <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-600 via-cyan-500 to-blue-400 rounded-[24px] blur opacity-30 group-hover:opacity-50 transition duration-1000"></div>
+
+        <div className="relative bg-slate-900 rounded-[22px] overflow-hidden border border-slate-800 shadow-2xl">
+          {/* Sticky Header Section */}
+          <div className="p-6 border-b border-slate-800 bg-slate-900/50 backdrop-blur-md flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/30">
+                <FiHexagon className="text-blue-400 animate-pulse" size={24} />
+              </div>
+              <div>
+                <h3 className="text-xl font-bold text-white tracking-tight">
+                  Teacher Insights
+                </h3>
+                <p className="text-xs text-blue-500 font-semibold uppercase tracking-widest">
+                  Feedback Stream
+                </p>
+              </div>
+            </div>
+
+            {/* Close Button */}
+            <button
+              onClick={() => setIsFeedback(false)}
+              className="p-2 transition-all text-slate-500 hover:text-white hover:bg-slate-800 rounded-xl active:scale-90"
+            >
+              <FiX size={20} />
+            </button>
           </div>
 
-          {/* Text Content */}
-          {feedbacks.map(feedback => (
-            <div key={feedback._id} className="space-y-2 border-b mb-2 ">
-              <h2 className="text-3xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white to-slate-400 flex items-center space-x-2">
-                <span>
-                  <FaBook size={20} className=" text-blue-400 " />
-                </span>{' '}
-                <span>{feedback?.subject}</span>
-              </h2>
-              <h3 className="text-sm font-medium tracking-widest uppercase text-cyan-400 flex items-center space-x-2">
-                <span>
-                  <HiHomeModern size={20} className=" text-blue-400 " />{' '}
-                </span>
-                <span>{feedback?.class}</span>
-              </h3>
-              <p className="pt-2 leading-relaxed text-slate-400 mb-2">
-                {feedback?.feedback}
-              </p>
-            </div>
-          ))}
+          {/* Scrollable Content Area */}
+          <div className="max-h-[60vh] overflow-y-auto p-6 space-y-6 custom-scrollbar">
+            {feedbacks.length > 0 ? (
+              feedbacks.map(feedback => (
+                <div
+                  key={feedback._id}
+                  className="relative pl-6 border-l-2 border-slate-800 hover:border-blue-500 transition-colors group/item"
+                >
+                  {/* Teacher Name & Icon */}
+                  <div className="flex items-center gap-2 mb-2">
+                    <div className="p-1.5 rounded-lg bg-slate-800 text-blue-400 group-hover/item:bg-blue-600 group-hover/item:text-white transition-all">
+                      <FaUserTie size={14} />
+                    </div>
+                    <h4 className="text-lg font-bold text-slate-200 tracking-tight">
+                      {feedback?.teacherName || 'Anonymous Instructor'}
+                    </h4>
+                  </div>
 
-          {/* Action Button
-          <button className="flex items-center justify-center w-full gap-2 py-4 mt-8 font-bold transition-all duration-300 group rounded-2xl bg-white text-slate-950 hover:bg-cyan-400">
-            Initiate Warp
-            <FiArrowRight className="transition-transform group-hover:translate-x-1" />
-          </button> */}
+                  {/* Feedback Message */}
+                  <div className="flex gap-3 bg-slate-800/30 p-4 rounded-2xl rounded-tl-none border border-slate-800 group-hover/item:bg-slate-800/50 transition-all">
+                    <MdOutlineMessage
+                      size={18}
+                      className="text-blue-500 shrink-0 mt-1"
+                    />
+                    <p className="text-sm leading-relaxed text-slate-400">
+                      {feedback?.feedback || 'No detailed commentary provided.'}
+                    </p>
+                  </div>
+
+                  {/* Date/Time Placeholder (Dummy text for design completeness) */}
+                  <p className="mt-2 text-[10px] text-slate-600 uppercase font-bold tracking-widest ml-1">
+                    Verified Feedback • {new Date(feedback?.feedbackAt).toLocaleDateString()}
+                  </p>
+                </div>
+              ))
+            ) : (
+              /* Empty State Dummy Text */
+              <div className="text-center py-10">
+                <p className="text-slate-500 italic">
+                  No feedback entries found for this student.
+                </p>
+              </div>
+            )}
+          </div>
+
+          {/* Bottom Decorative Bar */}
+          <div className="h-1 w-full bg-gradient-to-r from-transparent via-blue-500/50 to-transparent"></div>
         </div>
       </div>
     </div>

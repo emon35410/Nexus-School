@@ -1,6 +1,7 @@
 import axios from 'axios';
 import useAuth from './useAuth';
 import { useEffect } from 'react';
+import { useNavigate } from 'react-router';
 
 const axiosSecure = axios.create({
     baseURL: 'http://localhost:5000'
@@ -8,11 +9,17 @@ const axiosSecure = axios.create({
 })
 
 const useAxiosSecure = () => {
-    const { user } = useAuth();
+    const { user, logOut } = useAuth();
+    const navigate=useNavigate()
     
     useEffect(() => {
-        const requestInterceptor = axiosSecure.interceptors.request.use((config) => {
-        config.headers.Authorization = `Bearer ${user?.accessToken}`;
+        const requestInterceptor = axiosSecure.interceptors.request.use(async(config) => {
+            if (user) {
+                // console.log(user.accessToken)
+                const token = await user.getIdToken(); 
+                config.headers.Authorization = `Bearer ${token}`;
+            }
+        
         return config;
         })
 
@@ -23,9 +30,17 @@ const useAxiosSecure = () => {
                 return response;
             },
 
-            (error) => {
+            async(error) => {
+                let responseStatus= error?.response?.status;
                 console.log(error)
-
+                
+                if (responseStatus === 401 || responseStatus === 403) {
+                   await logOut().then(() => {
+                         navigate('/login');
+                    })
+                   
+                    
+                }
 
                 return Promise.reject(error);
             }
@@ -38,7 +53,7 @@ const useAxiosSecure = () => {
         }
         
 
-    },[user])
+    },[user,logOut,navigate])
 
     return axiosSecure;
 }
