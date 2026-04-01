@@ -108,7 +108,9 @@ const router = createBrowserRouter([
       },
       {
         path: '/dashboard/profile',
-        Component: Profile,
+        element: <PrivateRoutes>
+          <Profile></Profile>
+        </PrivateRoutes>
       },
       {
         path: '/dashboard/manage-users',
@@ -175,20 +177,28 @@ const router = createBrowserRouter([
 
       {
         path: '/dashboard/student-give-result',
-        Component: StudentGiveResult,
+        element: <AdminPrivetRoute>
+          <StudentGiveResult></StudentGiveResult>
+        </AdminPrivetRoute>
       },
       {
         path: '/dashboard/student-give-result/:id',
-        Component: CreateResultSheet,
+        element: <AdminPrivetRoute>
+          <CreateResultSheet></CreateResultSheet>
+        </AdminPrivetRoute>
       },
       {
         path: '/dashboard/student-result',
-        Component: StudentResult,
+        element: <StudentPrivRoute>
+          <StudentResult></StudentResult>
+        </StudentPrivRoute>
       },
 
       {
         path: '/dashboard/check-routine',
-        Component: UpdateRoutine,
+        element: <AdminPrivetRoute>
+          <UpdateRoutine></UpdateRoutine>
+        </AdminPrivetRoute>
       },
       {
         path: '/dashboard/my-exam-schedule',
