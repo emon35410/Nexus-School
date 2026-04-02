@@ -3,7 +3,7 @@ import useStudent from "../../Hooks/useStudent";
 import useAxiosSecure from "../../Hooks/useAxiosSecure";
 import { useQuery } from "@tanstack/react-query";
 import DownloadExamRoutine from "../../components/UI/DownloadExamRoutine";
-import { BookOpen, Clock, Edit, Trash, X } from "lucide-react";
+import { BookOpen, Calendar, Clock, Edit, Trash, X } from "lucide-react";
 
 const MyExamSchedule = () => {
   const axiosSecure = useAxiosSecure();
@@ -12,7 +12,7 @@ const MyExamSchedule = () => {
 
   const { data: myExamSchedule, isLoading: isQueryLoading } = useQuery({
     // Include the department in the key so it refetches if the student changes
-    queryKey: ["exam-schedule", student?.class_name],
+    queryKey: ['exam-schedule', student?.class_name],
     enabled: !!student?.class_name,
     queryFn: async () => {
       const res = await axiosSecure.get(
@@ -31,11 +31,34 @@ const MyExamSchedule = () => {
     );
   }
 
+  
   // Handle Empty States
   if (!myExamSchedule || myExamSchedule.length === 0) {
     return (
-      <div className="text-center p-10 text-slate-400">
-        No exam routine found for your class.
+      <div className="flex flex-col items-center justify-center p-16 bg-[#0b1120] border border-blue-900/20 rounded-[2.5rem] shadow-2xl shadow-blue-950/10 transition-all">
+        {/* Icon with Glowing Effect */}
+        <div className="w-20 h-20 bg-blue-600/10 border border-blue-500/20 rounded-3xl flex items-center justify-center mb-6 shadow-inner relative group">
+          <div className="absolute inset-0 bg-blue-500/20 blur-2xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity"></div>
+          <Calendar
+            className="text-blue-500 relative z-10"
+            size={40}
+            strokeWidth={1.5}
+          />
+        </div>
+
+        {/* Main Text */}
+        <h3 className="text-2xl font-black text-white tracking-tight mb-3 italic">
+          Exam Schedule <span className="text-blue-500">Not Found</span>
+        </h3>
+
+        {/* Description Text */}
+        <p className="text-slate-500 text-sm max-w-xs text-center leading-relaxed">
+          Currently, no exam schedule has been published for your class. Please
+          check back later or contact the admin.
+        </p>
+
+        {/* Optional: Simple Glow Divider */}
+        <div className="mt-8 w-16 h-1 bg-gradient-to-r from-transparent via-blue-500/30 to-transparent rounded-full"></div>
       </div>
     );
   }
@@ -81,14 +104,10 @@ const MyExamSchedule = () => {
                   <BookOpen size={24} className="text-emerald-500" />
                 </div>
                 <h2 className="text-2xl font-bold text-white tracking-tight">
-                  Class -{" "}
-                  <span className="text-emerald-500">
-                    {e?.class_name}
-                  </span>
+                  Class -{' '}
+                  <span className="text-emerald-500">{e?.class_name}</span>
                 </h2>
               </div>
-
-             
             </div>
 
             <div className="space-y-3 mb-8">
@@ -163,6 +182,6 @@ const MyExamSchedule = () => {
       )}
     </div>
   );
-};
+};;
 
 export default MyExamSchedule;
