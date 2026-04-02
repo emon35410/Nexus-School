@@ -8,6 +8,8 @@ import TeacherDashboard from '../DashboardHomepage/TeacherDashboard';
 import AdminPrivetRoute from '../../Router/PrivetRoute/AdminPrivetRoute';
 import TeacherPrivRoute from '../../Router/PrivetRoute/TeacherPrivRoute';
 import StudentPrivRoute from '../../Router/PrivetRoute/StudentPrivRoute';
+import UserDashboard from './UserDasboard/UserDashboard';
+import PrivateRoutes from '../../Router/PrivetRoute/PrivateRoutes';
 
 
 const Dashboard = () => {
@@ -30,13 +32,21 @@ const Dashboard = () => {
         </TeacherPrivRoute>
       
     );
+
+    if (role === 'student') {
+         return (
+           <StudentPrivRoute>
+             <StudentDashboard />
+           </StudentPrivRoute>
+         );
+    }
   
     return (
       
-        <StudentPrivRoute>
-          <StudentDashboard />
-        </StudentPrivRoute>
-      
+        <PrivateRoutes>
+          <UserDashboard></UserDashboard>
+        </PrivateRoutes>
+     
     );
 };
 

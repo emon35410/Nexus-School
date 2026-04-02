@@ -20,7 +20,7 @@ import { IoIosNotifications } from 'react-icons/io';
 import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../Hooks/useAxiosSecure";
 import Logo from "../components/UI/Logo";
-import { MdNotificationsActive } from 'react-icons/md';
+import { MdNotificationsActive, MdOutlineHistory } from 'react-icons/md';
 
 // --- SidebarLink Helper Component ---
 const SidebarLink = ({ to, icon, label, isOpen, end = false, onClick }) => (
@@ -111,13 +111,13 @@ const NavLinks = ({
 
     {userRole === 'teacher' && (
       <>
-        <SidebarLink
+        {/* <SidebarLink
           to="/dashboard/my-classes"
           icon={<BookOpen size={20} />}
           label="My Classes"
           isOpen={isOpen}
           onClick={() => isMobile && setMobileMenuOpen(false)}
-        />
+        /> */}
         <SidebarLink
           to="/dashboard/teachersh/Attendance"
           icon={<BookOpen size={20} />}
@@ -127,7 +127,7 @@ const NavLinks = ({
         />
         <SidebarLink
           to="/dashboard/teachersh/AttendanceHistory"
-          icon={<BookOpen size={20} />}
+          icon={<MdOutlineHistory  size={20} />}
           label="Attendance History"
           isOpen={isOpen}
           onClick={() => isMobile && setMobileMenuOpen(false)}
