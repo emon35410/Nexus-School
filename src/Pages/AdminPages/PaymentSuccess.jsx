@@ -16,7 +16,7 @@ const PaymentSuccess = () => {
         .post(`/payments/payment-success?session_id=${sessionId}`)
         .then((res) => {
             setStatus("success");
-            SetResInfo(res)
+            SetResInfo(res.data)
         })
         .catch((err) => {
           console.error(err);
@@ -58,10 +58,10 @@ const PaymentSuccess = () => {
       <div className="max-w-md w-full bg-[#0F172A] border border-slate-800 rounded-[2.5rem] p-8 md:p-12 text-center shadow-2xl relative overflow-hidden animate-in zoom-in-95 duration-500">
         
         {/* Background Glow */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-32 bg-emerald-500/20 blur-[60px] -z-0"></div>
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-32 bg-emerald-500/20 blur-[60px] z-0"></div>
 
         <div className="relative z-10">
-          <div className="w-20 h-20 bg-emerald-500/10 rounded-full flex items-center justify-center text-emerald-500 mx-auto mb-8 animate-bounce duration-[2000ms]">
+          <div className="w-20 h-20 bg-emerald-500/10 rounded-full flex items-center justify-center text-emerald-500 mx-auto mb-8 animate-bounce duration-2000">
             <CheckCircle2 size={48} />
           </div>
 

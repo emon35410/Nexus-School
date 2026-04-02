@@ -182,7 +182,7 @@ const UserProfile = ({ dbUser, refetch }) => {
                   </div>
 
                             {/* apply btn */}
-            <div className="bg-slate-900/80 p-6 rounded-[2rem] border border-slate-800 shadow-xl group">
+            <div className="bg-slate-900/80 p-6 rounded-4xl border border-slate-800 shadow-xl group">
             <Link to={'/admission'}>
                 <button className="w-full py-4 bg-indigo-600 hover:bg-indigo-500 text-white rounded-2xl font-bold uppercase tracking-[0.2em] text-[11px] transition-all duration-300 flex items-center justify-center gap-3 shadow-[0_0_20px_rgba(79,70,229,0.2)] hover:shadow-[0_0_25px_rgba(79,70,229,0.4)] active:scale-[0.98]">
                 <GraduationCap size={18} className="group-hover:rotate-12 transition-transform" />

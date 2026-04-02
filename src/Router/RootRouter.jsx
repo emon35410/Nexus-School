@@ -84,9 +84,6 @@ const router = createBrowserRouter([
         path: 'contact',
         Component: Contact,
       },
-      
-     
-
     ],
   },
   {
@@ -108,9 +105,11 @@ const router = createBrowserRouter([
       },
       {
         path: '/dashboard/profile',
-        element: <PrivateRoutes>
-          <Profile></Profile>
-        </PrivateRoutes>
+        element: (
+          <PrivateRoutes>
+            <Profile></Profile>
+          </PrivateRoutes>
+        ),
       },
       {
         path: '/dashboard/manage-users',
@@ -147,10 +146,9 @@ const router = createBrowserRouter([
       {
         path: '/dashboard/manage-student',
         element: (
-         <TeacherPrivRoute>
-              <ManageStudents></ManageStudents>
-            </TeacherPrivRoute>
-          
+          <TeacherPrivRoute>
+            <ManageStudents></ManageStudents>
+          </TeacherPrivRoute>
         ),
       },
       {
@@ -160,45 +158,52 @@ const router = createBrowserRouter([
       {
         path: '/dashboard/create-routine',
         element: (
-         <AdminPrivetRoute>
-              <CreateRoutine></CreateRoutine>
-            </AdminPrivetRoute>
-         
+          <AdminPrivetRoute>
+            <CreateRoutine></CreateRoutine>
+          </AdminPrivetRoute>
         ),
       },
       {
         path: '/dashboard/class-routine',
-        element: (<StudentPrivRoute>
-              <ClassRoutine></ClassRoutine>
-            </StudentPrivRoute>
-          
+        element: (
+          <StudentPrivRoute>
+            <ClassRoutine></ClassRoutine>
+          </StudentPrivRoute>
         ),
       },
 
       {
         path: '/dashboard/student-give-result',
-        element: <AdminPrivetRoute>
-          <StudentGiveResult></StudentGiveResult>
-        </AdminPrivetRoute>
+        element: (
+          <AdminPrivetRoute>
+            <StudentGiveResult></StudentGiveResult>
+          </AdminPrivetRoute>
+        ),
       },
       {
         path: '/dashboard/student-give-result/:id',
-        element: <AdminPrivetRoute>
-          <CreateResultSheet></CreateResultSheet>
-        </AdminPrivetRoute>
+        element: (
+          <AdminPrivetRoute>
+            <CreateResultSheet></CreateResultSheet>
+          </AdminPrivetRoute>
+        ),
       },
       {
         path: '/dashboard/student-result',
-        element: <StudentPrivRoute>
-          <StudentResult></StudentResult>
-        </StudentPrivRoute>
+        element: (
+          <StudentPrivRoute>
+            <StudentResult></StudentResult>
+          </StudentPrivRoute>
+        ),
       },
 
       {
         path: '/dashboard/check-routine',
-        element: <AdminPrivetRoute>
-          <UpdateRoutine></UpdateRoutine>
-        </AdminPrivetRoute>
+        element: (
+          <AdminPrivetRoute>
+            <UpdateRoutine></UpdateRoutine>
+          </AdminPrivetRoute>
+        ),
       },
       {
         path: '/dashboard/my-exam-schedule',
@@ -210,20 +215,26 @@ const router = createBrowserRouter([
       },
       {
         path: '/dashboard/payments',
-        Component: CreatePayment
+        Component: CreatePayment,
       },
       {
         path: '/dashboard/my-payments',
-        Component: MyPayments
+        Component: MyPayments,
       },
       {
         path: '/dashboard/payment-success',
-        Component: PaymentSuccess
+        Component: PaymentSuccess,
       },
       {
         path: '/dashboard/payment-cancel',
-        Component: PaymentCancel
-      }
+        Component: PaymentCancel,
+      },
+      {
+        path: '/dashboard/school-notices',
+        element: <StudentPrivRoute>
+         <ViewNotice></ViewNotice>
+        </StudentPrivRoute>,
+      },
     ],
   },
 ]);
