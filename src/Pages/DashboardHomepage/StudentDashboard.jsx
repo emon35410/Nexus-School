@@ -2,29 +2,37 @@ import React from 'react';
 import { 
   BookOpen, Clock, FileText, 
   CheckCircle2, Calendar, Layout,
-  ArrowRight, Bell
+  ArrowRight, Bell,
+  
 } from 'lucide-react';
+import useStudent from '../../Hooks/useStudent';
+import { Link } from 'react-router';
 
 const StudentDashboard = ({ userData }) => {
-  // ধরে নিচ্ছি userData তে class এবং section আছে
-  const studentClass = userData?.class || "10";
-  const section = userData?.section || "A";
-
+  // // ধরে নিচ্ছি userData তে class এবং section আছে
+  // const studentClass = userData?.class || "10";
+  // const section = userData?.section || "A";
+  const { student } = useStudent();
+  
   return (
     <div className="space-y-8 animate-in fade-in duration-700 ">
-      
       {/* 1. Welcome & Class Info Card */}
       <div className="relative overflow-hidden bg-linear-to-br from-indigo-600 to-blue-700 p-8 rounded-4xl text-white shadow-2xl shadow-blue-900/20">
         <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div>
-            <h2 className="text-3xl font-bold mb-2">Welcome back, {userData?.name.split(' ')[0]}! 🎓</h2>
+            <h2 className="text-3xl font-bold mb-2">
+              Welcome back, {student?.name}! 🎓
+            </h2>
             <p className="text-blue-100 flex items-center gap-2">
-              <Layout size={16} /> 
-              Class {studentClass} | Section {section} | Roll: {userData?.roll || "N/A"}
+              <Layout size={16} />
+              Class {student?.class_name} | Student_Id : {student?.student_id} |
+              Roll: {student?.roll}
             </p>
           </div>
           <div className="bg-white/10 backdrop-blur-md px-6 py-3 rounded-2xl border border-white/20">
-            <p className="text-xs font-bold uppercase tracking-wider text-blue-200">Attendance</p>
+            <p className="text-xs font-bold uppercase tracking-wider text-blue-200">
+              Attendance
+            </p>
             <p className="text-2xl font-black">94.8%</p>
           </div>
         </div>
@@ -32,7 +40,6 @@ const StudentDashboard = ({ userData }) => {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        
         {/* 2. Today's Class Schedule (Main Focus) */}
         <div className="lg:col-span-2 space-y-6">
           <div className="flex items-center justify-between">
@@ -45,23 +52,23 @@ const StudentDashboard = ({ userData }) => {
           </div>
 
           <div className="space-y-4">
-            <ScheduleItem 
-              subject="Advanced Mathematics" 
-              time="09:00 AM - 10:00 AM" 
-              room="Room 302" 
-              status="ongoing" 
+            <ScheduleItem
+              subject="Advanced Mathematics"
+              time="09:00 AM - 10:00 AM"
+              room="Room 302"
+              status="ongoing"
             />
-            <ScheduleItem 
-              subject="Physics Lab" 
-              time="10:30 AM - 12:00 PM" 
-              room="Lab B" 
-              status="upcoming" 
+            <ScheduleItem
+              subject="Physics Lab"
+              time="10:30 AM - 12:00 PM"
+              room="Lab B"
+              status="upcoming"
             />
-            <ScheduleItem 
-              subject="English Literature" 
-              time="01:00 PM - 02:00 PM" 
-              room="Room 105" 
-              status="upcoming" 
+            <ScheduleItem
+              subject="English Literature"
+              time="01:00 PM - 02:00 PM"
+              room="Room 105"
+              status="upcoming"
             />
           </div>
         </div>
@@ -74,25 +81,35 @@ const StudentDashboard = ({ userData }) => {
               <FileText className="text-amber-500" size={20} /> Assignments
             </h3>
             <div className="space-y-4">
-              <TaskItem title="Calculus Homework" due="Due: Tomorrow" color="text-amber-500" />
-              <TaskItem title="Physics Report" due="Due: Mar 05" color="text-blue-500" />
+              <TaskItem
+                title="Calculus Homework"
+                due="Due: Tomorrow"
+                color="text-amber-500"
+              />
+              <TaskItem
+                title="Physics Report"
+                due="Due: Mar 05"
+                color="text-blue-500"
+              />
             </div>
-            <button className="w-full mt-6 py-3 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl text-sm font-bold transition-all flex items-center justify-center gap-2">
+            <Link
+              to={'/dashboard/my-assignments'}
+              className="w-full  mt-6 py-3 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl text-sm font-bold transition-all flex items-center justify-center  gap-2"
+            >
               View All <ArrowRight size={14} />
-            </button>
+            </Link>
           </div>
 
           {/* Recent Class Notice */}
-          <div className="bg-emerald-500/10 border border-emerald-500/20 p-6 rounded-4xl">
+          {/* <div className="bg-emerald-500/10 border border-emerald-500/20 p-6 rounded-4xl">
             <h3 className="text-lg font-bold mb-3 flex items-center gap-2 text-emerald-400">
               <Bell size={20} /> Class Notice
             </h3>
             <p className="text-sm text-slate-400 leading-relaxed">
-              "The Chemistry practical exam for Class {studentClass} has been rescheduled to next Monday."
+              "The Chemistry practical exam for Class  has been rescheduled to next Monday."
             </p>
-          </div>
+          </div> */}
         </div>
-
       </div>
     </div>
   );

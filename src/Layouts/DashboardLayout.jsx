@@ -20,6 +20,7 @@ import { IoIosNotifications } from 'react-icons/io';
 import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../Hooks/useAxiosSecure";
 import Logo from "../components/UI/Logo";
+import { MdNotificationsActive } from 'react-icons/md';
 
 // --- SidebarLink Helper Component ---
 const SidebarLink = ({ to, icon, label, isOpen, end = false, onClick }) => (
@@ -154,15 +155,58 @@ const NavLinks = ({
         />
       </>
     )}
-    
-    {userRole === "student" && (
+
+    {userRole === 'student' && (
       <>
-        <SidebarLink to="/dashboard/my-courses" icon={<GraduationCap size={20} />} label="My Courses" isOpen={isOpen} onClick={() => isMobile && setMobileMenuOpen(false)} />
-        <SidebarLink to="/dashboard/student-result" icon={<BiSpreadsheet size={20} />} label="Exam Results" isOpen={isOpen} onClick={() => isMobile && setMobileMenuOpen(false)} />
-        <SidebarLink to="/dashboard/my-assignments" icon={<FileText size={20} />} label="My Assignments" isOpen={isOpen} onClick={() => isMobile && setMobileMenuOpen(false)} />
-        <SidebarLink to="/dashboard/class-routine" icon={<FaBookOpenReader size={20} />} label="Class Routine" isOpen={isOpen} onClick={() => isMobile && setMobileMenuOpen(false)} />
-        <SidebarLink to="/dashboard/my-exam-schedule" icon={<ClipboardClock size={20} />} label="My Exam Schedule" isOpen={isOpen} onClick={() => isMobile && setMobileMenuOpen(false)} />
-        <SidebarLink to="/dashboard/my-payments" icon={<CircleDollarSign size={20} />} label="My Payments" isOpen={isOpen} onClick={() => isMobile && setMobileMenuOpen(false)} />
+        <SidebarLink
+          to="/dashboard/my-courses"
+          icon={<GraduationCap size={20} />}
+          label="My Courses"
+          isOpen={isOpen}
+          onClick={() => isMobile && setMobileMenuOpen(false)}
+        />
+        <SidebarLink
+          to="/dashboard/student-result"
+          icon={<BiSpreadsheet size={20} />}
+          label="Exam Results"
+          isOpen={isOpen}
+          onClick={() => isMobile && setMobileMenuOpen(false)}
+        />
+        <SidebarLink
+          to="/dashboard/my-assignments"
+          icon={<FileText size={20} />}
+          label="My Assignments"
+          isOpen={isOpen}
+          onClick={() => isMobile && setMobileMenuOpen(false)}
+        />
+        <SidebarLink
+          to="/dashboard/class-routine"
+          icon={<FaBookOpenReader size={20} />}
+          label="Class Routine"
+          isOpen={isOpen}
+          onClick={() => isMobile && setMobileMenuOpen(false)}
+        />
+        <SidebarLink
+          to="/dashboard/my-exam-schedule"
+          icon={<ClipboardClock size={20} />}
+          label="My Exam Schedule"
+          isOpen={isOpen}
+          onClick={() => isMobile && setMobileMenuOpen(false)}
+        />
+        <SidebarLink
+          to="/dashboard/my-payments"
+          icon={<CircleDollarSign size={20} />}
+          label="My Payments"
+          isOpen={isOpen}
+          onClick={() => isMobile && setMobileMenuOpen(false)}
+        />
+        <SidebarLink
+          to="/dashboard/school-notices"
+          icon={<MdNotificationsActive size={20} />}
+          label="School Notices"
+          isOpen={isOpen}
+          onClick={() => isMobile && setMobileMenuOpen(false)}
+        />
       </>
     )}
 
@@ -188,6 +232,8 @@ const DashboardLayout = () => {
   const [userRole, roleLoading] = useRole();
   const [isDropDown, setIsDorpDown] = useState(false);
   const axiosSecure = useAxiosSecure();
+  const [role] = useRole()
+ 
   
 
 
@@ -205,10 +251,10 @@ const DashboardLayout = () => {
   };
 
   const { data: notifications = [] } = useQuery({
-    queryKey: ['notifications', user?.email],
+    queryKey: ['notifications', user?.email,role],
     queryFn: async () => {
       const res = await axiosSecure.get(
-        `/notifications?email=${user?.email}`,
+        `/notifications?email=${user?.email}&role=${role}`,
       );
       return res.data;
     },
