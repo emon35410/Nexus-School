@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, useWatch } from 'react-hook-form';
 import Class6 from './Class6';
 import Class7 from './Class7';
 import Class8 from './Class8';
@@ -10,8 +10,8 @@ import { useQuery } from '@tanstack/react-query';
 import { useNavigate, useParams, useSearchParams } from 'react-router';
 
 const CreateResultSheet = () => {
-  const { register, handleSubmit, watch, reset } = useForm();
-  const class_name = watch('class_name');
+  const { register, handleSubmit, reset } = useForm();
+  const class_name = useWatch('class_name');
   const navigate = useNavigate();
 
   const axiosSecure = useAxiosSecure();
@@ -110,7 +110,7 @@ const CreateResultSheet = () => {
     <div className="min-h-screen   mx-auto">
       <form
         onSubmit={handleSubmit(handleSubmitResult)}
-        className="bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900 border border-blue-500/30 shadow-2xl shadow-blue-500/20 md:max-w-[800px] rounded-2xl mx-auto p-6 w-full text-slate-200"
+        className="bg-linear-to-br from-slate-900 via-blue-950 to-slate-900 border border-blue-500/30 shadow-2xl shadow-blue-500/20 md:max-w-200 rounded-2xl mx-auto p-6 w-full text-slate-200"
       >
         <h2 className="text-2xl font-bold text-center mb-6 text-blue-400 tracking-wide uppercase">
           Create Student Result
@@ -230,7 +230,7 @@ const CreateResultSheet = () => {
         </div>
 
         {/* Dynamic Subject Section */}
-        <div className="mt-8 p-4 bg-blue-900/20 border border-blue-500/10 rounded-xl min-h-[100px]">
+        <div className="mt-8 p-4 bg-blue-900/20 border border-blue-500/10 rounded-xl min-h-25">
           <h3 className="text-lg font-medium mb-4 text-blue-200 border-b border-blue-500/20 pb-2">
             Subject Marks
           </h3>
