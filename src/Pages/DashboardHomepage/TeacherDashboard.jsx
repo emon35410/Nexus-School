@@ -6,13 +6,24 @@ import {
   Bell, LayoutGrid, Award, PenTool
 } from 'lucide-react';
 import useAuth from '../../Hooks/useAuth';
+import { useQuery } from '@tanstack/react-query';
+import useAxiosSecure from '../../Hooks/useAxiosSecure';
 
 const TeacherDashboard = () => {
-  const {user} = useAuth();
-  console.log(user) // Debugging: Check if user data is available
+  const { user } = useAuth();
+  const axiosSecure=useAxiosSecure()
+  // console.log(user) // Debugging: Check if user data is available
+
+  const { data:counter } = useQuery({
+    queryKey: ['counter'],
+    queryFn: async () => {
+      const res = await axiosSecure.get('/counter')
+      return res.data
+    }
+  })
+ console.log(counter)
   return (
     <div className="min-h-screen  text-slate-300 p-4 md:p-10 font-sans">
-      
       {/* --- TOP NAVIGATION / HEADER --- */}
       <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12">
         <div>
@@ -24,60 +35,85 @@ const TeacherDashboard = () => {
             Nexus High School | Academic Year 2026
           </p>
         </div>
-        
+
         <div className="flex items-center gap-4">
           <div className="text-right hidden md:block">
-            <p className="text-sm font-black text-white leading-tight">{user?.displayName || 'Emon Hasan'}</p>
-            <p className="text-[10px] text-slate-500 font-bold uppercase">Assistant Teacher (ICT)</p>
+            <p className="text-sm font-black text-white leading-tight">
+              {user?.displayName || 'Emon Hasan'}
+            </p>
+            <p className="text-[10px] text-slate-500 font-bold uppercase">
+              Assistant Teacher (ICT)
+            </p>
           </div>
-         
         </div>
       </header>
 
       {/* --- SCHOOL STATS --- */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-        <StatCard label="Total Students" value="480" trend="Assigned to you" icon={<Users className="text-blue-400" />} />
-        <StatCard label="Total Periods" value="22" trend="Per Week" icon={<Clock className="text-indigo-400" />} />
-        <StatCard label="Avg. Attendance" value="92%" trend="This Month" icon={<Award className="text-emerald-400" />} />
-        <StatCard label="Scripts to Grade" value="34" trend="Final Term" icon={<PenTool className="text-amber-400" />} />
+        <StatCard
+          label="Total Students"
+          value={counter?.totalStudents}
+          trend="Assigned to you"
+          icon={<Users className="text-blue-400" />}
+        />
+        <StatCard
+          label="Total Periods"
+          value={counter?.totalRoutine}
+          trend="Per Week"
+          icon={<Clock className="text-indigo-400" />}
+        />
+        <StatCard
+          label="Avg. Attendance"
+          value="92%"
+          trend="This Month"
+          icon={<Award className="text-emerald-400" />}
+        />
+        <StatCard
+          label="Scripts to Grade"
+          value="34"
+          trend="Final Term"
+          icon={<PenTool className="text-amber-400" />}
+        />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
-        
         {/* --- CLASS ROUTINE (Main Content) --- */}
         <div className="lg:col-span-2 space-y-8">
           <div className="flex justify-between items-end px-2">
             <div>
               <h3 className="text-2xl font-black text-white tracking-tight flex items-center gap-3">
-                <LayoutGrid size={24} className="text-blue-500" /> Today's Routine
+                <LayoutGrid size={24} className="text-blue-500" /> Today's
+                Routine
               </h3>
-              <p className="text-xs text-slate-500 font-medium mt-1">Thursday, April 02, 2026</p>
+              <p className="text-xs text-slate-500 font-medium mt-1">
+                Thursday, April 02, 2026
+              </p>
             </div>
             <button className="text-[10px] font-black uppercase tracking-widest text-blue-400 border-b border-blue-500/30 pb-1 hover:text-blue-300 transition-all">
               Full Timetable
             </button>
           </div>
-          
+
           <div className="space-y-4">
-            <ScheduleCard 
-              subject="ICT & Programming" 
-              time="09:00 AM - 09:45 AM" 
-              room="Computer Lab" 
-              batch="Class 10 - Science" 
+            <ScheduleCard
+              subject="ICT & Programming"
+              time="09:00 AM - 09:45 AM"
+              room="Computer Lab"
+              batch="Class 10 - Science"
               status="Finished"
             />
-            <ScheduleCard 
-              subject="Mathematics (Higher)" 
-              time="10:30 AM - 11:15 AM" 
-              room="Room 402" 
-              batch="Class 09 - Science" 
+            <ScheduleCard
+              subject="Mathematics (Higher)"
+              time="10:30 AM - 11:15 AM"
+              room="Room 402"
+              batch="Class 09 - Science"
               status="Ongoing"
             />
-            <ScheduleCard 
-              subject="Physics Practical" 
-              time="01:00 PM - 02:00 PM" 
-              room="Science Lab" 
-              batch="Class 10 - Science" 
+            <ScheduleCard
+              subject="Physics Practical"
+              time="01:00 PM - 02:00 PM"
+              room="Science Lab"
+              batch="Class 10 - Science"
               status="Upcoming"
             />
           </div>
@@ -90,28 +126,59 @@ const TeacherDashboard = () => {
             <h4 className="font-black text-blue-400 mb-8 flex items-center gap-2 text-xs uppercase tracking-[0.2em]">
               <FileText size={16} /> Exam Grading Status
             </h4>
-            
+
             <div className="space-y-6 relative z-10">
-              <GradingItem title="ICT Class Test" due="Completed" count="40/40" progress="100" color="text-emerald-400" />
-              <GradingItem title="Math Mid-Term" due="3 Days left" count="15/45" progress="35" color="text-blue-400" />
-              <GradingItem title="Physics Viva" due="Next Week" count="0/42" progress="0" color="text-slate-500" />
+              <GradingItem
+                title="ICT Class Test"
+                due="Completed"
+                count="40/40"
+                progress="100"
+                color="text-emerald-400"
+              />
+              <GradingItem
+                title="Math Mid-Term"
+                due="3 Days left"
+                count="15/45"
+                progress="35"
+                color="text-blue-400"
+              />
+              <GradingItem
+                title="Physics Viva"
+                due="Next Week"
+                count="0/42"
+                progress="0"
+                color="text-slate-500"
+              />
             </div>
           </section>
 
           {/* School Notices */}
           <section className="bg-[#0F172A] p-8 rounded-[2.5rem] border border-slate-800 shadow-xl">
             <div className="flex items-center justify-between mb-8">
-              <h4 className="font-black text-white text-sm uppercase tracking-widest">School Notice</h4>
+              <h4 className="font-black text-white text-sm uppercase tracking-widest">
+                School Notice
+              </h4>
               <MessageSquare size={18} className="text-slate-600" />
             </div>
             <div className="space-y-5">
-              <ActivityItem text="Staff meeting at Principal's office" time="03:30 PM" important />
-              <ActivityItem text="Submit final marksheet of Class 9" time="Sat, 04 Apr" important={false} />
-              <ActivityItem text="Annual Sports Day preparation" time="Next Week" important={false} />
+              <ActivityItem
+                text="Staff meeting at Principal's office"
+                time="03:30 PM"
+                important
+              />
+              <ActivityItem
+                text="Submit final marksheet of Class 9"
+                time="Sat, 04 Apr"
+                important={false}
+              />
+              <ActivityItem
+                text="Annual Sports Day preparation"
+                time="Next Week"
+                important={false}
+              />
             </div>
           </section>
         </div>
-
       </div>
     </div>
   );

@@ -58,41 +58,93 @@ const Notice = ({ refetch }) => {
         {/* Title */}
         <div>
           <input
-            {...register("title", { required: "Title is required" })}
+            {...register('title', { required: 'Title is required' })}
             placeholder="Notice Title"
             className={`w-full bg-slate-900 border ${errors.title ? 'border-rose-500' : 'border-slate-800'} rounded-xl p-3 text-sm outline-none focus:border-blue-500 text-slate-200`}
           />
-          {errors.title && <p className="text-rose-500 text-[10px] mt-1 ml-2 font-bold">{errors.title.message}</p>}
+          {errors.title && (
+            <p className="text-rose-500 text-[10px] mt-1 ml-2 font-bold">
+              {errors.title.message}
+            </p>
+          )}
         </div>
 
         {/* Content */}
         <div>
           <textarea
-            {...register("content", { required: "Content cannot be empty" })}
+            {...register('content', { required: 'Content cannot be empty' })}
             placeholder="Write details here..."
             rows="4"
             className={`w-full bg-slate-900 border ${errors.content ? 'border-rose-500' : 'border-slate-800'} rounded-xl p-3 text-sm outline-none focus:border-blue-500 text-slate-200 resize-none`}
           ></textarea>
-          {errors.content && <p className="text-rose-500 text-[10px] mt-1 ml-2 font-bold">{errors.content.message}</p>}
+          {errors.content && (
+            <p className="text-rose-500 text-[10px] mt-1 ml-2 font-bold">
+              {errors.content.message}
+            </p>
+          )}
         </div>
 
         {/* Category & Priority */}
         <div className="grid grid-cols-2 gap-3">
-          <select {...register("category")} className="bg-slate-900 border border-slate-800 rounded-xl p-3 text-xs text-slate-400 outline-none">
+          <select
+            {...register('category')}
+            className="bg-slate-900 border border-slate-800 rounded-xl p-3 text-xs text-slate-400 outline-none "
+          >
             <option value="General">General</option>
             <option value="Event">Event</option>
             <option value="Exam">Exam</option>
             <option value="Academic">Academic</option>
           </select>
 
-          <select {...register("priority")} className="bg-slate-900 border border-slate-800 rounded-xl p-3 text-xs text-slate-400 outline-none">
+          <select
+            {...register('priority')}
+            className="bg-slate-900 border border-slate-800 rounded-xl p-3 text-xs text-slate-400 outline-none "
+          >
             <option value="Normal">Normal</option>
             <option value="High">High</option>
             <option value="Urgent">Urgent</option>
           </select>
         </div>
+        {/*set date */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div className=" fieldset">
+            <label className="label ml-2">Start Date</label>
+            <input
+              type="date"
+              {...register('startAt', {
+                required: 'start Date is required',
+              })}
+              placeholder="set start date"
+              className={`w-full bg-slate-900 border input ${errors.title ? 'border-rose-500' : 'border-slate-800'} rounded-xl p-3 text-sm outline-none focus:border-blue-500 text-slate-200`}
+            />
+            {errors.title && (
+              <p className="text-rose-500 text-[10px] mt-1 ml-2 font-bold">
+                {errors.title.message}
+              </p>
+            )}
+          </div>
+          <div className=" fieldset">
+            <label className="label ml-2">Expiry Date</label>
+            <input
+              type="date"
+              {...register('expiryDate', {
+                required: 'expiry Date is required',
+              })}
+              placeholder="set end date"
+              className={`w-full bg-slate-900 border input ${errors.title ? 'border-rose-500' : 'border-slate-800'} rounded-xl p-3 text-sm outline-none focus:border-blue-500 text-slate-200`}
+            />
+            {errors.title && (
+              <p className="text-rose-500 text-[10px] mt-1 ml-2 font-bold">
+                {errors.title.message}
+              </p>
+            )}
+          </div>
+        </div>
 
-        <button type="submit" className="w-full py-3.5 bg-blue-600 hover:bg-blue-500 text-white font-black rounded-xl shadow-lg shadow-blue-600/20 transition-all active:scale-95 uppercase tracking-widest text-xs">
+        <button
+          type="submit"
+          className="w-full py-3.5 bg-blue-600 hover:bg-blue-500 text-white font-black rounded-xl shadow-lg shadow-blue-600/20 transition-all active:scale-95 uppercase tracking-widest text-xs"
+        >
           Publish Notice
         </button>
       </form>
