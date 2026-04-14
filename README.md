@@ -111,14 +111,6 @@ EMAIL_PASS=your_email_password
 
 ---
 
-## 📸 Screenshots
-
-* Dashboard UI
-* Attendance System
-* Student Panel
-  *(Add screenshots here)*
-
----
 
 ## 🌐 Live Demo
 
